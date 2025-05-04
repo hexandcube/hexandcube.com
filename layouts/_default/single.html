@@ -17,11 +17,13 @@
                     class="rounded-full w-7 inline border-1 border-light-border dark:border-dark-border">
                 <span>By Anonymous</span>
             {{ end }}
-            {{ with .PublishDate }}
-            <span>
-                <span>&middot;</span>
-                <span>{{ .Format "January 2, 2006" }}</span>
-            </span>
+            {{ if not .Params.HidePublishDate }}
+                {{ with .PublishDate }}
+                    <span>
+                        <span>&middot;</span>
+                        <span>{{ .Format "January 2, 2006" }}</span>
+                    </span>
+                {{ end }}
             {{ end }}
             {{ if .Params.ShowLastMod }}
                 {{ with .Params.LastMod }}
