@@ -3,7 +3,7 @@ title: Domain Migration
 author: Hexandcube
 hideReadingTime: true
 publishDate: 2025-03-20
-lastmod: 2025-03-20
+lastmod: 2025-05-04
 showLastmod: true
 ---
 
@@ -24,14 +24,12 @@ foreseeable future, and will eventually redirect to the new domain.
 - [x] **[March 20, 2025 21:27 UTC]** Email services migrated to the new domain
 - [x] **[March 20, 2025 21:48 UTC]** New domain submitted to search engines for indexing
 - [x] **[March 20, 2025 22:13 UTC]** Hexandcube Files migrated to the new domain
-- [ ] **[Pending]** PGP Keys updated with the new email address
+- [x] **[May 5th, 2025 17:04 UTC]** New PGP key created with the a new UID
 - [ ] **[Pending]** Other releated services migrated to the new domain
 - [ ] **[Pending]** Internal and external links updated
 - [ ] **[Pending]** Broken links verified
 - [ ] **[Pending]** Search engine optimization verified
 - [ ] **[Pending]** Migration complete
-
-## Signed Message
 
 ```plaintext
 -----BEGIN PGP SIGNED MESSAGE-----
