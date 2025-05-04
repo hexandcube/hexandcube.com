@@ -28,7 +28,9 @@ author: Hexandcube
 
 ## Identity verification
 
-* [Keyoxide OpenPGP profile](https://keyoxide.org/9E1E4A20C369E6DE256069896FABEFAB422FF8AE/)
+* Keyoxide OpenPGP profile
+    * [WKD URL (hexandcube@hexandcube.com)](https://keyoxide.org/hexandcube@hexandcube.com)
+    * [Key fingerprint URL](https://keyoxide.org/9E1E4A20C369E6DE256069896FABEFAB422FF8AE)
 
 ## Public key download 
 
