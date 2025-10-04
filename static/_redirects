@@ -1,4 +1,5 @@
 /.well-known/hexandcube_pub.asc /.well-known/openpgpkey/Hexandcube_0x422FF8AE_public.asc 301!
 /.well-known/hexandcube_pub.pgp /.well-known/openpgpkey/Hexandcube_0x422FF8AE_public.pgp 301!
 /.well-known/hexandcube_qr.png /.well-known/openpgpkey/Hexandcube_0x422FF8AE_fpr.png 301!
+/files/* /projects/:splat 301!
 /gpg /pgp 301!
