@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="{{ .Language.Lang }}">
+
+<head>
+    {{ partial "head.html" . }}
+</head>
+
+<body class="bg-background-primary fa-width-auto {{ if hugo.IsServer }}debug-screens{{ end }}">
+    <noscript class="p-10 mb-3 bg-orange-500 text-white dark:text-white">
+        <div class="responsive">
+            <i class="fa-regular fa-exclamation-circle"></i>
+            <b>Looks like you're browsing with JavaScript disabled</b><br>
+            <p>
+                My website relies on scripts for some interactive features and may not work properly without them.<br>
+                Please consider enabling JavaScript or allowing <b>hexandcube.com</b> in your script blocking software.
+                Thanks!
+            </p>
+        </div>
+    </noscript>
+    <div class="min-h-screen flex flex-col">
+        {{ partial "header.html" . }}
+        <main class="grow">
+            {{ block "main" . }}{{ end }}
+        </main>
+        {{ partial "footer.html" . }}
+    </div>
+    {{ partial "scripts.html" . }}
+</body>
+
+</html>

@@ -1,0 +1,717 @@
+{{ $feedData := index hugo.Data "feed-widget" }}
+{{ $atHandle := $feedData.ATproto.handle | default $feedData.atproto.handle }}
+{{ $apHandle := $feedData.activityPub.handle | default $feedData.activitypub.handle }}
+
+
+<section
+  class="flex w-full flex-col gap-5 text-left"
+  id="feed-widget-wrapper"
+  data-atproto="{{ $atHandle }}"
+  data-activitypub="{{ $apHandle }}">
+  <div class="border-foreground-primary/10 mt-8 mb-1 flex items-end justify-between border-b pb-2 md:mt-10 md:mb-2">
+    <div class="flex items-center gap-3">
+      <h2 class="font-primary text-foreground-primary flex items-center gap-2 text-2xl font-bold">
+        <i class="fa-regular fa-hashtag fa-fw text-foreground-secondary"></i> Feed
+      </h2>
+    </div>
+
+    <nav
+      class="bg-background-secondary border-foreground-primary/15 pointer-events-auto relative z-20 inline-flex gap-0.5 rounded-full border p-0.5"
+      aria-label="Feed platform switcher">
+      <button
+        type="button"
+        id="btn-atproto"
+        onclick="switchFeed('atproto')"
+        class="text-foreground-primary bg-accent-secondary focus-visible:ring-accent-primary/50 relative flex h-7 w-7 cursor-pointer items-center justify-center rounded-full shadow-[0px_1px_2px_0px_rgba(0,0,0,0.15),inset_0px_-2px_0px_0px_rgba(0,0,0,0.15)] transition-all duration-200 ease-in-out outline-none before:pointer-events-none before:absolute before:inset-0 before:rounded-full before:mask-[linear-gradient(to_bottom,black,transparent)] before:shadow-[inset_0px_0px_0px_1px_rgba(255,255,255,0.25)] hover:brightness-120 focus-visible:ring-2"
+        aria-label="Bluesky">
+        <i class="fa-brands fa-bluesky block translate-y-[0.5px] text-xs leading-none"></i>
+      </button>
+      <button
+        type="button"
+        id="btn-activitypub"
+        onclick="switchFeed('activitypub')"
+        class="text-foreground-secondary hover:text-foreground-primary hover:bg-accent-muted/20 focus-visible:ring-accent-primary/50 relative flex h-7 w-7 cursor-pointer items-center justify-center rounded-full transition-all duration-200 ease-in-out outline-none focus-visible:ring-2"
+        aria-label="Mastodon">
+        <i class="fa-brands fa-mastodon block translate-y-[0.5px] text-xs leading-none"></i>
+      </button>
+    </nav>
+  </div>
+
+  <div class="relative w-full min-w-0" id="feed-widget-container">
+    <div
+      id="feed-widget-content"
+      class="-mx-2 -mt-2 flex max-h-[calc(100vh-14rem)] min-w-0 flex-col gap-3 overflow-hidden px-2 pt-2 pb-4 transition-[max-height] duration-500 ease-in-out">
+      <div id="feed-skeletons" class="contents">
+        {{ range seq 4 }}
+          <div
+            class="bg-background-secondary border-foreground-primary/15 flex min-w-0 animate-pulse flex-col gap-2.5 rounded-xl border-1 p-3 shadow-sm sm:p-4">
+            <div class="flex items-start gap-3">
+              <div
+                class="bg-foreground-primary/10 border-foreground-primary/5 h-9 w-9 shrink-0 rounded-full border"></div>
+              <div class="flex grow flex-col gap-1.5 pt-0.5">
+                <div class="bg-foreground-primary/10 h-2.5 w-28 rounded"></div>
+                <div class="bg-foreground-primary/10 h-2 w-16 rounded"></div>
+              </div>
+            </div>
+            <div class="mt-1 flex flex-col gap-1.5">
+              <div class="bg-foreground-primary/10 h-2.5 w-full rounded"></div>
+              <div class="bg-foreground-primary/10 h-2.5 w-11/12 rounded"></div>
+              <div class="bg-foreground-primary/10 h-2.5 w-4/5 rounded"></div>
+            </div>
+          </div>
+        {{ end }}
+      </div>
+
+      <div id="feed-posts" class="contents"></div>
+    </div>
+
+    <div
+      id="feed-widget-fade"
+      class="from-background-primary via-background-primary/80 absolute right-0 bottom-0 left-0 z-30 flex h-24 items-end justify-center bg-linear-to-t to-transparent pb-1 transition-opacity duration-300">
+      <button
+        type="button"
+        onclick="expandFeed()"
+        class="btn btn-tertiary btn-small bg-background-secondary/90 pointer-events-auto cursor-pointer rounded-full! px-4! py-1! text-xs shadow-sm backdrop-blur-sm">
+        <i class="fa-solid fa-chevron-down mr-1.5 text-[10px]"></i> View more
+      </button>
+    </div>
+
+    <div
+      id="feed-error"
+      class="text-brand-danger bg-brand-danger/10 border-brand-danger/20 mt-2 hidden rounded-xl border-1 p-4 text-center text-sm font-medium">
+      Feed loading failed (check developer console)
+    </div>
+  </div>
+</section>
+
+<script>
+  let currentPlatform = "atproto";
+  let cursors = { atproto: null, activitypub: null };
+  let activityPubId = null;
+  let isFetching = false;
+
+  window.expandFeed = function () {
+    const content = document.getElementById("feed-widget-content");
+    const fade = document.getElementById("feed-widget-fade");
+
+    if (content && fade) {
+      content.style.maxHeight = content.scrollHeight + "px";
+      fade.style.opacity = "0";
+
+      setTimeout(() => {
+        fade.style.display = "none";
+        content.style.maxHeight = "none";
+      }, 300);
+    }
+  };
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const wrapper = document.getElementById("feed-widget-wrapper");
+    if (!wrapper) return;
+
+    const content = document.getElementById("feed-widget-content");
+    const postsContainer = document.getElementById("feed-posts");
+    const skeletons = document.getElementById("feed-skeletons");
+    const errorEl = document.getElementById("feed-error");
+    const fadeEl = document.getElementById("feed-widget-fade");
+
+    const atHandle = wrapper.dataset.atproto;
+    const apHandle = wrapper.dataset.activitypub;
+
+    function setSkeletons(show) {
+      if (show) {
+        postsContainer.innerHTML = "";
+        skeletons.style.display = "contents";
+        errorEl.classList.add("hidden");
+        content.style.display = "flex";
+        if (fadeEl) fadeEl.style.display = "flex";
+        fadeEl.style.opacity = "1";
+        content.style.maxHeight = "calc(100vh - 14rem)";
+      } else {
+        skeletons.style.display = "none";
+      }
+    }
+
+    function showError(msg) {
+      setSkeletons(false);
+      errorEl.textContent = msg;
+      errorEl.classList.remove("hidden");
+      content.style.display = "none";
+      if (fadeEl) fadeEl.style.display = "none";
+    }
+
+    function escapeHtml(input) {
+      if (!input) return "";
+      return input
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function stripHtmlAndPreserveLines(html) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(
+        html.replace(/<br\s*[\/]?>/gi, "\n").replace(/<\/p>\s*<p>/gi, "\n\n"),
+        "text/html",
+      );
+      return doc.body.textContent || "";
+    }
+
+    function emojify(text, emojis) {
+      if (!text || !emojis || emojis.length === 0) return text;
+      let result = text;
+      emojis.forEach((emoji) => {
+        const regex = new RegExp(`:${emoji.shortcode}:`, "g");
+        result = result.replace(
+          regex,
+          `<img src="${emoji.url}" alt=":${emoji.shortcode}:" class="custom-emoji inline-block h-[1.2em] w-[1.2em] object-contain align-middle -translate-y-[1px]" />`,
+        );
+      });
+      return result;
+    }
+
+    function getRelativeTime(dateString) {
+      const now = new Date();
+      const past = new Date(dateString);
+      const diffSec = Math.floor((now - past) / 1000);
+
+      if (diffSec < 60) return "now";
+      const diffMin = Math.floor(diffSec / 60);
+      if (diffMin < 60) return `${diffMin} min ago`;
+      const diffHr = Math.floor(diffMin / 60);
+      if (diffHr < 24) return `${diffHr} ${diffHr === 1 ? "hour" : "hours"} ago`;
+      const diffDay = Math.floor(diffHr / 24);
+      if (diffDay < 7) return `${diffDay} ${diffDay === 1 ? "day" : "days"} ago`;
+      const diffWeek = Math.floor(diffDay / 7);
+      if (diffWeek < 4) return `${diffWeek} ${diffWeek === 1 ? "week" : "weeks"} ago`;
+      const diffMonth = Math.floor(diffDay / 30);
+      if (diffMonth < 12) return `${diffMonth} ${diffMonth === 1 ? "month" : "months"} ago`;
+      const diffYear = Math.floor(diffDay / 365);
+      return `${diffYear} ${diffYear === 1 ? "year" : "years"} ago`;
+    }
+
+    function updateActiveButton(platform) {
+      const btnAt = document.getElementById("btn-atproto");
+      const btnAp = document.getElementById("btn-activitypub");
+
+      const activeClasses =
+        "relative w-7 h-7 flex items-center justify-center rounded-full transition-all duration-200 ease-in-out text-foreground-primary bg-accent-secondary hover:brightness-120 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.15),inset_0px_-2px_0px_0px_rgba(0,0,0,0.15)] before:absolute before:inset-0 before:rounded-full before:pointer-events-none before:shadow-[inset_0px_0px_0px_1px_rgba(255,255,255,0.25)] before:mask-[linear-gradient(to_bottom,black,transparent)] cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50";
+      const inactiveClasses =
+        "relative w-7 h-7 flex items-center justify-center rounded-full transition-all duration-200 ease-in-out text-foreground-secondary hover:text-foreground-primary hover:bg-accent-muted/20 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50";
+
+      if (platform === "atproto") {
+        btnAt.className = activeClasses;
+        btnAp.className = inactiveClasses;
+      } else {
+        btnAp.className = activeClasses;
+        btnAt.className = inactiveClasses;
+      }
+    }
+
+    function renderMedia(mediaList) {
+      if (!mediaList || mediaList.length === 0) return "";
+      let gridClass = "grid gap-1 mt-2 overflow-hidden rounded-lg border border-foreground-primary/10 relative z-20";
+      if (mediaList.length === 1) gridClass += " grid-cols-1";
+      else gridClass += " grid-cols-2";
+
+      let html = `<div class="${gridClass}">`;
+      mediaList.forEach((media, i) => {
+        let wrapperClass = "relative w-full h-full overflow-hidden bg-background-elevated";
+        if (mediaList.length === 1) wrapperClass += " max-h-64";
+        else if (mediaList.length === 3 && i === 0) wrapperClass += " row-span-2 aspect-auto";
+        else wrapperClass += " aspect-[4/3] sm:aspect-square";
+
+        html += `<div class="${wrapperClass}">`;
+        html += `<img src="${media.thumb}" alt="${escapeHtml(media.alt || "")}" class="w-full h-full object-cover transition-all pointer-events-none" loading="lazy" />`;
+
+        if (media.type === "video") {
+          html += `
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none bg-black/10">
+                            <div class="w-10 h-10 flex items-center justify-center bg-black/60 text-white rounded-full backdrop-blur-sm shadow-sm border border-white/20">
+                                <i class="fa-solid fa-play translate-x-[1px] text-sm"></i>
+                            </div>
+                        </div>
+                    `;
+        }
+        html += `</div>`;
+      });
+      html += `</div>`;
+      return html;
+    }
+
+    function renderQuote(quoteRecord) {
+      if (!quoteRecord) return "";
+      if (quoteRecord.notFound) {
+        return `<div class="mt-2 border-1 border-foreground-primary/15 rounded-lg p-3 bg-background-primary/30 flex items-center gap-2 transition-colors min-w-0 text-foreground-secondary text-sm relative z-20 pointer-events-none"><i class="fa-solid fa-circle-info opacity-70"></i> <span>Deleted post</span></div>`;
+      }
+      if (quoteRecord.blocked) {
+        return `<div class="mt-2 border-1 border-foreground-primary/15 rounded-lg p-3 bg-background-primary/30 flex items-center gap-2 transition-colors min-w-0 text-foreground-secondary text-sm relative z-20 pointer-events-none"><i class="fa-solid fa-ban opacity-70"></i> <span>Post unavailable</span></div>`;
+      }
+
+      const author = quoteRecord.author;
+      const text = quoteRecord.text || "";
+      const avatar = author.avatar
+        ? `<img src="${author.avatar}" alt="" class="w-4 h-4 rounded-full object-cover shrink-0" />`
+        : "";
+      const mediaHtml = quoteRecord.media ? renderMedia(quoteRecord.media) : "";
+
+      return `
+                <div class="mt-2 border-1 border-foreground-primary/15 rounded-lg p-3 bg-background-primary/30 flex flex-col gap-1.5 transition-colors min-w-0 relative z-20 pointer-events-none">
+                    <div class="flex items-center gap-1.5 min-w-0">
+                        ${avatar}
+                        <span class="text-xs font-primary font-bold text-foreground-primary truncate">${author.displayName}</span>
+                        <span class="text-[10px] text-foreground-secondary truncate">@${author.handle}</span>
+                    </div>
+                    <div class="text-sm text-foreground-secondary line-clamp-3 break-words whitespace-pre-wrap leading-snug">${text}</div>
+                    ${mediaHtml}
+                </div>
+            `;
+    }
+
+    function renderPosts(posts, platform, append = false, hasMore = false) {
+      if (!append) {
+        setSkeletons(false);
+        postsContainer.innerHTML = "";
+      } else {
+        const actionsBox = document.getElementById("feed-action-buttons");
+        if (actionsBox) actionsBox.remove();
+      }
+
+      if (posts.length === 0 && !append) {
+        postsContainer.innerHTML = `<div class="bg-background-secondary border-1 border-foreground-primary/15 rounded-xl p-4 text-sm text-foreground-secondary text-center italic">No recent posts.</div>`;
+        if (fadeEl) fadeEl.style.display = "none";
+        return;
+      }
+
+      posts.forEach((post) => {
+        let repostHtml = "";
+        if (post.reposter) {
+          repostHtml = `
+                        <div class="flex items-center gap-1.5 text-[10px] font-bold text-foreground-secondary uppercase tracking-wider mb-2.5 ml-0.5 relative z-20 pointer-events-none">
+                            <i class="fa-solid fa-retweet text-brand-success"></i> Reposted by ${post.reposter.displayName}
+                        </div>
+                    `;
+        }
+
+        const mediaHtml = renderMedia(post.media);
+        const quoteHtml = renderQuote(post.quote);
+
+        let contentBody = `
+            <div class="text-sm text-foreground-secondary group-hover:text-foreground-primary transition-colors break-words leading-snug mt-2 whitespace-pre-wrap relative z-20 pointer-events-none">${post.text}</div>
+            ${mediaHtml}
+            ${quoteHtml}
+        `;
+
+        if (post.cw) {
+          contentBody = `
+                <button type="button" class="mt-2 flex w-full items-center justify-between rounded-lg border-1 border-foreground-primary/10 bg-background-elevated p-2.5 text-left text-sm font-medium text-foreground-primary transition-colors hover:bg-background-primary focus-visible:ring-2 focus-visible:ring-accent-primary/50 relative z-30 outline-none cursor-pointer" onclick="this.nextElementSibling.classList.toggle('hidden'); const t = this.querySelector('.cw-toggle-text'); t.textContent = t.textContent === 'Show' ? 'Hide' : 'Show';">
+                    <span class="truncate pr-2"><i class="fa-solid fa-eye-slash mr-1.5 opacity-70"></i> ${post.cw}</span>
+                    <span class="cw-toggle-text shrink-0 text-[10px] font-bold tracking-wider uppercase opacity-70">Show</span>
+                </button>
+                <div class="hidden flex-col">
+                    ${contentBody}
+                </div>
+            `;
+        }
+
+        const postEl = document.createElement("div");
+        postEl.className =
+          "group relative flex flex-col bg-background-secondary border-1 border-foreground-primary/15 rounded-xl p-3 sm:p-4 shadow-sm hover:scale-[101%] hover:bg-background-elevated transition-all duration-200 min-w-0 text-left cursor-pointer";
+
+        postEl.innerHTML = `
+                    <a href="${post.url}" target="_blank" rel="noopener noreferrer" class="absolute inset-0 z-10 rounded-xl" aria-label="View post"></a>
+                    ${repostHtml}
+                    <div class="flex items-start justify-between gap-2 relative z-20">
+                        <a href="${post.author.profileUrl}" target="_blank" rel="noopener noreferrer" class="flex items-start gap-2.5 min-w-0 outline-none focus-visible:ring-2 rounded-sm cursor-pointer">
+                            <img src="${post.author.avatar || ""}" alt="" class="w-9 h-9 rounded-full bg-foreground-primary/10 border-1 border-foreground-primary/15 shrink-0 object-cover" onerror="this.style.display='none'">
+                            <div class="flex flex-col min-w-0 pt-0.5">
+                                <span class="text-sm font-primary font-bold text-foreground-primary truncate transition-colors leading-none">${post.author.displayName}</span>
+                                <span class="text-xs text-foreground-secondary truncate leading-none mt-1">@${post.author.handle}</span>
+                            </div>
+                        </a>
+                        <span class="text-[10px] font-medium text-foreground-secondary shrink-0 pt-0.5 pointer-events-none">${post.relativeDate}</span>
+                    </div>
+                    ${contentBody}
+                    <div class="flex items-center gap-4 text-[11px] font-semibold text-foreground-muted mt-3 pt-2 relative z-20 pointer-events-none">
+                        <span class="flex items-center gap-1.5"><i class="fa-regular fa-comment text-[10px] opacity-70"></i> ${post.stats.replies}</span>
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-retweet text-[10px] opacity-70"></i> ${post.stats.reposts}</span>
+                        <span class="flex items-center gap-1.5"><i class="fa-regular fa-heart text-[10px] opacity-70"></i> ${post.stats.likes}</span>
+                    </div>
+                `;
+        postsContainer.appendChild(postEl);
+      });
+
+      let endUrl, endText;
+      if (platform === "atproto") {
+        endUrl = `https://bsky.app/profile/${atHandle}`;
+        endText = "bsky.app";
+      } else {
+        const domainParts = apHandle.split("@").filter(Boolean);
+        const domain = domainParts.length > 1 ? domainParts[1] : "Mastodon";
+        endUrl = `https://${domain}/@${domainParts[0]}`;
+        endText = domain;
+      }
+
+      const actionsContainer = document.createElement("div");
+      actionsContainer.id = "feed-action-buttons";
+      actionsContainer.className = "flex flex-col gap-2 mt-1 relative z-20 pointer-events-auto";
+
+      let actionsHtml = "";
+      if (hasMore) {
+        actionsHtml += `
+                    <button type="button" id="load-more-btn" onclick="loadMoreFeed()" class="btn btn-primary btn-full !ml-0 flex items-center justify-center gap-2 max-w-full outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50 cursor-pointer">
+                        <i class="fa-solid fa-plus text-sm opacity-80 shrink-0"></i>
+                        <span class="truncate">Load more</span>
+                    </button>
+                `;
+      }
+
+      actionsHtml += `
+                <a href="${endUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-full !ml-0 flex items-center justify-center gap-2 max-w-full outline-none focus-visible:ring-2 focus-visible:ring-foreground-primary/50 cursor-pointer">
+                    <i class="fa-solid fa-arrow-up-right-from-square text-sm opacity-80 shrink-0"></i>
+                    <span class="truncate">View on ${endText}</span>
+                </a>
+            `;
+
+      actionsContainer.innerHTML = actionsHtml;
+      postsContainer.appendChild(actionsContainer);
+
+      if (!append) {
+        setTimeout(() => {
+          if (fadeEl && content.scrollHeight <= content.clientHeight) {
+            fadeEl.style.display = "none";
+          } else if (fadeEl && fadeEl.style.opacity === "1") {
+            fadeEl.style.display = "flex";
+          }
+        }, 100);
+      }
+    }
+
+    function extractBlueskyQuote(recordEmbed) {
+      if (!recordEmbed) return null;
+      let quoteRecord = null;
+
+      if (recordEmbed.$type === "app.bsky.embed.record#viewRecord") {
+        let qMedia = [];
+        if (recordEmbed.embeds && recordEmbed.embeds.length > 0) {
+          const qe = recordEmbed.embeds[0];
+          if (qe.$type === "app.bsky.embed.images#view") {
+            qMedia = qe.images.map((img) => ({ thumb: img.thumb, alt: img.alt, type: "image" }));
+          } else if (qe.$type === "app.bsky.embed.video#view") {
+            qMedia = [{ thumb: qe.thumbnail, alt: qe.alt || "Video", type: "video" }];
+          } else if (qe.$type === "app.bsky.embed.recordWithMedia#view") {
+            if (qe.media?.images)
+              qMedia = qe.media.images.map((img) => ({ thumb: img.thumb, alt: img.alt, type: "image" }));
+            else if (qe.media?.$type === "app.bsky.embed.video#view")
+              qMedia = [{ thumb: qe.media.thumbnail, alt: qe.media.alt || "Video", type: "video" }];
+          }
+        }
+        quoteRecord = {
+          text: escapeHtml(recordEmbed.value?.text || "").trim(),
+          author: {
+            displayName: escapeHtml(recordEmbed.author.displayName || recordEmbed.author.handle),
+            handle: escapeHtml(recordEmbed.author.handle),
+            avatar: recordEmbed.author.avatar,
+          },
+          media: qMedia,
+        };
+      } else if (recordEmbed.$type === "app.bsky.embed.record#viewNotFound") {
+        quoteRecord = { notFound: true };
+      } else if (recordEmbed.$type === "app.bsky.embed.record#viewBlocked") {
+        quoteRecord = { blocked: true };
+      }
+      return quoteRecord;
+    }
+
+    async function fetchAtProto(cursor = null) {
+      if (!atHandle) throw new Error("No ATproto handle configured");
+      let url = `https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${encodeURIComponent(atHandle)}&limit=6&filter=posts_no_replies`;
+      if (cursor) url += `&cursor=${encodeURIComponent(cursor)}`;
+
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("Failed to load ATproto feed");
+      const data = await res.json();
+
+      const posts = data.feed.map((item) => {
+        const post = item.post;
+        const record = post.record;
+        let reposter = null;
+
+        if (item.reason && item.reason.$type === "app.bsky.feed.defs#reasonRepost") {
+          reposter = {
+            displayName: escapeHtml(item.reason.by.displayName || item.reason.by.handle),
+            handle: escapeHtml(item.reason.by.handle),
+          };
+        }
+
+        let cwLabels = [];
+        if (post.labels && post.labels.length > 0) {
+          cwLabels.push(...post.labels.map((l) => l.val));
+        }
+        if (record.labels && record.labels.values) {
+          cwLabels.push(...record.labels.values.map((l) => l.val));
+        }
+
+        const labelMap = {
+          porn: "Adult Content",
+          sexual: "Sexually Suggestive",
+          "graphic-media": "Graphic Media",
+          nudity: "Non-sexual Nudity",
+          gore: "Gore",
+          spoiler: "Spoiler",
+        };
+        const warningTags = Object.keys(labelMap);
+
+        let matchedLabels = cwLabels.filter((l) => warningTags.includes(l.toLowerCase()));
+
+        let cw = null;
+        if (matchedLabels.length > 0) {
+          let uniqueLabels = Array.from(new Set(matchedLabels.map((l) => labelMap[l.toLowerCase()])));
+          cw = uniqueLabels.join(", ");
+        }
+
+        let mediaList = [];
+        let quoteRecord = null;
+
+        if (post.embed) {
+          if (post.embed.$type === "app.bsky.embed.images#view") {
+            mediaList = post.embed.images.map((img) => ({ thumb: img.thumb, alt: img.alt, type: "image" }));
+          } else if (post.embed.$type === "app.bsky.embed.video#view") {
+            mediaList = [{ thumb: post.embed.thumbnail, alt: post.embed.alt || "Video", type: "video" }];
+          } else if (post.embed.$type === "app.bsky.embed.external#view") {
+            if (post.embed.external && post.embed.external.thumb) {
+              mediaList = [{ thumb: post.embed.external.thumb, alt: post.embed.external.title, type: "image" }];
+            }
+          }
+          // quote posts
+          else if (post.embed.$type === "app.bsky.embed.record#view") {
+            const r = post.embed.record;
+            if (r.$type === "app.bsky.embed.record#viewRecord") {
+              quoteRecord = extractBlueskyQuote(r);
+            } else if (r.$type === "app.bsky.embed.record#viewNotFound") quoteRecord = { notFound: true };
+            else if (r.$type === "app.bsky.embed.record#viewBlocked") quoteRecord = { blocked: true };
+          }
+          // quote posts with media
+          else if (post.embed.$type === "app.bsky.embed.recordWithMedia#view") {
+            if (post.embed.media?.images) {
+              mediaList = post.embed.media.images.map((img) => ({ thumb: img.thumb, alt: img.alt, type: "image" }));
+            } else if (post.embed.media?.$type === "app.bsky.embed.video#view") {
+              mediaList = [{ thumb: post.embed.media.thumbnail, alt: post.embed.media.alt || "Video", type: "video" }];
+            }
+
+            const r = post.embed.record?.record;
+            if (r) {
+              if (r.$type === "app.bsky.embed.record#viewRecord") {
+                quoteRecord = extractBlueskyQuote(r);
+              } else if (r.$type === "app.bsky.embed.record#viewNotFound") quoteRecord = { notFound: true };
+              else if (r.$type === "app.bsky.embed.record#viewBlocked") quoteRecord = { blocked: true };
+            }
+          }
+        }
+
+        return {
+          url: `https://bsky.app/profile/${post.author.handle}/post/${post.uri.split("/").pop()}`,
+          author: {
+            displayName: escapeHtml(post.author.displayName || post.author.handle),
+            handle: escapeHtml(post.author.handle),
+            avatar: post.author.avatar,
+            profileUrl: `https://bsky.app/profile/${post.author.handle}`,
+          },
+          relativeDate: getRelativeTime(record.createdAt),
+          text: escapeHtml((record.text || "").trim()),
+          reposter: reposter,
+          cw: cw,
+          media: mediaList,
+          quote: quoteRecord,
+          stats: { replies: post.replyCount || 0, reposts: post.repostCount || 0, likes: post.likeCount || 0 },
+        };
+      });
+
+      return { posts: posts, nextCursor: data.cursor || null };
+    }
+
+    async function fetchActivityPub(maxId = null) {
+      if (!apHandle || !apHandle.includes("@")) throw new Error("No ActivityPub handle configured.");
+      const parts = apHandle.split("@").filter(Boolean);
+      const user = parts[0];
+      const domain = parts[1];
+
+      if (!activityPubId) {
+        const lookupRes = await fetch(`https://${domain}/api/v1/accounts/lookup?acct=${user}`);
+        if (!lookupRes.ok) throw new Error("Failed to locate ActivityPub account");
+        const account = await lookupRes.json();
+        activityPubId = account.id;
+      }
+
+      let url = `https://${domain}/api/v1/accounts/${activityPubId}/statuses?exclude_replies=true&limit=6`;
+      if (maxId) url += `&max_id=${maxId}`;
+
+      const statusRes = await fetch(url);
+      if (!statusRes.ok) throw new Error(`Failed to load feed from ${domain} (ActivityPub)`);
+      const statuses = await statusRes.json();
+
+      const mapped = await Promise.all(
+        statuses.map(async (status) => {
+          let target = status;
+          let reposter = null;
+
+          function getFullHandle(acct) {
+            return acct.includes("@") ? acct : `${acct}@${domain}`;
+          }
+
+          if (status.reblog) {
+            target = status.reblog;
+            const rawRepName = status.account.display_name || status.account.username;
+            reposter = {
+              displayName: emojify(escapeHtml(rawRepName), status.account.emojis || []),
+              handle: escapeHtml(getFullHandle(status.account.acct)),
+            };
+          }
+
+          let cw = null;
+          if (target.spoiler_text && target.spoiler_text.trim().length > 0) {
+            cw = emojify(escapeHtml(target.spoiler_text), target.emojis || []);
+          } else if (target.sensitive) {
+            cw = "Sensitive Content";
+          }
+
+          let quoteRecord = null;
+          let cleanContent = target.content;
+          const urlRegex = /href="([^"]+)"/g;
+          let match;
+          let quoteUrl = null;
+
+          while ((match = urlRegex.exec(target.content)) !== null) {
+            const url = match[1];
+            if (url.match(/^https?:\/\/[^\/]+\/@[^\/]+\/\d+$/)) quoteUrl = url;
+          }
+
+          if (quoteUrl) {
+            try {
+              const urlObj = new URL(quoteUrl);
+              const statusId = urlObj.pathname.split("/").pop();
+              const qRes = await fetch(`https://${urlObj.hostname}/api/v1/statuses/${statusId}`);
+              if (qRes.ok) {
+                const qData = await qRes.json();
+                const linkRegex = new RegExp(
+                  `<a[^>]*href="${quoteUrl.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&")}"[^>]*>.*?<\\/a>`,
+                  "g",
+                );
+                cleanContent = cleanContent.replace(linkRegex, "");
+
+                const qAuthorName = emojify(
+                  escapeHtml(qData.account.display_name || qData.account.username),
+                  qData.account.emojis || [],
+                );
+
+                const qMediaList = qData.media_attachments
+                  .map((m) => {
+                    if (m.type === "image") return { thumb: m.preview_url, alt: m.description, type: "image" };
+                    if (m.type === "video" || m.type === "gifv")
+                      return { thumb: m.preview_url, alt: m.description, type: "video" };
+                    return null;
+                  })
+                  .filter(Boolean);
+
+                quoteRecord = {
+                  text: emojify(escapeHtml(stripHtmlAndPreserveLines(qData.content).trim()), qData.emojis || []),
+                  author: {
+                    displayName: qAuthorName,
+                    handle: escapeHtml(
+                      qData.account.acct.includes("@")
+                        ? qData.account.acct
+                        : `${qData.account.acct}@${urlObj.hostname}`,
+                    ),
+                    avatar: qData.account.avatar,
+                  },
+                  media: qMediaList,
+                };
+              } else {
+                quoteRecord = { notFound: true };
+              }
+            } catch (e) {
+              quoteRecord = { blocked: true };
+            }
+          }
+
+          const rawAuthorName = target.account.display_name || target.account.username;
+          const authorName = emojify(escapeHtml(rawAuthorName), target.account.emojis || []);
+          const rawText = stripHtmlAndPreserveLines(cleanContent).trim();
+          const text = emojify(escapeHtml(rawText), target.emojis || []);
+
+          const mediaList = target.media_attachments
+            .map((m) => {
+              if (m.type === "image") return { thumb: m.preview_url, alt: m.description, type: "image" };
+              if (m.type === "video" || m.type === "gifv")
+                return { thumb: m.preview_url, alt: m.description, type: "video" };
+              return null;
+            })
+            .filter(Boolean);
+
+          return {
+            url: target.url,
+            author: {
+              displayName: authorName,
+              handle: escapeHtml(getFullHandle(target.account.acct)),
+              avatar: target.account.avatar,
+              profileUrl: target.account.url,
+            },
+            relativeDate: getRelativeTime(target.created_at),
+            text: text,
+            reposter: reposter,
+            cw: cw,
+            media: mediaList,
+            quote: quoteRecord,
+            stats: {
+              replies: target.replies_count || 0,
+              reposts: target.reblogs_count || 0,
+              likes: target.favourites_count || 0,
+            },
+          };
+        }),
+      );
+
+      const nextMaxId = statuses.length > 0 ? statuses[statuses.length - 1].id : null;
+      return { posts: mapped, nextCursor: nextMaxId };
+    }
+
+    async function fetchAndRender(platform, append = false) {
+      isFetching = true;
+      try {
+        let result;
+        if (platform === "atproto") result = await fetchAtProto(cursors.atproto);
+        else result = await fetchActivityPub(cursors.activitypub);
+
+        cursors[platform] = result.nextCursor;
+        renderPosts(result.posts, platform, append, result.nextCursor != null);
+      } catch (err) {
+        console.error(`Feed fetch error (${platform}):`, err);
+        if (!append) showError(err.message || "Failed to load feed (check developer console)");
+      } finally {
+        isFetching = false;
+      }
+    }
+
+    window.loadMoreFeed = async function () {
+      if (isFetching) return;
+      const btn = document.getElementById("load-more-btn");
+      if (btn)
+        btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin text-sm opacity-80 shrink-0"></i><span class="truncate">Loading...</span>`;
+      await fetchAndRender(currentPlatform, true);
+    };
+
+    window.switchFeed = async function (platform) {
+      if (currentPlatform === platform && postsContainer.innerHTML !== "") return;
+      currentPlatform = platform;
+      updateActiveButton(platform);
+      setSkeletons(true);
+
+      cursors[platform] = null;
+      await fetchAndRender(platform, false);
+    };
+
+    fetchAndRender("atproto", false);
+  });
+</script>

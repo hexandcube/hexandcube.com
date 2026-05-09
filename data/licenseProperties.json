@@ -1,0 +1,76 @@
+{
+  "permissions": {
+    "none": {
+      "icon": "fa-regular fa-empty-set",
+      "description": "You may not use the material in any way without explicit permission from the creator."
+    },
+    "privateUse": {
+      "icon": "fa-regular fa-house-user",
+      "description": "You may use the material for private purposes."
+    },
+    "commercialUse": {
+      "icon": "fa-regular fa-briefcase",
+      "description": "You may use the material for commercial purposes."
+    },
+    "distribution": {
+      "icon": "fa-regular fa-share-nodes",
+      "description": "You may share and distribute the material in unmodified form."
+    },
+    "adaptation": {
+      "icon": "fa-regular fa-pen",
+      "description": "You may modify, transform, and build upon the material, and distribute the modified contributions."
+    }
+  },
+  "conditions": {
+    "none": {
+      "icon": "fa-regular fa-empty-set",
+      "description": "There are no conditions for using the material (though attribution is appreciated!)."
+    },
+    "attribution": {
+      "icon": "fa-brands fa-creative-commons-by",
+      "description": "You must give appropriate credit, provide a link to the license, and indicate if changes were made."
+    },
+    "stateChanges": {
+      "icon": "fa-regular fa-file-pen",
+      "description": "You must document all changes made to the published material."
+    },
+    "nonCommercial": {
+      "icon": "fa-brands fa-creative-commons-nc",
+      "description": "You may not use the material for commercial purposes."
+    },
+    "noRestrictions": {
+      "icon": "fa-regular fa-lock-open",
+      "description": "You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits."
+    },
+    "shareAlike": {
+      "icon": "fa-brands fa-creative-commons-sa",
+      "description": "If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original."
+    },
+    "noDerivatives": {
+      "icon": "fa-brands fa-creative-commons-nd",
+      "description": "If you remix, transform, or build upon the material, you may not distribute the modified material."
+    },
+    "noDistribution": {
+      "icon": "fa-regular fa-ban",
+      "description": "You may not share, distribute, or publicly display the material."
+    },
+    "custom": {
+      "icon": "fa-solid fa-file-contract",
+      "description": "This license includes unique, custom conditions. You must read the official license text for specific restrictions."
+    }
+  },
+  "limitations": {
+    "noWarranty": {
+      "icon": "fa-regular fa-exclamation-triangle",
+      "description": "The material is provided 'as is'. The licensor provides no guarantees regarding its quality, accuracy, or fitness for a particular purpose."
+    },
+    "liability": {
+      "icon": "fa-regular fa-balance-scale",
+      "description": "The licensor cannot be held legally or financially responsible for any damages, data loss, or losses arising from your use of the material."
+    },
+    "trademarkUse": {
+      "icon": "fa-regular fa-trademark",
+      "description": "The license does not grant you any rights in the licensor's brand names, logos, or trademarks."
+    }
+  }
+}

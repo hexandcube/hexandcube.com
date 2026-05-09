@@ -1,0 +1,23 @@
+{
+  "subject": "acct:hexandcube@hexandcube.com",
+  "aliases": [
+    "https://furry.engineer/@hexandcube",
+    "https://furry.engineer/users/hexandcube"
+  ],
+  "links": [
+    {
+      "rel": "http://webfinger.net/rel/profile-page",
+      "type": "text/html",
+      "href": "https://furry.engineer/@hexandcube"
+    },
+    {
+      "rel": "self",
+      "type": "application/activity+json",
+      "href": "https://furry.engineer/users/hexandcube"
+    },
+    {
+      "rel": "http://ostatus.org/schema/1.0/subscribe",
+      "template": "https://furry.engineer/authorize_interaction?uri={uri}"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{{- $href := .Get "href" | default "#" -}}
+
+{{- $class := printf "btn %s %s %s %s %s"
+(cond (.Get "tertiary") "btn-tertiary" (cond (.Get "secondary") "btn-secondary" "btn-primary"))
+(cond (.Get "full") "btn-full" "")
+(cond (.Get "square") "btn-square" "")
+(cond (.Get "small") "btn-small" "")
+(.Get "class" | default "")
+(cond (.Get "disabled") "btn-disabled" "")
+-}}
+
+<a href="{{ $href }}" class="{{ $class | safeHTMLAttr }}" {{ with .Get "onclick" }}onclick="{{ . | safeJS }}" {{ end }}
+    {{ with .Get "id" }}id="{{ . }}" {{ end }}>
+    {{ .Inner }}
+</a>

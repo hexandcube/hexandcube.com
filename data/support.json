@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Ko-fi",
+    "url": "https://ko-fi.com/hexandcube",
+    "icon": "fa-solid fa-mug-hot",
+    "description": "Buy me a coffee"
+  },
+  {
+    "name": "GitHub Sponsors",
+    "url": "https://github.com/sponsors/hexandcube",
+    "icon": "fa-brands fa-github",
+    "description": "Support my open source work"
+  },
+  {
+    "name": "PayPal",
+    "url": "https://www.paypal.com/donate/?business=Hexandcube%40hexandcube.com",
+    "icon": "fa-brands fa-paypal",
+    "description": "Send a one-time tip"
+  },
+  {
+    "name": "Liberapay",
+    "url": "https://liberapay.com/hexandcube/",
+    "icon": "fa-solid fa-circle-nodes",
+    "description": "Support me on Liberapay"
+  }
+]

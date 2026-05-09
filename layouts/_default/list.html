@@ -1,0 +1,64 @@
+{{ define "main" }}
+  <main class="responsive flex min-h-[50vh] flex-col items-center justify-center px-4 py-12 sm:py-20">
+    <div
+      class="border-foreground-primary/15 bg-background-secondary relative w-full max-w-4xl overflow-hidden rounded-xl border-1 p-8 text-left shadow-xl sm:p-12">
+      <div
+        class="bg-accent-primary/10 pointer-events-none absolute -top-32 -right-32 h-96 w-96 rounded-full blur-[80px]"></div>
+      <div class="relative z-10 flex flex-col gap-10">
+        <div class="flex w-full flex-col-reverse justify-between gap-6 sm:flex-row sm:items-start">
+          <div class="flex w-full flex-col gap-4">
+            <div class="flex flex-col gap-1 sm:gap-1.5">
+              <div
+                class="text-foreground-secondary font-mono text-xs font-bold tracking-widest uppercase sm:text-sm"
+                id="error-code">
+                Undefined list template error
+              </div>
+
+              <h1
+                class="font-brand from-accent-strong to-accent-primary wrap-break-words m-0 max-w-128 bg-linear-to-r bg-clip-text text-4xl leading-tight font-black tracking-tight text-transparent sm:text-5xl md:text-6xl">
+                Well, uh...
+              </h1>
+            </div>
+
+            <div class="text-foreground-secondary max-w-128 leading-relaxed content" id="error-description">
+              Congratulations, You found a list page without a defined template! 
+              <br> If you followed a link to get here, this is a bug. Please
+              contact me at <a href="mailto:hexandcube@hexandcube.com">hexandcube@hexandcube.com</a> or 
+              <a href="https://github.com/hexandcube/hexandcube.com/issues" target="_blank">report the issue on GitHub</a> and tell me 
+              how you got here, so I can fix this. Thanks!
+            </div>
+          </div>
+
+          <div
+            class="bg-background-elevated border-foreground-primary/10 relative flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border-1 shadow-sm sm:h-24 sm:w-24">
+            <i
+              class="fa-regular fa-file-exclamation text-foreground-secondary relative z-10 text-2xl sm:text-4xl"
+              id="error-icon"></i>
+          </div>
+        </div>
+
+        <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:gap-4">
+          <a href="/" class="btn btn-primary w-full justify-center sm:w-auto">
+            <i class="fa-solid fa-house mr-1.5 text-sm opacity-80"></i> Go to Homepage
+          </a>
+          <button
+            type="button"
+            onclick="history.back()"
+            class="btn btn-secondary w-full cursor-pointer justify-center sm:w-auto">
+            <i class="fa-solid fa-arrow-left mr-1.5 text-sm opacity-80"></i> Go Back
+          </button>
+        </div>
+      </div>
+    </div>
+    {{ with .Content}}
+    <br>
+    <div
+      class="border-foreground-primary/15 bg-background-secondary relative w-full max-w-4xl overflow-hidden rounded-xl border-1 p-8 text-left shadow-xl sm:p-12">
+      <div class="text-foreground-secondary font-mono text-xs font-bold tracking-widest uppercase sm:text-sm">
+        Page content
+      </div>
+      {{ . }}
+    </div>
+    {{ end }}
+  </main>
+{{ end }}

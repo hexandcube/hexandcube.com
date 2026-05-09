@@ -1,0 +1,881 @@
+{{ define "main" }}
+  {{ $galleryPage := site.GetPage "/gallery" }}
+
+  {{ $categoryPathNames := hugo.Data.categoryPathNames.gallery }}
+  {{ $currentCategory := .Params.category }}
+  {{ $categoryPath := $currentCategory }}
+  {{ if index $categoryPathNames $currentCategory }}
+    {{ $categoryPath = index $categoryPathNames $currentCategory }}
+  {{ end }}
+
+  {{ $authorName := .Params.author | default site.Params.author | default "Hexandcube" }}
+  {{ $totalSlides := add 1 (len (.Params.variants | default slice)) }}
+  {{ $licenseId := .Params.license | default "reserved" }}
+
+
+  <article>
+    <section class="responsive pt-8 md:pt-12">
+      <div class="mb-4 flex flex-wrap items-center gap-2">
+        <nav
+          aria-label="Breadcrumb"
+          class="font-primary text-foreground-secondary flex flex-wrap items-center gap-2 text-sm font-medium">
+          <a
+            href="{{ if $galleryPage }}
+              {{ $galleryPage.RelPermalink }}
+            {{ else }}
+              /gallery
+            {{ end }}"
+            class="hover:text-foreground-primary decoration-foreground-primary/30 underline-offset-4 transition-colors focus:underline focus:outline-none">
+            {{ if $galleryPage }}{{ $galleryPage.Title }}{{ else }}Gallery{{ end }}
+          </a>
+          {{ with .Params.category }}
+            <i class="fa-solid fa-chevron-right text-[10px] opacity-50"></i>
+            <a
+              href="{{ $galleryPage.RelPermalink }}{{ $currentCategory }}/"
+              class="hover:text-foreground-primary decoration-foreground-primary/30 capitalize underline-offset-4 transition-colors focus:underline focus:outline-none">
+              {{ . }}
+            </a>
+          {{ end }}
+          <i class="fa-solid fa-chevron-right text-[10px] opacity-50"></i>
+          <span class="text-foreground-primary cursor-default" aria-current="page">{{ .Title }}</span>
+        </nav>
+      </div>
+      <h1 class="text-foreground-primary font-primary text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+        {{ .Title }}
+      </h1>
+      <div class="text-foreground-secondary mt-5 max-w-prose">
+        {{ .Description }}
+      </div>
+    </section>
+
+    <section class="responsive mt-5 mb-20">
+      <div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-12">
+        <div class="overflow-hidden lg:col-span-8">
+          <div
+            class="group border-foreground-primary/15 bg-background-secondary relative w-full overflow-hidden rounded-xl border-1 shadow-sm"
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="{{ .Title }} Images">
+            <div
+              id="image-carousel"
+              class="no-scrollbar z-0 flex w-full snap-x snap-mandatory items-center gap-1 overflow-x-auto scroll-smooth">
+              <div
+                class="group/slide bg-foreground-primary/10 lightbox-trigger relative flex w-full flex-[0_0_100%] animate-pulse cursor-zoom-in snap-center justify-center"
+                data-index="0"
+                role="group"
+                aria-roledescription="slide"
+                aria-label="Image 1 of {{ $totalSlides }}">
+                <img
+                  src="https://fs.floofware.net/hexandcube/gallery/{{ $categoryPath }}/thumbnails/{{ .Params.id }}.{{ .Params.format }}"
+                  alt="{{ .Title }} - Main Image"
+                  width="{{ .Params.width }}"
+                  height="{{ .Params.height }}"
+                  class="block h-auto max-h-[70vh] w-full object-contain opacity-0 transition-all duration-700 ease-out group-hover/slide:scale-[102%]"
+                  onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('animate-pulse', 'bg-foreground-primary/10');" />
+                <div
+                  class="absolute inset-0 z-0 flex items-center justify-center bg-black/0 opacity-0 transition-colors group-hover/slide:bg-black/10 group-hover/slide:opacity-100">
+                  <div
+                    class="effect-shadowlight pointer-events-none flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-b from-black/60 to-black/40 text-white backdrop-blur-md">
+                    <i class="fa-solid fa-expand" aria-hidden="true"></i>
+                  </div>
+                </div>
+              </div>
+
+              {{ range $index, $variant := .Params.variants }}
+                <div
+                  class="group/slide bg-foreground-primary/10 lightbox-trigger relative flex w-full flex-[0_0_100%] animate-pulse cursor-zoom-in snap-center justify-center"
+                  data-index="{{ add $index 1 }}"
+                  role="group"
+                  aria-roledescription="slide"
+                  aria-label="Image {{ add $index 2 }} of {{ $totalSlides }}">
+                  <img
+                    src="https://fs.floofware.net/hexandcube/gallery/{{ $categoryPath }}/thumbnails/{{ $.Params.id }}-{{ . }}.{{ $.Params.format }}"
+                    alt="{{ $.Title }} - {{ . }}"
+                    width="{{ $.Params.width }}"
+                    height="{{ $.Params.height }}"
+                    loading="lazy"
+                    class="block h-auto max-h-[70vh] w-full object-contain opacity-0 transition-all duration-700 ease-out group-hover/slide:scale-[102%]"
+                    onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('animate-pulse', 'bg-foreground-primary/10');" />
+                  <div
+                    class="absolute inset-0 z-0 flex items-center justify-center bg-black/0 opacity-0 transition-colors group-hover/slide:bg-black/10 group-hover/slide:opacity-100">
+                    <div
+                      class="effect-shadowlight pointer-events-none flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-b from-black/60 to-black/40 text-white backdrop-blur-md">
+                      <i class="fa-solid fa-expand" aria-hidden="true"></i>
+                    </div>
+                  </div>
+                </div>
+              {{ end }}
+
+            </div>
+
+            {{ if .Params.variants }}
+              <button
+                id="carousel-prev"
+                class="effect-shadowlight absolute top-1/2 left-3 z-10 hidden h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white/90 opacity-0 backdrop-blur-md transition-all group-hover:opacity-100 hover:bg-black/80 hover:text-white sm:flex"
+                aria-label="Previous image"
+                aria-controls="image-carousel">
+                <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+              </button>
+              <button
+                id="carousel-next"
+                class="effect-shadowlight absolute top-1/2 right-3 z-10 hidden h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white/90 opacity-0 backdrop-blur-md transition-all group-hover:opacity-100 hover:bg-black/80 hover:text-white sm:flex"
+                aria-label="Next image"
+                aria-controls="image-carousel">
+                <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+              </button>
+            {{ end }}
+          </div>
+
+          {{ if .Params.variants }}
+            <div
+              class="no-scrollbar mt-4 flex snap-x gap-3 overflow-x-auto py-1"
+              id="carousel-thumbs"
+              role="tablist"
+              aria-label="Image Thumbnails">
+              <button
+                class="border-foreground-primary thumb-indicator bg-foreground-primary/10 focus:ring-foreground-primary/50 h-16 w-16 shrink-0 animate-pulse snap-center overflow-hidden rounded-md border-2 opacity-100 transition-all hover:opacity-100 focus:ring-2 focus:outline-none sm:h-20 sm:w-20"
+                data-index="0"
+                role="tab"
+                aria-label="Go to main image"
+                aria-current="true"
+                aria-selected="true">
+                <img
+                  src="https://fs.floofware.net/hexandcube/gallery/{{ $categoryPath }}/thumbnails/{{ .Params.id }}.{{ .Params.format }}"
+                  alt="Thumbnail for main image"
+                  loading="lazy"
+                  class="pointer-events-none h-full w-full object-cover opacity-0 transition-opacity duration-700 ease-out"
+                  onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('animate-pulse', 'bg-foreground-primary/10'); this.parentElement.classList.add('bg-background-secondary');" />
+              </button>
+
+              {{ range $index, $variant := .Params.variants }}
+                <button
+                  class="thumb-indicator bg-foreground-primary/10 focus:ring-foreground-primary/50 h-16 w-16 shrink-0 animate-pulse snap-center overflow-hidden rounded-md border-2 border-transparent opacity-50 transition-all hover:opacity-100 focus:ring-2 focus:outline-none sm:h-20 sm:w-20"
+                  data-index="{{ add $index 1 }}"
+                  role="tab"
+                  aria-label="Go to variant {{ add $index 1 }}"
+                  aria-selected="false">
+                  <img
+                    src="https://fs.floofware.net/hexandcube/gallery/{{ $categoryPath }}/thumbnails/{{ $.Params.id }}-{{ . }}.{{ $.Params.format }}"
+                    alt="Thumbnail for variant {{ . }}"
+                    loading="lazy"
+                    class="pointer-events-none h-full w-full object-cover opacity-0 transition-opacity duration-700 ease-out"
+                    onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('animate-pulse', 'bg-foreground-primary/10'); this.parentElement.classList.add('bg-background-secondary');" />
+                </button>
+              {{ end }}
+
+            </div>
+          {{ end }}
+        </div>
+
+        <div class="flex flex-col gap-4 lg:col-span-4">
+          <div class="sticky top-8 flex flex-col gap-4">
+            <div class="bg-background-secondary border-foreground-primary/15 rounded-xl border-1 p-5">
+              <h3 class="font-primary text-foreground-primary mb-4 flex items-center gap-2 text-lg font-bold">
+                <i class="fa-regular fa-image text-foreground-secondary"></i> Work Details
+              </h3>
+              <dl class="flex flex-col gap-3 text-sm">
+                {{ with .Params.date }}
+                  <div
+                    class="border-foreground-primary/10 flex items-start justify-between gap-4 border-b pb-2 last:border-b-0 last:pb-0">
+                    <dt class="text-foreground-secondary inline-flex items-center gap-1.5 whitespace-nowrap">
+                      <i class="fa-regular fa-calendar text-xs"></i> Published on
+                    </dt>
+                    <dd class="text-foreground-primary text-right">
+                      {{ .Format "Jan 2, 2006" }}
+                    </dd>
+                  </div>
+                {{ end }}
+                {{ with .Params.format }}
+                  <div
+                    class="border-foreground-primary/10 flex items-start justify-between gap-4 border-b pb-2 last:border-b-0 last:pb-0">
+                    <dt class="text-foreground-secondary inline-flex items-center gap-1.5 whitespace-nowrap">
+                      <i class="fa-regular fa-file text-xs"></i> Format
+                    </dt>
+                    <dd class="text-foreground-primary text-right font-mono uppercase">
+                      {{ . }}
+                    </dd>
+                  </div>
+                {{ end }}
+
+                {{ if and .Params.width .Params.height }}
+                  <div
+                    class="border-foreground-primary/10 flex items-start justify-between gap-4 border-b pb-2 last:border-b-0 last:pb-0">
+                    <dt class="text-foreground-secondary inline-flex items-center gap-1.5 whitespace-nowrap">
+                      <i class="fa-regular fa-arrows-maximize text-xs"></i>
+                      Resolution
+                    </dt>
+                    <dd class="text-foreground-primary text-right font-mono">
+                      {{ .Params.width }} &times;
+                      {{ .Params.height }}
+                    </dd>
+                  </div>
+                {{ end }}
+
+                {{ with $authorName }}
+                  <div
+                    class="border-foreground-primary/10 flex items-start justify-between gap-4 border-b pb-2 last:border-b-0 last:pb-0">
+                    <dt class="text-foreground-secondary inline-flex items-center gap-1.5 whitespace-nowrap">
+                      <i class="fa-regular fa-user text-xs"></i> Creator
+                    </dt>
+                    <dd class="text-foreground-primary text-right capitalize">
+                      {{ . }}
+                    </dd>
+                  </div>
+                {{ end }}
+
+                {{ $licensesData := hugo.Data.licenses }}
+                {{ if index $licensesData $licenseId }}
+                  {{ $thisLicense := index $licensesData $licenseId }}
+                  <div
+                    class="border-foreground-primary/10 flex items-start justify-between gap-4 border-b pb-2 last:border-b-0 last:pb-0">
+                    <dt class="text-foreground-secondary inline-flex items-center gap-1.5 whitespace-nowrap">
+                      <i class="fa-regular fa-file-contract text-xs"></i>
+                      License
+                    </dt>
+                    <dd class="text-foreground-primary text-right">
+                      <button
+                        type="button"
+                        data-modal-target="license-modal"
+                        aria-haspopup="dialog"
+                        class="hover:text-foreground-secondary focus:ring-foreground-primary/50 inline-flex cursor-pointer items-center gap-1.5 rounded-sm transition-colors outline-none focus:ring-2">
+                        <i class="{{ $thisLicense.icon }}" aria-hidden="true"></i>
+                        <span class="decoration-foreground-primary/30 underline underline-offset-4"
+                          >{{ $thisLicense.name }}</span
+                        >
+                      </button>
+                    </dd>
+                  </div>
+                {{ end }}
+
+                {{ with .Params.variants }}
+                  <div
+                    class="border-foreground-primary/10 flex flex-col gap-2 border-b pt-1 pb-1 last:border-b-0 last:pb-0">
+                    <dt class="text-foreground-secondary inline-flex items-center gap-1.5 whitespace-nowrap">
+                      <i class="fa-regular fa-image-stack text-xs"></i> Variants
+                    </dt>
+                    <dd class="mt-1 ml-0 flex flex-wrap gap-1.5">
+                      {{ range . }}
+                        <span
+                          class="font-primary bg-background-elevated border-foreground-primary/15 text-foreground-primary rounded-md border px-2 py-1 text-[11px] font-semibold capitalize"
+                          >{{ . }}</span
+                        >
+                      {{ end }}
+                    </dd>
+                  </div>
+                {{ end }}
+              </dl>
+
+              {{ if or .Params.downloadUrl .Params.links }}
+                <div class="mt-6 flex flex-col gap-3">
+                  {{ with .Params.downloadUrl }}
+                    <a
+                      href="{{ . }}"
+                      {{ if $.Params.downloadInNewTab }}target="_blank"{{ end }}
+                      class="btn btn-primary btn-full flex items-center justify-center gap-2">
+                      <i class="fa-regular fa-download text-base"></i>
+                      {{ with $.Params.downloadText }}
+                        {{ . }}
+                      {{ else }}
+                        Download
+                      {{ end }}
+                    </a>
+                  {{ end }}
+
+                  {{ with .Params.links }}
+                    {{ range . }}
+                      <div>
+                        <a
+                          href="{{ .url | safeURL }}"
+                          target="_blank"
+                          rel="noopener"
+                          class="btn {{ if .primary }}
+                            btn-primary
+                          {{ else }}
+                            btn-secondary
+                          {{ end }} btn-full ml-0 flex items-center justify-center gap-2">
+                          <i class="fa-regular fa-arrow-up-right-from-square text-base"></i>
+                          View on
+                          {{ .name }}
+                        </a>
+                      </div>
+                    {{ end }}
+                  {{ end }}
+                </div>
+              {{ end }}
+
+            </div>
+
+            {{ if or .Params.camera .Params.lens .Params.iso .Params.focalLength .Params.shutterSpeed
+              .Params.aperture
+            }}
+              <div class="bg-background-secondary border-foreground-primary/15 rounded-xl border-1 p-5">
+                <h3 class="font-primary text-foreground-primary mb-4 text-xl font-bold">
+                  <i class="fa-regular fa-camera-viewfinder text-foreground-secondary"></i> Photo Metadata
+                </h3>
+                <dl class="flex flex-col gap-3 text-sm">
+                  {{ with .Params.captureDate }}
+                    <div
+                      class="border-foreground-primary/10 flex items-start justify-between gap-4 border-b pb-2 last:border-b-0 last:pb-0">
+                      <dt class="text-foreground-secondary whitespace-nowrap">
+                        <i class="fa-regular fa-calendar-clock mr-1 text-xs"></i> Captured on
+                      </dt>
+                      <dd class="text-foreground-primary text-right">
+                        {{ (time.AsTime .).Format "Jan 2, 2006" }}
+                      </dd>
+                    </div>
+                  {{ end }}
+                  {{ with .Params.camera }}
+                    <div
+                      class="border-foreground-primary/10 flex items-start justify-between gap-4 border-b pb-2 last:border-b-0 last:pb-0">
+                      <dt class="text-foreground-secondary whitespace-nowrap">
+                        <i class="fa-regular fa-camera mr-1 text-xs"></i> Camera
+                      </dt>
+                      <dd class="text-foreground-primary text-right">
+                        {{ . }}
+                      </dd>
+                    </div>
+                  {{ end }}
+                  {{ with .Params.lens }}
+                    <div
+                      class="border-foreground-primary/10 flex items-start justify-between gap-4 border-b pb-2 last:border-b-0 last:pb-0">
+                      <dt class="text-foreground-secondary whitespace-nowrap">
+                        <i class="fa-regular fa-eye mr-1 text-xs"></i> Lens
+                      </dt>
+                      <dd class="text-foreground-primary text-right">
+                        {{ . }}
+                      </dd>
+                    </div>
+                  {{ end }}
+                  {{ with .Params.focalLength }}
+                    <div
+                      class="border-foreground-primary/10 flex items-start justify-between gap-4 border-b pb-2 last:border-b-0 last:pb-0">
+                      <dt class="text-foreground-secondary whitespace-nowrap">
+                        <i class="fa-regular fa-arrows-to-circle mr-1 text-xs"></i>
+                        Focal Length
+                      </dt>
+                      <dd class="text-foreground-primary text-right font-mono">
+                        {{ . }}
+                      </dd>
+                    </div>
+                  {{ end }}
+                  {{ with .Params.aperture }}
+                    <div
+                      class="border-foreground-primary/10 flex items-start justify-between gap-4 border-b pb-2 last:border-b-0 last:pb-0">
+                      <dt class="text-foreground-secondary whitespace-nowrap">
+                        <i class="fa-regular fa-aperture mr-1 text-xs"></i>
+                        Aperture
+                      </dt>
+                      <dd class="text-foreground-primary text-right font-mono">
+                        {{ . }}
+                      </dd>
+                    </div>
+                  {{ end }}
+                  {{ with .Params.shutterSpeed }}
+                    <div
+                      class="border-foreground-primary/10 flex items-start justify-between gap-4 border-b pb-2 last:border-b-0 last:pb-0">
+                      <dt class="text-foreground-secondary whitespace-nowrap">
+                        <i class="fa-regular fa-stopwatch mr-1 text-xs"></i>
+                        Shutter speed
+                      </dt>
+                      <dd class="text-foreground-primary text-right font-mono">{{ . }}s</dd>
+                    </div>
+                  {{ end }}
+                  {{ with .Params.iso }}
+                    <div
+                      class="border-foreground-primary/10 flex items-start justify-between gap-4 border-b pb-2 last:border-b-0 last:pb-0">
+                      <dt class="text-foreground-secondary whitespace-nowrap">
+                        <i class="fa-regular fa-lightbulb mr-1 text-xs"></i> ISO
+                      </dt>
+                      <dd class="text-foreground-primary text-right font-mono">
+                        {{ . }}
+                      </dd>
+                    </div>
+                  {{ end }}
+                </dl>
+              </div>
+            {{ end }}
+
+          {{ partial "donation.html" . }}
+
+          </div>
+        </div>
+      </div>
+      <div>
+        {{ if .Content }}
+          <div class="content text-foreground-secondary prose-sm md:prose-base mt-5">
+            {{ .Content }}
+          </div>
+        {{ end }}
+      </div>
+    </section>
+
+    <noscript>
+      <style>
+        img[loading="lazy"] {
+          opacity: 1 !important;
+        }
+      </style>
+    </noscript>
+  </article>
+
+  {{ partial "license-modal.html" (dict "Page" . "Author" $authorName "CopyrightYears" (.Date.Format "2006") "LicenseId" $licenseId) }}
+
+  <dialog
+    id="gallery-lightbox"
+    aria-label="Fullscreen Lightbox"
+    aria-modal="true"
+    data-custom-modal="true"
+    class="pointer-events-none invisible fixed inset-0 z-50 m-0 flex h-dvh max-h-none w-dvw max-w-none flex-col justify-between border-none bg-black/40 p-0 opacity-0 backdrop-blur-2xl transition-all duration-300 select-none [&.is-closing]:invisible! [&.is-closing]:opacity-0! [&.ui-hidden_.lb-ui]:pointer-events-none [&.ui-hidden_.lb-ui]:opacity-0 [[open]]:pointer-events-auto [[open]]:visible [[open]]:opacity-100">
+    <div
+      class="lb-ui pointer-events-none absolute top-0 right-0 left-0 z-50 flex w-full items-center justify-between bg-linear-to-b from-black/50 to-transparent p-4 transition-opacity duration-300 sm:p-6 lg:pointer-events-auto lg:relative lg:shrink-0 lg:bg-none lg:p-8">
+      <div
+        id="lightbox-caption"
+        aria-live="polite"
+        class="font-primary effect-shadowlight pointer-events-auto rounded-full bg-linear-to-b from-black/60 to-black/40 px-4 py-2 text-sm font-medium tracking-wide text-white drop-shadow-md backdrop-blur-md sm:text-lg lg:text-xl"></div>
+      <button
+        id="lb-close-btn"
+        class="effect-shadowlight pointer-events-auto ml-4 flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full bg-linear-to-b from-black/60 to-black/40 text-white/90 drop-shadow-md backdrop-blur-md transition-colors outline-none hover:bg-black/80 hover:text-white focus:ring-2 focus:ring-white/50"
+        aria-label="Close Lightbox">
+        <i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="group/lbarrows relative z-0 flex h-full min-h-0 w-full flex-1 items-center justify-center">
+      {{ if .Params.variants }}
+        <button
+          id="lb-prev-btn"
+          class="lb-ui effect-shadowlight pointer-events-auto absolute top-1/2 left-2 z-50 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-linear-to-b from-black/60 to-black/40 text-white/90 opacity-100 drop-shadow-lg backdrop-blur-md transition-all outline-none hover:bg-black/80 hover:text-white focus:ring-2 focus:ring-white/50 sm:left-4 md:h-12 md:w-12 lg:left-8 lg:opacity-0 lg:group-hover/lbarrows:opacity-100"
+          aria-label="Previous Image">
+          <i class="fa-solid fa-chevron-left text-lg" aria-hidden="true"></i>
+        </button>
+        <button
+          id="lb-next-btn"
+          class="lb-ui effect-shadowlight pointer-events-auto absolute top-1/2 right-2 z-50 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-linear-to-b from-black/60 to-black/40 text-white/90 opacity-100 drop-shadow-lg backdrop-blur-md transition-all outline-none hover:bg-black/80 hover:text-white focus:ring-2 focus:ring-white/50 sm:right-4 md:h-12 md:w-12 lg:right-8 lg:opacity-0 lg:group-hover/lbarrows:opacity-100"
+          aria-label="Next Image">
+          <i class="fa-solid fa-chevron-right text-lg" aria-hidden="true"></i>
+        </button>
+      {{ end }}
+
+
+      <div
+        id="lightbox-carousel"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Fullscreen Gallery"
+        class="no-scrollbar pointer-events-auto z-10 flex h-full w-full snap-x snap-mandatory items-center gap-1 overflow-x-auto scroll-smooth">
+        <div
+          role="group"
+          aria-roledescription="slide"
+          aria-label="Fullscreen Image 1 of {{ $totalSlides }}"
+          class="relative flex h-full w-full flex-[0_0_100%] snap-center items-center justify-center p-2 sm:p-4 lg:p-4">
+          <img
+            src="https://fs.floofware.net/hexandcube/gallery/{{ $categoryPath }}/{{ .Params.id }}.{{ .Params.format }}"
+            class="lb-img max-h-full max-w-full cursor-pointer rounded-md object-contain opacity-0 drop-shadow-2xl transition-opacity duration-700 ease-out"
+            alt="{{ .Title }}"
+            loading="lazy"
+            onload="this.classList.remove('opacity-0');" />
+        </div>
+
+        {{ range $index, $variant := .Params.variants }}
+          <div
+            role="group"
+            aria-roledescription="slide"
+            aria-label="Fullscreen Image {{ add $index 2 }} of {{ $totalSlides }}"
+            class="relative flex h-full w-full flex-[0_0_100%] snap-center items-center justify-center p-2 sm:p-4 lg:p-4">
+            <img
+              src="https://fs.floofware.net/hexandcube/gallery/{{ $categoryPath }}/{{ $.Params.id }}-{{ . }}.{{ $.Params.format }}"
+              class="lb-img max-h-full max-w-full cursor-pointer rounded-md object-contain opacity-0 drop-shadow-2xl transition-opacity duration-700 ease-out"
+              alt="{{ $.Title }} - {{ . }}"
+              loading="lazy"
+              onload="this.classList.remove('opacity-0');" />
+          </div>
+        {{ end }}
+
+      </div>
+    </div>
+
+    <div
+      class="lb-ui {{ if not .Params.variants }} opacity-0! invisible! pointer-events-none! {{ end }} pointer-events-none absolute right-0 bottom-0 left-0 z-50 flex w-full items-end justify-center bg-linear-to-t from-black/50 to-transparent p-4 pb-6 transition-opacity duration-300 sm:p-6 sm:pb-10 lg:pointer-events-auto lg:relative lg:shrink-0 lg:items-center lg:bg-none lg:p-8 lg:pb-8">
+      <div
+        class="no-scrollbar pointer-events-auto flex max-w-full snap-x gap-3 overflow-x-auto px-2"
+        id="lightbox-thumbs"
+        role="tablist"
+        aria-label="Lightbox Thumbnails">
+        <button
+          role="tab"
+          aria-label="Go to main image"
+          aria-selected="true"
+          class="lb-thumb-indicator bg-foreground-primary/10 h-14 w-14 shrink-0 animate-pulse snap-center overflow-hidden rounded-md border-2 border-white opacity-100 shadow-lg transition-all hover:opacity-100 focus:ring-2 focus:ring-white/50 focus:outline-none sm:h-16 sm:w-16"
+          data-index="0"
+          aria-current="true">
+          <img
+            src="https://fs.floofware.net/hexandcube/gallery/{{ $categoryPath }}/thumbnails/{{ .Params.id }}.{{ .Params.format }}"
+            alt="Thumbnail"
+            loading="lazy"
+            class="pointer-events-none h-full w-full object-cover opacity-0 transition-opacity duration-700 ease-out"
+            onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('animate-pulse', 'bg-foreground-primary/10'); this.parentElement.classList.add('bg-black/40');" />
+        </button>
+
+        {{ range $index, $variant := .Params.variants }}
+          <button
+            role="tab"
+            aria-label="Go to variant {{ add $index 1 }}"
+            aria-selected="false"
+            class="lb-thumb-indicator bg-foreground-primary/10 h-14 w-14 shrink-0 animate-pulse snap-center overflow-hidden rounded-md border-2 border-transparent opacity-50 shadow-lg transition-all hover:opacity-100 focus:ring-2 focus:ring-white/50 focus:outline-none sm:h-16 sm:w-16"
+            data-index="{{ add $index 1 }}">
+            <img
+              src="https://fs.floofware.net/hexandcube/gallery/{{ $categoryPath }}/thumbnails/{{ $.Params.id }}-{{ . }}.{{ $.Params.format }}"
+              alt="Thumbnail"
+              loading="lazy"
+              class="pointer-events-none h-full w-full object-cover opacity-0 transition-opacity duration-700 ease-out"
+              onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('animate-pulse', 'bg-foreground-primary/10'); this.parentElement.classList.add('bg-black/40');" />
+          </button>
+        {{ end }}
+      </div>
+    </div>
+  </dialog>
+
+  <script id="lightbox-data" type="application/json">
+  [
+    {
+      "caption": {{ .Title | jsonify | safeJS }}
+    }
+    {{ range $index, $variant := .Params.variants }}
+    ,{
+      "caption": {{ printf "%s (%s)" $.Title (. | title) | jsonify | safeJS }}
+    }
+    {{ end }}
+  ]
+  </script>
+
+  <script>
+    (() => {
+      document.addEventListener("DOMContentLoaded", () => {
+        const lightboxImages = JSON.parse(document.getElementById("lightbox-data").textContent);
+        let currentLightboxIndex = 0;
+
+        const lightbox = document.getElementById("gallery-lightbox");
+        const lightboxCarousel = document.getElementById("lightbox-carousel");
+        const lightboxCaption = document.getElementById("lightbox-caption");
+        const lbThumbs = document.querySelectorAll(".lb-thumb-indicator");
+
+        const mainCarousel = document.getElementById("image-carousel");
+        const thumbs = document.querySelectorAll(".thumb-indicator");
+
+        const mainSlides = mainCarousel ? mainCarousel.querySelectorAll(".snap-center") : [];
+        const lbSlides = lightboxCarousel ? lightboxCarousel.querySelectorAll(".snap-center") : [];
+
+        if (mainCarousel && mainSlides.length > 0) {
+          const carouselObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  const activeIndex = Array.from(mainSlides).indexOf(entry.target);
+
+                  thumbs.forEach((thumb, index) => {
+                    if (index === activeIndex) {
+                      thumb.classList.add("border-foreground-primary", "opacity-100");
+                      thumb.classList.remove("border-transparent", "opacity-50");
+                      thumb.setAttribute("aria-current", "true");
+                      thumb.setAttribute("aria-selected", "true");
+                      thumb.scrollIntoView({
+                        behavior: "smooth",
+                        block: "nearest",
+                        inline: "center",
+                      });
+                    } else {
+                      thumb.classList.add("border-transparent", "opacity-50");
+                      thumb.classList.remove("border-foreground-primary", "opacity-100");
+                      thumb.removeAttribute("aria-current");
+                      thumb.setAttribute("aria-selected", "false");
+                    }
+                  });
+                }
+              });
+            },
+            { root: mainCarousel, threshold: 0.6 },
+          );
+
+          mainSlides.forEach((slide) => carouselObserver.observe(slide));
+        }
+
+        if (lightboxCarousel && lbSlides.length > 0) {
+          const lbObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                  const activeIndex = Array.from(lbSlides).indexOf(entry.target);
+                  currentLightboxIndex = activeIndex;
+
+                  if (lightboxCaption) {
+                    lightboxCaption.textContent = lightboxImages[activeIndex].caption;
+                  }
+
+                  if (lbThumbs.length) {
+                    lbThumbs.forEach((thumb, i) => {
+                      if (i === activeIndex) {
+                        thumb.classList.add("border-white", "opacity-100");
+                        thumb.classList.remove("border-transparent", "opacity-50");
+                        thumb.setAttribute("aria-current", "true");
+                        thumb.setAttribute("aria-selected", "true");
+                        thumb.scrollIntoView({
+                          behavior: "smooth",
+                          block: "nearest",
+                          inline: "center",
+                        });
+                      } else {
+                        thumb.classList.add("border-transparent", "opacity-50");
+                        thumb.classList.remove("border-white", "opacity-100");
+                        thumb.removeAttribute("aria-current");
+                        thumb.setAttribute("aria-selected", "false");
+                      }
+                    });
+                  }
+                }
+              });
+            },
+            { root: lightboxCarousel, threshold: 0.6 },
+          );
+
+          lbSlides.forEach((slide) => lbObserver.observe(slide));
+        }
+
+        function toggleLightboxUI() {
+          if (window.innerWidth >= 1024) return;
+          lightbox.classList.toggle("ui-hidden");
+        }
+
+        function openLightbox(index) {
+          document.body.style.overflow = "hidden";
+          currentLightboxIndex = index;
+          lightbox.classList.remove("ui-hidden");
+          lightbox.showModal();
+
+          lightboxCarousel.classList.remove("scroll-smooth");
+          if (lbSlides[index]) {
+            lightboxCarousel.scrollTo({ left: lbSlides[index].offsetLeft });
+          }
+
+          setTimeout(() => {
+            lightboxCarousel.classList.add("scroll-smooth");
+          }, 50);
+        }
+
+        function changeLightbox(direction) {
+          let newIndex = currentLightboxIndex + direction;
+          if (newIndex < 0) {
+            newIndex = lightboxImages.length - 1;
+          } else if (newIndex >= lightboxImages.length) {
+            newIndex = 0;
+          }
+          goToLightboxSlide(newIndex);
+        }
+
+        function goToLightboxSlide(index) {
+          if (lbSlides[index]) {
+            lightboxCarousel.scrollTo({
+              left: lbSlides[index].offsetLeft,
+              behavior: "smooth",
+            });
+          }
+        }
+
+        function closeLightbox() {
+          lightbox.classList.add("is-closing");
+          setTimeout(() => {
+            lightbox.close();
+            lightbox.classList.remove("is-closing");
+            document.body.style.overflow = "";
+            if (mainCarousel && mainSlides[currentLightboxIndex]) {
+              mainCarousel.scrollTo({
+                left: mainSlides[currentLightboxIndex].offsetLeft,
+              });
+            }
+          }, 300);
+        }
+
+        document.querySelectorAll(".lightbox-trigger").forEach((trigger) => {
+          trigger.addEventListener("click", (e) => {
+            const index = parseInt(e.currentTarget.dataset.index);
+            openLightbox(index);
+          });
+        });
+
+        const lbCloseBtnLbx = document.getElementById("lb-close-btn");
+        if (lbCloseBtnLbx) lbCloseBtnLbx.addEventListener("click", closeLightbox);
+
+        const lbPrevBtn = document.getElementById("lb-prev-btn");
+        if (lbPrevBtn)
+          lbPrevBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            changeLightbox(-1);
+          });
+
+        const lbNextBtn = document.getElementById("lb-next-btn");
+        if (lbNextBtn)
+          lbNextBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            changeLightbox(1);
+          });
+
+        if (lightboxCarousel) {
+          lightboxCarousel.addEventListener("click", () => {
+            closeLightbox();
+          });
+        }
+
+        document.querySelectorAll(".lb-img").forEach((img) => {
+          img.addEventListener("click", (e) => {
+            e.stopPropagation();
+            toggleLightboxUI();
+          });
+        });
+
+        if (lightbox) {
+          lightbox.addEventListener("cancel", (e) => {
+            e.preventDefault();
+            closeLightbox();
+          });
+        }
+
+        thumbs.forEach((thumb) => {
+          thumb.addEventListener("click", (e) => {
+            const index = parseInt(e.currentTarget.dataset.index);
+            if (mainSlides[index]) {
+              mainCarousel.scrollTo({
+                left: mainSlides[index].offsetLeft,
+                behavior: "smooth",
+              });
+            }
+          });
+        });
+
+        lbThumbs.forEach((thumb) => {
+          thumb.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const index = parseInt(e.currentTarget.dataset.index);
+            goToLightboxSlide(index);
+          });
+        });
+
+        const btnPrev = document.getElementById("carousel-prev");
+        const btnNext = document.getElementById("carousel-next");
+
+        if (btnPrev && mainCarousel) {
+          btnPrev.addEventListener("click", (e) => {
+            e.preventDefault();
+            let currentIndex = 0;
+            thumbs.forEach((t, i) => {
+              if (t.getAttribute("aria-current") === "true") currentIndex = i;
+            });
+
+            if (currentIndex === 0) {
+              mainCarousel.scrollTo({
+                left: mainSlides[mainSlides.length - 1].offsetLeft,
+                behavior: "smooth",
+              });
+            } else {
+              mainCarousel.scrollTo({
+                left: mainSlides[currentIndex - 1].offsetLeft,
+                behavior: "smooth",
+              });
+            }
+          });
+        }
+
+        if (btnNext && mainCarousel) {
+          btnNext.addEventListener("click", (e) => {
+            e.preventDefault();
+            let currentIndex = 0;
+            thumbs.forEach((t, i) => {
+              if (t.getAttribute("aria-current") === "true") currentIndex = i;
+            });
+
+            if (currentIndex === mainSlides.length - 1) {
+              mainCarousel.scrollTo({
+                left: mainSlides[0].offsetLeft,
+                behavior: "smooth",
+              });
+            } else {
+              mainCarousel.scrollTo({
+                left: mainSlides[currentIndex + 1].offsetLeft,
+                behavior: "smooth",
+              });
+            }
+          });
+        }
+
+        document.addEventListener("keydown", (e) => {
+          if (lightbox && lightbox.open) {
+            if (e.key === "ArrowLeft") changeLightbox(-1);
+            if (e.key === "ArrowRight") changeLightbox(1);
+          }
+        });
+
+        window.addEventListener("resize", () => {
+          if (lightbox && lightbox.open) {
+            goToLightboxSlide(currentLightboxIndex);
+          }
+        });
+      });
+    })();
+  </script>
+
+  <script type="application/ld+json">
+    {{ $licensesData := hugo.Data.licenses }}
+    {{ $schemaLicense := index $licensesData $licenseId }}
+    {{ $creditText := "" }}
+
+    {{ if eq $licenseId "reserved" }}
+      {{ $creditText = printf "All rights to %s are reserved by %s." .Title $authorName }}
+    {{ else if eq $licenseId "personalUse" }}
+      {{ $creditText = printf "%s by %s is restricted strictly to a %s." .Title $authorName $schemaLicense.fullName }}
+    {{ else }}
+      {{ $creditText = printf "%s by %s is licensed under %s." .Title $authorName $schemaLicense.fullName }}
+    {{ end }}
+
+    {
+      "@context": "https://schema.org/",
+      "@type": "ImageObject",
+      "name": "{{ .Title }}",
+      "url": "{{ .Permalink }}",
+      "contentUrl": "https://fs.floofware.net/hexandcube/gallery/{{ $categoryPath }}/{{ .Params.id }}.{{ .Params.format }}",
+      "thumbnailUrl": "https://fs.floofware.net/hexandcube/gallery/{{ $categoryPath }}/thumbnails/{{ .Params.id }}.{{ .Params.format }}",
+      "datePublished": "{{ .Date.Format "2006-01-02" }}",
+      "acquireLicensePage": "{{ .Permalink }}",
+      "copyrightNotice": "Copyright \u00A9 {{ .Date.Format "2006" }} {{ $authorName }}",
+      "creditText": "{{ $creditText }}",
+      "creator": {
+        "@type": "Person",
+        {{ if eq (lower $authorName) "hexandcube" }}
+        "@id": "https://hexandcube.com/#author"
+        {{ else }}
+        "name": "{{ $authorName }}"
+        {{ end }}
+      },
+      "author": {
+        "@type": "Person",
+        {{ if eq (lower $authorName) "hexandcube" }}
+        "@id": "https://hexandcube.com/#author"
+        {{ else }}
+        "name": "{{ $authorName }}"
+        {{ end }}
+      }
+      {{ with .Description }}
+      ,"description": "{{ . | plainify }}"
+      {{ end }}
+      {{ if and .Params.width .Params.height }}
+      ,"width": "{{ .Params.width }} px",
+      "height": "{{ .Params.height }} px"
+      {{ end }}
+      {{ with .Params.format }}
+      ,"encodingFormat": "image/{{ . }}"
+      {{ end }}
+      {{ if $schemaLicense }}
+          {{ if $schemaLicense.url }}
+          ,"license": "{{ $schemaLicense.url }}"
+          {{ end }}
+      {{ end }}
+    }
+  </script>
+{{ end }}

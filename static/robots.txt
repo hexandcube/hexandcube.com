@@ -1,0 +1,60 @@
+# robots.txt for hexandcube.com
+
+# Search Engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# AI Search Bots
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+# AI Training/Scraping Bots
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: *
+Disallow: /error
+Disallow: /error/404
+Disallow: /error/403
+Disallow: /error/410
+Disallow: /error/418
+Disallow: /error/451
+Disallow: /error/PAWS
+Disallow: /markdown
+Allow: /
+
+Sitemap: https://hexandcube.com/sitemap.xml

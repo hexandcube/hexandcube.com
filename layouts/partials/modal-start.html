@@ -1,0 +1,20 @@
+<dialog
+  id="{{ .id }}"
+  aria-labelledby="{{ .id }}-title"
+  aria-modal="true"
+  class="bg-background-secondary border-foreground-primary/15 text-foreground-primary fixed inset-0 z-50 m-auto w-[95vw] {{ .sizeClass | default "max-w-3xl" }} scale-95 rounded-2xl border-1 p-0 opacity-0 shadow-2xl transition-all duration-300 ease-out backdrop:bg-black/60 backdrop:opacity-0 backdrop:backdrop-blur-sm backdrop:transition-all backdrop:duration-300 backdrop:ease-out open:scale-100 open:opacity-100 open:backdrop:opacity-100 starting:open:scale-95 starting:open:opacity-0 starting:open:backdrop:opacity-0 [&.is-closing]:!scale-95 [&.is-closing]:!opacity-0 [&.is-closing::backdrop]:!opacity-0">
+  <div class="no-scrollbar flex max-h-[85vh] flex-col overflow-y-auto p-6 sm:p-8 {{ .class }}">
+    
+    <div class="mb-6 flex items-start justify-between gap-4">
+      <h2 id="{{ .id }}-title" class="font-primary flex items-center gap-3 text-2xl font-bold wrap-break-word mt-0! mb-0!">
+        {{ with .icon }}<i class="{{ . }} text-foreground-secondary shrink-0" aria-hidden="true"></i>{{ end }}
+        {{ .title }}
+      </h2>
+      <button
+        type="button"
+        data-modal-close
+        class="text-foreground-secondary hover:text-foreground-primary hover:bg-foreground-primary/10 focus:ring-foreground-primary/50 flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors outline-none focus:ring-2"
+        aria-label="Close Modal">
+        <i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i>
+      </button>
+    </div>

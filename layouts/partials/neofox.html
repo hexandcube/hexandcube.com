@@ -1,0 +1,21 @@
+{{ $input := . }}
+{{ $matches := slice }}
+{{ $imageFile := "" }}
+
+{{ $searchTerm := $input }}
+{{ if not (hasPrefix $input "neofox_") }}
+{{ $searchTerm = printf "neofox_%s" $input }}
+{{ end }}
+
+{{ with hugo.Data.neofox.emojis }}
+{{ $matches = where . "emoji.name" $searchTerm }}
+{{ end }}
+
+{{ if gt (len $matches) 0 }}
+{{ $data := index $matches 0 }}
+{{ $imageFile = $data.fileName }}
+{{ else }}
+{{ $imageFile = printf "%s.png" $searchTerm }}
+{{ end }}
+
+<img src="/emojis/neofox/{{ $imageFile }}" alt=":{{ $searchTerm }}:" title=":{{ $searchTerm }}:" class="custom-emoji neofox-emoji" loading="lazy" width="30" height="30">

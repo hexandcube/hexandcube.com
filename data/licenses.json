@@ -1,0 +1,152 @@
+{
+  "reserved": {
+    "name": "All Rights Reserved",
+    "fullName": "All Rights Reserved",
+    "url": "",
+    "icon": "fa-regular fa-copyright",
+    "description": "All rights are reserved by the creator. You may not use, share, or modify the material without explicit permission from the creator.",
+    "permissions": ["none"],
+    "conditions": [],
+    "limitations": []
+  },
+  "personalUse": {
+    "name": "Personal Use",
+    "fullName": "Personal Use Only",
+    "url": "",
+    "icon": "fa-regular fa-copyright",
+    "description": "You may use the material for personal purposes only. All other rights are reserved.",
+    "permissions": ["privateUse"],
+    "conditions": ["nonCommercial", "noDistribution", "noDerivatives"],
+    "limitations": ["noWarranty", "liability"]
+  },
+  "cc0": {
+    "name": "CC0 1.0",
+    "fullName": "Creative Commons CC0 1.0 Universal",
+    "url": "https://creativecommons.org/publicdomain/zero/1.0/legalcode.en",
+    "icon": "fa-brands fa-creative-commons-zero",
+    "description": "This license allows you to use, modify, and distribute the material for any purpose, even commercially, without any restrictions.",
+    "permissions": ["privateUse", "commercialUse", "distribution", "adaptation"],
+    "conditions": ["none"],
+    "limitations": ["noWarranty", "liability", "trademarkUse"]
+  },
+  "cc-by-4.0": {
+    "name": "CC-BY 4.0",
+    "fullName": "Creative Commons Attribution 4.0 International",
+    "url": "https://creativecommons.org/licenses/by/4.0/legalcode.en",
+    "icon": "fa-brands fa-creative-commons-by",
+    "description": "This license allows you to share and adapt the material for any purpose, even commercially. You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may not apply any additional restrictions.",
+    "permissions": ["privateUse", "commercialUse", "distribution", "adaptation"],
+    "conditions": ["attribution", "noRestrictions"],
+    "limitations": ["noWarranty", "liability", "trademarkUse"]
+  },
+  "cc-by-sa-4.0": {
+    "name": "CC-BY-SA 4.0",
+    "fullName": "Creative Commons Attribution-ShareAlike 4.0 International",
+    "url": "https://creativecommons.org/licenses/by-sa/4.0/legalcode.en",
+    "icon": "fa-brands fa-creative-commons-sa",
+    "description": "This license allows you to share and adapt the material for any purpose, even commercially. You must give appropriate credit, provide a link to the license, and indicate if changes were made. If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.",
+    "permissions": ["privateUse", "commercialUse", "distribution", "adaptation"],
+    "conditions": ["attribution", "shareAlike", "noRestrictions"],
+    "limitations": ["noWarranty", "liability", "trademarkUse"]
+  },
+  "cc-by-nc-4.0": {
+    "name": "CC-BY-NC 4.0",
+    "fullName": "Creative Commons Attribution-NonCommercial 4.0 International",
+    "url": "https://creativecommons.org/licenses/by-nc/4.0/legalcode.en",
+    "icon": "fa-brands fa-creative-commons-nc",
+    "description": "This license allows you to share and adapt the material, but for noncommercial purposes only. You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may not apply any additional restrictions.",
+    "permissions": ["privateUse", "distribution", "adaptation"],
+    "conditions": ["attribution", "nonCommercial", "noRestrictions"],
+    "limitations": ["noWarranty", "liability", "trademarkUse"]
+  },
+  "cc-by-nc-sa-4.0": {
+    "name": "CC-BY-NC-SA 4.0",
+    "fullName": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International",
+    "url": "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.en",
+    "icon": "fa-brands fa-creative-commons-nc",
+    "description": "This license allows you to share and adapt the material for noncommercial purposes only. You must give appropriate credit, provide a link to the license, and indicate if changes were made. If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.",
+    "permissions": ["privateUse", "distribution", "adaptation"],
+    "conditions": ["attribution", "nonCommercial", "shareAlike", "noRestrictions"],
+    "limitations": ["noWarranty", "liability", "trademarkUse"]
+  },
+  "cc-by-nd-4.0": {
+    "name": "CC-BY-ND 4.0",
+    "fullName": "Creative Commons Attribution-NoDerivatives 4.0 International",
+    "url": "https://creativecommons.org/licenses/by-nd/4.0/legalcode.en",
+    "icon": "fa-brands fa-creative-commons-nd",
+    "description": "This license allows you to share the material for any purpose, even commercially. You must give appropriate credit, provide a link to the license, and indicate if changes were made. If you remix, transform, or build upon the material, you may not distribute the modified material.",
+    "permissions": ["privateUse", "commercialUse", "distribution"],
+    "conditions": ["attribution", "noDerivatives", "noRestrictions"],
+    "limitations": ["noWarranty", "liability", "trademarkUse"]
+  },
+  "cc-by-nc-nd-4.0": {
+    "name": "CC-BY-NC-ND 4.0",
+    "fullName": "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International",
+    "url": "https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.en",
+    "icon": "fa-brands fa-creative-commons-nd",
+    "description": "This license allows you to share the material for noncommercial purposes only. You must give appropriate credit, provide a link to the license, and indicate if changes were made. If you remix, transform, or build upon the material, you may not distribute the modified material.",
+    "permissions": ["privateUse", "distribution"],
+    "conditions": ["attribution", "nonCommercial", "noDerivatives", "noRestrictions"],
+    "limitations": ["noWarranty", "liability", "trademarkUse"]
+  },
+  "unsplash": {
+    "name": "Unsplash License",
+    "fullName": "Unsplash License",
+    "url": "https://unsplash.com/license",
+    "icon": "fa-brands fa-unsplash",
+    "description": "The Unsplash License allows you to use the photos for free, including for commercial purposes, without asking permission from or providing attribution to the photographer or Unsplash. However, you cannot sell the photos without significant modification or compile photos from Unsplash to create a similar or competing service.",
+    "permissions": ["privateUse", "commercialUse", "distribution", "adaptation"],
+    "conditions": ["custom"],
+    "limitations": ["noWarranty", "liability", "trademarkUse"]
+  },
+  "mit": {
+    "name": "MIT License",
+    "fullName": "MIT License",
+    "url": "https://opensource.org/licenses/MIT",
+    "icon": "fa-regular fa-scale-balanced",
+    "description": "The MIT License is a permissive free software license that allows you to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software. You must include the original copyright notice and permission notice in all copies or substantial portions of the software. The software is provided \"as is\", without warranty of any kind.",
+    "permissions": ["privateUse", "commercialUse", "distribution", "adaptation"],
+    "conditions": ["attribution"],
+    "limitations": ["noWarranty", "liability"]
+  },
+  "apache-2.0": {
+    "name": "Apache 2.0",
+    "fullName": "Apache License, Version 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0",
+    "icon": "fa-regular fa-scale-balanced",
+    "description": "The Apache License is a permissive license whose main conditions require preservation of copyright and license notices. Contributors provide an express grant of patent rights. Licensed works, modifications, and larger works may be distributed under different terms and without source code.",
+    "permissions": ["privateUse", "commercialUse", "distribution", "adaptation"],
+    "conditions": ["attribution", "stateChanges"],
+    "limitations": ["noWarranty", "liability", "trademarkUse"]
+  },
+  "sil-ofl": {
+    "name": "SIL Open Font License 1.1",
+    "fullName": "SIL Open Font License 1.1",
+    "url": "https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL",
+    "icon": "fa-regular fa-font",
+    "description": "The SIL Open Font License allows you to use, study, modify, and distribute the fonts, both commercially and non-commercially. You can create and distribute modified versions of the fonts under the same license. The fonts are provided \"as is\", without warranty of any kind.",
+    "permissions": ["privateUse", "commercialUse", "distribution", "adaptation"],
+    "conditions": ["attribution", "shareAlike"],
+    "limitations": ["noWarranty", "liability"]
+  },
+  "ui-test-license": {
+    "name": "UI Test License",
+    "fullName": "The UI Test License v1.0",
+    "url": "https://example.com/",
+    "icon": "fa-solid fa-flask",
+    "description": "This is a dummy license designed to test the frontend.",
+    "permissions": ["none", "privateUse", "commercialUse", "distribution", "adaptation"],
+    "conditions": [
+      "none",
+      "attribution",
+      "stateChanges",
+      "nonCommercial",
+      "noRestrictions",
+      "shareAlike",
+      "noDerivatives",
+      "noDistribution",
+      "custom"
+    ],
+    "limitations": ["noWarranty", "liability", "trademarkUse"]
+  }
+}

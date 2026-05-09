@@ -1,0 +1,75 @@
+<!-- Global helper functions -->
+<script>
+    async function copyToClipboard(text, btnElement) {
+        const icon = btnElement.querySelector('i');
+        try {
+            await navigator.clipboard.writeText(text);
+            icon.classList.remove('fa-regular', 'fa-copy');
+            icon.classList.add('fa-solid', 'fa-check', 'text-green-500');
+            setTimeout(() => {
+                icon.classList.remove('fa-solid', 'fa-check', 'text-green-500');
+                icon.classList.add('fa-regular', 'fa-copy');
+            }, 2000);
+        } catch (err) {
+            console.error('Failed to copy text: ', err);
+        }
+    }
+
+    // Global Modal Handlers
+    window.openModal = function(modalId) {
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            document.body.style.overflow = 'hidden';
+            modal.showModal();
+        }
+    };
+
+    window.closeModal = function(modal) {
+        if (typeof modal === 'string') modal = document.getElementById(modal);
+        if (modal && modal.open) {
+            modal.classList.add('is-closing');
+            setTimeout(() => {
+                modal.close();
+                modal.classList.remove('is-closing');
+                if (!document.querySelectorAll('dialog[open]:not(.is-closing)').length) {
+                    document.body.style.overflow = '';
+                }
+            }, 300);
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('click', (e) => {
+            const openTrigger = e.target.closest('[data-modal-target]');
+            if (openTrigger) {
+                openModal(openTrigger.dataset.modalTarget);
+            }
+
+            const closeTrigger = e.target.closest('[data-modal-close]');
+            if (closeTrigger) {
+                const modal = closeTrigger.closest('dialog');
+                if (modal && !modal.hasAttribute('data-custom-modal')) {
+                    closeModal(modal);
+                }
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (e.target.tagName === 'DIALOG' && e.target.open && !e.target.hasAttribute('data-custom-modal')) {
+                const rect = e.target.getBoundingClientRect();
+                const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
+                    rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
+                if (!isInDialog) {
+                    closeModal(e.target);
+                }
+            }
+        });
+
+        document.addEventListener('cancel', (e) => {
+            if (e.target.tagName === 'DIALOG' && !e.target.hasAttribute('data-custom-modal')) {
+                e.preventDefault();
+                closeModal(e.target);
+            }
+        }, true);
+    });
+</script>

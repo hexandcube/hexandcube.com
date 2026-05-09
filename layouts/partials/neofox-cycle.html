@@ -1,0 +1,55 @@
+{{/* Usage:
+{{ partial "neofox-cycle.html" (dict "default" "wink" "cycle" (slice "heart" "happy" "uwu")) }}
+*/}}
+
+{{ $defaultName := .default }}
+{{ $cycleNames := .cycle }}
+
+{{ $allNames := slice $defaultName | append $cycleNames }}
+{{ $allUrls := slice }}
+
+{{ range $allNames }}
+{{ $input := . }}
+{{ $searchTerm := $input }}
+
+{{ if not (hasPrefix $input "neofox_") }}
+{{ $searchTerm = printf "neofox_%s" $input }}
+{{ end }}
+
+{{ $matches := slice }}
+{{ with hugo.Data.neofox.emojis }}
+{{ $matches = where . "emoji.name" $searchTerm }}
+{{ end }}
+
+{{ $fileName := "" }}
+{{ if gt (len $matches) 0 }}
+{{ $data := index $matches 0 }}
+{{ $fileName = $data.fileName }}
+{{ else }}
+{{ $fileName = printf "%s.png" $searchTerm }}
+{{ end }}
+
+{{ $allUrls = $allUrls | append (printf "/emojis/neofox/%s" $fileName) }}
+{{ end }}
+
+{{ $currentSrc := index $allUrls 0 }}
+
+<button type="button"
+    class="neofox-cycler cursor-pointer appearance-none border-none p-0 bg-transparent inline-flex align-middle focus:outline-none"
+    data-index="0" data-images="{{ $allUrls | jsonify }}" onclick="cycleNeofox(this)" title="Click me :3"
+    aria-label="Interactive neofox emoji">
+    <img src="{{ $currentSrc }}" class="neofox-emoji pointer-events-none" alt="neofox" width="24" height="24">
+</button>
+
+<script>
+    function cycleNeofox(button) {
+        const images = JSON.parse(button.getAttribute('data-images'));
+        let index = parseInt(button.getAttribute('data-index'));
+
+        index = (index + 1) % images.length;
+
+        const img = button.querySelector('img');
+        img.src = images[index];
+        button.setAttribute('data-index', index);
+    }
+</script>

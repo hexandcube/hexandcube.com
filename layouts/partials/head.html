@@ -1,0 +1,123 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+{{ $pageTitle := .Site.Title }}
+{{ $pageTitle = printf "%s · %s" .Page.Title .Site.Title }}
+
+{{ $description := .Summary | truncate 160 }}
+{{ if and (eq .Section "projects") .Params.tagline }}
+    {{ $description = .Params.tagline }}
+{{ else if .Params.Description }}
+    {{ $description = .Params.Description }}
+{{ else if .IsHome }}
+    {{ $description = .Site.Params.Description }}
+{{ end }}
+
+{{ $ogImage := "https://hexandcube-wip.netlify.app/img/opengraph.png" }}
+{{ $pathParts := split (strings.Trim .RelPermalink "/") "/" }}
+{{ $isGallery := and (eq .Section "gallery") (ge (len $pathParts) 2) }}
+
+{{ if $isGallery }}
+    {{ $categoryPath := index $pathParts 1 }}
+    {{ $mappedCategory := index hugo.Data.categoryPathNames.gallery $categoryPath | default $categoryPath }}
+    
+    {{ if and .Params.id .Params.format }}
+        {{ $ogImage = printf "https://fs.floofware.net/hexandcube/gallery/%s/thumbnails/%s.%s" $mappedCategory .Params.id .Params.format }}
+    {{ end }}
+{{ else if eq .Section "projects" }}
+    {{ if .Params.Banner }}
+        {{ $ogImage = .Params.Banner | absURL }}
+    {{ else if .Params.Thumbnail }}
+        {{ $ogImage = .Params.Thumbnail | absURL }}
+    {{ end }}
+{{ else if .Params.Thumbnail }}
+    {{ $ogImage = .Params.Thumbnail | absURL }}
+{{ end }}
+
+<title>{{ $pageTitle }}</title>
+<meta name="description" content="{{ $description }}">
+<link rel="canonical" href="{{ .Permalink }}">
+
+<meta property="og:title" content="{{ $pageTitle }}" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="{{ .Permalink }}" />
+<meta property="og:description" content="{{ $description }}" />
+<meta property="og:image" content="{{ $ogImage }}" />
+
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:title" content="{{ $pageTitle }}" />
+<meta property="twitter:description" content="{{ $description }}" />
+<meta property="twitter:image" content="{{ $ogImage }}" />
+<meta property="twitter:creator" content="@hexandcube" />
+<meta property="twitter:site" content="@hexandcube" />
+
+<script type="application/ld+json">
+    {{ hugo.Data.author | jsonify (dict "indent" "  ") | safeJS }}
+</script>
+
+<script defer src="https://cloud.umami.is/script.js" data-website-id="6a022d44-0c1e-4155-b8be-60e25730f60d"></script>
+
+{{ if .Params.NoIndex }}
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
+{{ end }}
+
+{{ $styles := resources.Get "css/theme.css" }}
+{{ $opts := dict "optimize" true }}
+
+{{ if hugo.IsDevelopment }}
+{{/*
+    Tailwind doesn't generate new classes when some layout template files are changed (e.g. layout/_default/single.html),
+    so a dummy config option with the current timestamp is added to force it to regenerate the CSS on every change.
+
+    This brute-force method slows down the build process a bit in development mode, since it basically disables CSS caching, 
+    but it shouldn't be a problem considering how fast Tailwind 4 is, and it's the only solution I could find. 
+*/}}
+{{ $opts = dict "optimize" false "config" (now.UnixNano) }}
+{{ end }}
+
+{{ $styles = $styles | css.TailwindCSS $opts }}
+
+{{ if not hugo.IsServer }}
+    {{ $styles = $styles | minify | fingerprint }}
+{{ end }}
+
+<link rel="stylesheet" href="{{ $styles.RelPermalink }}" integrity="{{ $styles.Data.Integrity }}">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.floofware.net" crossorigin="anonymous">
+<link rel="dns-prefetch" href="https://fonts.floofware.net">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.floofware.net/mont/mont.css">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.floofware.net/sen/sen.css">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.floofware.net/tasa-orbiter/tasa-orbiter.css">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.floofware.net/space-mono/space-mono.css">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.floofware.net/hexandcubeLogo/hexandcubeLogo.css">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.floofware.net/fontawesome/v7.0.1/css/fontawesome.css">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.floofware.net/fontawesome/v7.0.1/css/regular.css">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.floofware.net/fontawesome/v7.0.1/css/solid.css">
+<link rel="stylesheet" media="print" onload="this.media='all'" href="https://fonts.floofware.net/fontawesome/v7.0.1/css/brands.css">
+
+<!-- Icons -->
+<link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-touch-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="/icons/apple-touch-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="/icons/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/icons/apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="/icons/apple-touch-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/icons/apple-touch-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-touch-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" type="image/png" href="/icons/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
+<link rel="shortcut icon" href="/icons/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
+
+<!-- Meta -->
+<link rel="me" href="https://github.com/hexandcube" />
+<link rel="me" href="mailto:hexandcube@hexandcube.com" />
+<link rel="me" href="https://furry.engineer/@hexandcube" />
+<link rel="me atproto" href="https://bsky.app/profile/hexandcube.com" />
+<link href="/.well-known/openpgpkey/Hexandcube_0x422FF8AE_public.asc" rel="pgpkey authn">

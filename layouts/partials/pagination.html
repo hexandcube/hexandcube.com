@@ -1,0 +1,50 @@
+{{ $pag := . }}
+
+{{ if gt $pag.TotalPages 1 }}
+<div class="flex justify-center w-full mt-10 mb-8">
+    <nav class="inline-flex items-center gap-1.5 p-1.5 rounded-full bg-background-secondary border border-foreground-primary/15"
+        aria-label="Pagination">
+
+        {{ if $pag.HasPrev }}
+        <a href="{{ $pag.Prev.URL }}" aria-label="Previous page"
+            class="relative px-4 py-2 text-sm font-primary font-semibold text-foreground-secondary rounded-full transition-all duration-200 ease-in-out hover:text-foreground-primary hover:bg-accent-muted/20">
+            <i class="fa-solid fa-arrow-left-from-arc pt-1 mr-1"></i> Previous
+        </a>
+        {{ else }}
+        <span
+            class="relative px-4 py-2 text-sm font-primary font-semibold text-foreground-secondary/30 rounded-full cursor-not-allowed"
+            aria-hidden="true">
+            <i class="fa-solid fa-arrow-left-from-arc pt-1 mr-1"></i> Previous
+        </span>
+        {{ end }}
+
+        {{ range $pag.Pagers }}
+        {{ if eq . $pag }}
+        <span aria-current="page"
+            class="relative min-w-[36px] flex justify-center px-3 py-2 text-sm font-primary font-semibold text-foreground-primary bg-accent-secondary rounded-full shadow-[0px_1px_2px_0px_rgba(0,0,0,0.15),inset_0px_-2px_0px_0px_rgba(0,0,0,0.15)] before:absolute before:inset-0 before:rounded-full before:pointer-events-none before:shadow-[inset_0px_0px_0px_1px_rgba(255,255,255,0.25)] before:[mask-image:linear-gradient(to_bottom,black,transparent)]">
+            {{ .PageNumber }}
+        </span>
+        {{ else }}
+        <a href="{{ .URL }}" aria-label="Page {{ .PageNumber }}"
+            class="relative min-w-[36px] flex justify-center px-3 py-2 text-sm font-primary font-semibold text-foreground-secondary rounded-full transition-all duration-200 ease-in-out hover:text-foreground-primary hover:bg-accent-muted/20">
+            {{ .PageNumber }}
+        </a>
+        {{ end }}
+        {{ end }}
+
+        {{ if $pag.HasNext }}
+        <a href="{{ $pag.Next.URL }}" aria-label="Next page"
+            class="relative px-4 py-2 text-sm font-primary font-semibold text-foreground-secondary rounded-full transition-all duration-200 ease-in-out hover:text-foreground-primary hover:bg-accent-muted/20">
+            Next <i class="fa-solid fa-arrow-right-from-arc pt-1 ml-1"></i>
+        </a>
+        {{ else }}
+        <span
+            class="relative px-4 py-2 text-sm font-primary font-semibold text-foreground-secondary/30 rounded-full cursor-not-allowed"
+            aria-hidden="true">
+            Next <i class="fa-solid fa-arrow-right-from-arc pt-1 ml-1"></i>
+        </span>
+        {{ end }}
+
+    </nav>
+</div>
+{{ end }}

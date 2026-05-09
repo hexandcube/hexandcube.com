@@ -1,0 +1,31 @@
+[build]
+    command = "hugo"
+    publish = "public"
+
+[build.environment]
+    HUGO_VERSION = "0.159.2"
+    TZ = "UTC"
+
+[dev]
+    framework = "#custom" 
+    command = "hugo server --bind 127.0.0.1 --port 1313 -b http://localhost:8888"
+    targetPort = 1313
+    port = 8888
+
+[[headers]]
+    for = "/*"
+    [headers.values]
+        X-Frame-Options = "SAMEORIGIN"
+        Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+    for = "/.well-known/webfinger"
+    [headers.values]
+        Content-Type="application/json"
+        Access-Control-Allow-Origin="*"
+
+[[headers]]
+    for = "/.well-known/openpgpkey/hu/dehirk6zmc7jk1h5cn91ji8ffxzdhfqj"
+    [headers.values]
+        Content-Type="application/octet-stream"
+        Access-Control-Allow-Origin="*"

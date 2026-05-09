@@ -1,0 +1,81 @@
+# Supported HTTP status codes
+# 301 - Permanent (default), 302 - Temporary (307 is unsupported)
+# 404 - not found, 200 - OK (for rewrites/proxying)
+# 410 -  Gone, 451 - Unavailable for legal reasons
+
+
+# PGP Key URLs
+/.well-known/hexandcube_pub.asc /.well-known/openpgpkey/Hexandcube_0x422FF8AE_public.asc 301!
+/.well-known/hexandcube_pub.pgp /.well-known/openpgpkey/Hexandcube_0x422FF8AE_public.pgp 301!
+/.well-known/hexandcube_qr.png /.well-known/openpgpkey/Hexandcube_0x422FF8AE_fpr.png 301!
+/gpg /pgp 301!
+
+# 418 Easter Egg
+/418 /error/418 418!
+/teapot /error/418 418!
+
+# Renamed pages
+/photos/two-benches-in-fog /gallery/photography/parallel_limbo 301
+/photos/curious-black-cat /gallery/photography/target_acquired 301
+/photos/black-cat-sleeping /gallery/photography/cat_nap 301
+/photos/sky-reflections-on-a-lake /gallery/photography/afternoon_reflections 301
+/photos/frosti-the-arctic-fox /gallery/photography/frosti_the_arctic_fox 301
+/photos/my-monochrome-friend /gallery/photography/my_monochrome_friend 301
+/photos/green-mall /gallery/photography/green_mall 301
+/photos/glass-steel-and-bricks /gallery/photography/glass_steel_and_bricks 301
+/photos/fancy-pigeon /gallery/photography/fancy_feathered 301
+/photos/boat-dock /gallery/photography/tiny_dock 301
+/wallpapers/wallpaper-3 /gallery/wallpapers/blue_arc 301
+/wallpapers/wallpaper-5 /gallery/wallpapers/midnight_material 301
+/wallpapers/wallpaper-6 /gallery/wallpapers/shape_confetti 301
+/wallpapers/wallpaper-10 /gallery/wallpapers/thermal_tide 301
+/wallpapers/wallpaper-12 /gallery/wallpapers/tinted_peaks 301
+/wallpapers/wallpaper-13 /gallery/wallpapers/ananas_party 301
+/wallpapers/wallpaper-14 /gallery/wallpapers/dual_perspective 301
+/wallpapers/wallpaper-15 /gallery/wallpapers/magnetic_outline 301
+/wallpapers/wallpaper-16 /gallery/wallpapers/test_card 301
+/wallpapers/wallpaper-17 /gallery/wallpapers/ignite_material 301
+/wallpapers/wallpaper-20 /gallery/wallpapers/solstice_stay 301
+/wallpapers/wallpaper-22 /gallery/wallpapers/shapeshifter 301
+/wallpapers/wallpaper-23 /gallery/wallpapers/chromatide_luminous_syrup 301
+/wallpapers/wallpaper-24 /gallery/wallpapers/chromatide_vivd_coral 301
+/wallpapers/wallpaper-25 /gallery/wallpapers/powder_peaks 301
+/wallpapers/wallpaper-26 /gallery/wallpapers/silicate 301
+
+# Deleted pages
+/photos/cute-cat /error/410 410
+/photos/krakow-old-town /error/410 410
+/photos/adorable-kitten-laying-on-the-grass /error/410 410
+/photos/adorable-kitten /error/410 410
+/photos/cat-sitting-on-a-dvd-player /error/410 410
+/photos/bus-stop-covered-in-snow /error/410 410
+/photos/switch /error/410 410
+/photos/stair-cat /error/410 410
+/photos/warm-light /error/410 410
+/photos/small-forest-mushrooms /error/410 410
+/photos/small-mushroom /error/410 410
+/photos/modern-hotel /error/410 410
+/wallpapers/wallpaper-1 /error/410 410
+/wallpapers/wallpaper-2 /error/410 410
+/wallpapers/wallpaper-4 /error/410 410
+/wallpapers/wallpaper-7 /error/410 410
+/wallpapers/wallpaper-8 /error/410 410
+/wallpapers/wallpaper-9 /error/410 410
+/wallpapers/wallpaper-11 /error/410 410
+/wallpapers/wallpaper-18 /error/410 410
+/wallpapers/wallpaper-19 /error/410 410
+/wallpapers/wallpaper-21 /error/410 410
+/twittermigration /error/410 410
+/posts/* /error/410 410
+/.well-known/legacy/* /error/410 410
+/.well-known/assetlinks.json /error/410 410
+/.well-known/sigpro.txt /error/410 410
+
+# Legacy URL Redirects
+/wallpapers/* /gallery/wallpapers/:splat 301
+/photos/* /gallery/photography/:splat 301
+/files/* /projects/:splat 301
+/pgp /about 301
+
+# 404 fallback
+/* /error/404 404

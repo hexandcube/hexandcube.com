@@ -1,0 +1,42 @@
+{{ define "main" }}
+<article>
+    {{ if not ( .Params.HideMetabar )}}
+    <section class="responsive pt-8 md:pt-12">
+        <div class="flex flex-wrap gap-2 mb-3 items-center">
+            {{ with .Params.category }}
+            <div
+                class="rounded-3xl px-3 py-1 font-primary whitespace-nowrap bg-foreground-primary/10 text-foreground-primary first:font-semibold first:bg-foreground-primary first:text-background-primary">
+                {{ . }}
+            </div>
+            {{ end }}
+            {{ with .Date }}
+            <div
+                class="rounded-3xl px-3 py-1 font-primary whitespace-nowrap bg-foreground-primary/10 text-foreground-primary first:font-semibold first:bg-foreground-primary first:text-background-primary">
+                {{ .Format "January 2, 2006" }}
+            </div>
+            {{ end }}
+            {{ with .Params.updateDate }}
+            <div
+                class="rounded-3xl px-3 py-1 font-primary whitespace-nowrap bg-foreground-primary/10 text-foreground-primary first:font-semibold first:bg-foreground-primary first:text-background-primary">
+                Updated {{ (time.AsTime .).Format "January 2, 2006" }}
+            </div>
+            {{ end }}
+            {{ if not ( .Params.hideReadingTime )}}
+            <div
+                class="rounded-3xl px-3 py-1 font-primary whitespace-nowrap bg-foreground-primary/10 text-foreground-primary first:font-semibold first:bg-foreground-primary first:text-background-primary">
+                {{ .ReadingTime }} min read
+            </div>
+            {{ end }}
+        </div>
+        <h1 class="text-foreground-primary font-primary font-bold tracking-tight text-4xl sm:text-5xl md:text-6xl">{{
+            .Title }}</h1>
+        <div class="mt-5 text-foreground-secondary max-w-prose">
+            {{ .Description}}
+        </div>
+    </section>
+    <section class="responsive content mt-10">
+        {{ .Content }}
+    </section>
+    {{ end }}
+</article>
+{{ end }}

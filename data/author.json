@@ -1,0 +1,42 @@
+{
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": "https://hexandcube.com/#author",
+    "name": "Hexandcube",
+    "alternateName": "Mallow",
+    "gender": "Male",
+    "pronouns": "he/him",
+    "nationality": {
+        "@type": "Country",
+        "name": "Poland"
+    },
+    "knowsLanguage": [
+        {
+            "@type": "Language",
+            "name": "Polish",
+            "alternateName": "pl"
+        },
+        {
+            "@type": "Language",
+            "name": "English",
+            "alternateName": "en"
+        }
+    ],
+    "description": "A fox with a computer and a camera. Creator of stuff and photographer.",
+    "url": "https://hexandcube.com",
+    "email": "hexandcube@hexandcube.com",
+    "image": "https://fs.floofware.net/hexandcube/images/avatar.png",
+    "sameAs": [
+        "https://x.com/hexandcube",
+        "https://bsky.app/profile/hexandcube.com",
+        "https://furry.engineer/@hexandcube",
+        "https://github.com/hexandcube",
+        "https://gitlab.com/hexandcube",
+        "https://keybase.io/hexandcube",
+        "https://www.instagram.com/hexandcube/",
+        "https://www.youtube.com/@hexandcube",
+        "https://www.reddit.com/user/hexandcube",
+        "https://500px.com/p/hexandcube",
+        "https://addons.mozilla.org/en-US/firefox/user/14625252/"
+    ]
+}

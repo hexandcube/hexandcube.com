@@ -1,0 +1,222 @@
+{{ $page := .Page }}
+{{ $authorName := .Author }}
+{{ $copyrightYears := .CopyrightYears }}
+{{ $licenseId := .LicenseId }}
+
+{{ $licensesData := hugo.Data.licenses }}
+{{ $licenseProps := hugo.Data.licenseProperties }}
+
+{{ if index $licensesData $licenseId }}
+  {{ $thisLicense := index $licensesData $licenseId }}
+  {{ $finalLicenseURL := $page.Params.licenseURL | default $thisLicense.url }}
+
+  {{ partial "modal-start.html" (dict "id" "license-modal" "title" "Copyright and license terms" "icon" "fa-solid fa-scale-balanced" "sizeClass" "max-w-3xl") }}
+
+
+  <p class="text-foreground-primary mb-3 text-lg leading-relaxed wrap-break-word">
+    {{ if eq $licenseId "reserved" }}
+      All rights to <strong>{{ $page.Title }}</strong> are reserved by <strong>{{ $authorName }}</strong>.
+    {{ else if eq $licenseId "personalUse" }}
+      <strong>{{ $page.Title }}</strong> by <strong>{{ $authorName }}</strong> is restricted strictly to
+      <strong>{{ $thisLicense.fullName }}</strong>.
+    {{ else }}
+      <strong>{{ $page.Title }}</strong> by <strong>{{ $authorName }}</strong> is licensed under
+      <strong>{{ $thisLicense.fullName }}</strong>.
+    {{ end }}
+  </p>
+
+  <p class="text-foreground-secondary mb-8 leading-relaxed wrap-break-word">
+    {{ $thisLicense.description }}
+  </p>
+
+  <div class="mb-8 grid grid-cols-1 gap-10 md:grid-cols-2">
+    {{ if $thisLicense.permissions }}
+      <div>
+        <h3 class="font-primary mb-3 flex items-center gap-2 font-semibold">
+          <i class="fa-solid fa-check text-green-500" aria-hidden="true"></i> Permissions
+        </h3>
+        <ul class="text-foreground-secondary space-y-3 text-sm">
+          {{ range $thisLicense.permissions }}
+            {{ $prop := index $licenseProps.permissions . }}
+            <li class="flex items-start gap-3">
+              <i class="{{ $prop.icon }} mt-1 w-4 shrink-0 text-center" aria-hidden="true"></i>
+              <span class="wrap-break-word">{{ $prop.description }}</span>
+            </li>
+          {{ end }}
+        </ul>
+      </div>
+    {{ end }}
+
+    {{ if $thisLicense.conditions }}
+      <div>
+        <h3 class="font-primary mb-3 flex items-center gap-2 font-semibold">
+          <i class="fa-solid fa-circle-exclamation text-amber-500" aria-hidden="true"></i> Conditions
+        </h3>
+        <ul class="text-foreground-secondary space-y-3 text-sm">
+          {{ range $thisLicense.conditions }}
+            {{ $prop := index $licenseProps.conditions . }}
+            <li class="flex items-start gap-3">
+              <i class="{{ $prop.icon }} mt-1 w-4 shrink-0 text-center" aria-hidden="true"></i>
+              <span class="wrap-break-word">{{ $prop.description }}</span>
+            </li>
+          {{ end }}
+        </ul>
+      </div>
+    {{ end }}
+
+    {{ if $thisLicense.limitations }}
+      <div class="md:col-span-2">
+        <h3 class="font-primary mb-3 flex items-center gap-2 font-semibold">
+          <i class="fa-solid fa-ban text-red-500" aria-hidden="true"></i> Limitations
+        </h3>
+        <ul class="text-foreground-secondary grid grid-cols-1 gap-x-10 gap-y-3 text-sm md:grid-cols-2">
+          {{ range $thisLicense.limitations }}
+            {{ $prop := index $licenseProps.limitations . }}
+            <li class="flex items-start gap-3">
+              <i class="{{ $prop.icon }} mt-1 w-4 shrink-0 text-center" aria-hidden="true"></i>
+              <span class="wrap-break-word">{{ $prop.description }}</span>
+            </li>
+          {{ end }}
+        </ul>
+      </div>
+    {{ end }}
+  </div>
+
+  {{ if or (in $thisLicense.conditions "attribution") (in $thisLicense.conditions "none") }}
+    <div
+      class="bg-background-primary border-foreground-primary/15 group relative mb-6 rounded-lg border-1 p-4"
+      id="attribution-container"
+      data-title="{{ $page.Title }}"
+      data-permalink="{{ $page.Permalink }}"
+      data-author="{{ $authorName }}"
+      data-author-url="{{ site.BaseURL }}"
+      data-license-id="{{ $licenseId }}"
+      data-license="{{ $thisLicense.fullName }}"
+      data-license-url="{{ $finalLicenseURL }}">
+      <div class="mb-3 flex items-center justify-between gap-2">
+        <h3 class="text-foreground-secondary m-0 shrink-0 text-xs font-semibold tracking-wider uppercase">
+          Attribution example
+        </h3>
+        <div class="relative inline-flex items-center">
+          <select
+            id="attr-format"
+            aria-label="Select attribution format"
+            class="bg-background-secondary border-foreground-primary/20 hover:border-foreground-primary/40 text-foreground-primary focus:ring-foreground-primary/50 max-w-[130px] cursor-pointer appearance-none rounded-md border py-1.5 pr-8 pl-3 text-xs transition-colors outline-none focus:ring-2 sm:max-w-none">
+            <option class="bg-background-secondary text-foreground-primary" value="plain">Plain Text</option>
+            <option class="bg-background-secondary text-foreground-primary" value="markdown">Markdown</option>
+            <option class="bg-background-secondary text-foreground-primary" value="html">HTML</option>
+          </select>
+          <i
+            class="fa-solid fa-chevron-down text-foreground-secondary pointer-events-none absolute right-2.5 text-[10px]"
+            aria-hidden="true"></i>
+        </div>
+      </div>
+
+      <div class="bg-background-elevated/50 border-foreground-primary/10 relative rounded-lg border p-4">
+        <p
+          id="attribution-text"
+          aria-live="polite"
+          class="text-foreground-primary m-0 pr-10 font-mono text-sm wrap-break-word whitespace-pre-wrap"></p>
+        <button
+          type="button"
+          onclick="copyToClipboard(document.getElementById('attribution-text').textContent, this)"
+          class="btn btn-tertiary btn-square btn-small absolute! top-2! right-2! flex! h-8! w-8! shrink-0 items-center! justify-center!"
+          aria-label="Copy attribution to clipboard">
+          <i class="fa-regular fa-copy" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  {{ end }}
+
+
+  <div
+    class="bg-background-elevated/50 border-foreground-primary/10 mb-6 flex items-start gap-3.5 rounded-lg border p-3 sm:p-4">
+    <i class="fa-solid fa-scale-unbalanced text-foreground-secondary mt-0.5 opacity-70"></i>
+    <p class="text-foreground-secondary m-0 text-xs leading-relaxed">
+      <strong>Disclaimer:</strong> This summary is not legal advice and is provided for informational purposes only.
+      {{ if $finalLicenseURL }}
+        Only the actual full license text is legally binding. The author is not responsible for any mistakes or
+        misinterpretations in this summary.
+      {{ else }}
+        These terms represent the author's intended usage guidelines and restrictions for this work.
+      {{ end }}
+    </p>
+  </div>
+
+  <div
+    class="border-foreground-primary/10 mt-auto flex flex-col items-center justify-between gap-4 border-t pt-4 text-center sm:flex-row sm:text-left">
+    <span class="text-foreground-secondary text-sm font-medium wrap-break-word">
+      Copyright &copy; {{ $copyrightYears }}
+      {{ $authorName }}
+    </span>
+
+    {{ if $finalLicenseURL }}
+      <a
+        href="{{ $finalLicenseURL }}"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-tertiary btn-small inline-flex w-full shrink-0 items-center justify-center gap-2 sm:w-auto">
+        Read full license text <i class="fa-solid fa-arrow-up-right-from-square text-xs" aria-hidden="true"></i>
+      </a>
+    {{ end }}
+  </div>
+
+  {{ partial "modal-end.html" . }}
+
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const attrContainer = document.getElementById("attribution-container");
+      const attrFormatSelect = document.getElementById("attr-format");
+      const attrTextDisplay = document.getElementById("attribution-text");
+
+      if (attrContainer && attrFormatSelect && attrTextDisplay) {
+        const lId = attrContainer.dataset.licenseId;
+        const title = attrContainer.dataset.title;
+        const permalink = attrContainer.dataset.permalink;
+        const author = attrContainer.dataset.author;
+        const authorUrl = attrContainer.dataset.authorUrl;
+        const license = attrContainer.dataset.license;
+        const licenseUrl = attrContainer.dataset.licenseUrl;
+
+        function updateAttributionText() {
+          const format = attrFormatSelect.value;
+          let outputText = "";
+          let tTitle, tAuthor, tLicense;
+
+          if (format === "markdown") {
+            tTitle = `[${title}](${permalink})`;
+            tAuthor = `[${author}](${authorUrl})`;
+            tLicense = licenseUrl ? `[${license}](${licenseUrl})` : license;
+          } else if (format === "html") {
+            tTitle = `<a href="${permalink}">${title}</a>`;
+            tAuthor = `<a href="${authorUrl}">${author}</a>`;
+            tLicense = licenseUrl ? `<a href="${licenseUrl}">${license}</a>` : license;
+          } else {
+            tTitle = `"${title}"`;
+            tAuthor = author;
+            tLicense = license;
+          }
+
+          if (lId === "reserved") {
+            outputText = `All rights to ${tTitle} are reserved by ${tAuthor}.`;
+          } else if (lId === "personalUse") {
+            outputText = `${tTitle} by ${tAuthor} is restricted strictly to a ${tLicense}.`;
+          } else {
+            outputText = `${tTitle} by ${tAuthor} is licensed under ${tLicense}.`;
+          }
+
+          if (format === "plain") {
+            outputText += `\n\nAuthor: ${authorUrl}\nSource: ${permalink}`;
+            if (licenseUrl) outputText += `\nLicense: ${licenseUrl}`;
+          }
+
+          attrTextDisplay.textContent = outputText;
+        }
+
+        attrFormatSelect.addEventListener("change", updateAttributionText);
+        updateAttributionText();
+      }
+    });
+  </script>
+{{ end }}

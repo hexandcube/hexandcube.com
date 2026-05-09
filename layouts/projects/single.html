@@ -1,0 +1,1183 @@
+{{ define "main" }}
+  {{ $authorName := .Params.author | default site.Params.author | default "Hexandcube" }}
+  {{ $licenseId := .Params.license | default "reserved" }}
+
+  {{ $creationYear := .Date.Format "2006" }}
+  {{ $modYear := .Lastmod.Format "2006" }}
+  {{ $copyrightYears := $creationYear }}
+  {{ if ne $creationYear $modYear }}
+    {{ $copyrightYears = printf "%s - %s" $creationYear $modYear }}
+  {{ end }}
+
+
+  <article>
+    <section class="responsive pt-8 md:pt-12">
+      {{ $projectsPage := site.GetPage "/projects" }}
+      <div class="mb-4 flex flex-wrap items-center gap-2 sm:mb-6">
+        <nav
+          aria-label="Breadcrumb"
+          class="font-primary text-foreground-secondary flex flex-wrap items-center gap-2 text-sm font-medium">
+          <a
+            href="{{ if $projectsPage }}
+              {{ $projectsPage.RelPermalink }}
+            {{ else }}
+              /projects
+            {{ end }}"
+            class="hover:text-foreground-primary decoration-foreground-primary/30 underline-offset-4 transition-colors focus:underline focus:outline-none">
+            {{ if $projectsPage }}{{ $projectsPage.Title }}{{ else }}Projects{{ end }}
+          </a>
+          <i class="fa-solid fa-chevron-right text-[10px] opacity-50"></i>
+          <span class="text-foreground-primary cursor-default wrap-break-word" aria-current="page">{{ .Title }}</span>
+        </nav>
+      </div>
+
+      {{ with .Params.banner }}
+        <div
+          id="banner-container"
+          class="bg-foreground-primary/10 group relative aspect-21/9 max-h-55 w-full animate-pulse overflow-hidden rounded-t-3xl mask-[linear-gradient(to_bottom,black_40%,transparent)] shadow-sm md:aspect-4/1">
+          <img
+            src="{{ . }}"
+            alt="{{ $.Title }} banner"
+            class="h-full w-full object-cover opacity-0 transition-all duration-1000 ease-out"
+            onload="this.classList.remove('opacity-0'); document.getElementById('banner-container').classList.remove('animate-pulse', 'bg-foreground-primary/10'); document.getElementById('banner-container').classList.add('bg-background-secondary');" />
+          <div
+            class="from-background-primary/95 pointer-events-none absolute inset-0 z-10 bg-linear-to-t via-transparent to-transparent"></div>
+        </div>
+      {{ end }}
+
+
+      <div
+        class="{{ if .Params.banner }}
+          -mt-10 sm:-mt-12 px-2 sm:px-6
+        {{ else }}
+          mt-0
+        {{ end }} relative z-10 mb-5 flex flex-col items-start gap-4 sm:flex-row sm:gap-6">
+        <div
+          id="logo-container"
+          class="group/logo border-foreground-primary/15 {{ if .Params.banner }}
+            bg-background-elevated ring-[6px] ring-background-primary
+          {{ else }}
+            bg-foreground-primary/5
+          {{ end }} {{ if .Params.logo }}
+            animate-pulse
+          {{ end }} relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-3xl border-1 shadow-md sm:h-24 sm:w-24">
+          {{ if .Params.logo }}
+            <button
+              type="button"
+              onclick="openLogoLightbox()"
+              class="focus:ring-foreground-primary/50 relative h-full w-full cursor-zoom-in outline-none focus:ring-2"
+              aria-label="View full logo">
+              <img
+                src="{{ .Params.logo }}"
+                alt="{{ .Title }} logo"
+                class="h-full w-full object-cover opacity-0 transition-all duration-300 ease-out group-hover/logo:scale-105"
+                onload="this.classList.remove('opacity-0'); document.getElementById('logo-container').classList.remove('animate-pulse');" />
+              <div
+                class="absolute inset-0 z-10 flex items-center justify-center bg-black/0 opacity-0 transition-all group-hover/logo:bg-black/20 group-hover/logo:opacity-100">
+                <i class="fa-solid fa-expand text-white drop-shadow-md"></i>
+              </div>
+            </button>
+          {{ else if .Params.icon }}
+            <span
+              class="font-primary text-foreground-secondary group-hover/logo:text-foreground-primary text-3xl font-bold transition-colors sm:text-4xl">
+              <i class="{{ .Params.icon }}"></i>
+            </span>
+          {{ else }}
+            <span
+              class="font-primary text-foreground-secondary group-hover/logo:text-foreground-primary text-3xl font-bold transition-colors sm:text-4xl">
+              {{ upper (substr .Title 0 2) }}
+            </span>
+          {{ end }}
+        </div>
+
+        <div class="flex w-full min-w-0 flex-col items-start">
+          <h1
+            class="text-foreground-primary font-primary m-0 mb-2 -ml-1 w-full text-4xl leading-none font-bold tracking-tight wrap-break-word sm:text-5xl md:text-6xl">
+            {{ .Title }}
+          </h1>
+
+          <div class="text-foreground-secondary max-w-prose text-lg leading-snug wrap-break-word">
+            {{ .Params.tagline }}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="responsive mt-8 mb-20">
+      <div class="grid grid-cols-1 items-start gap-5 lg:grid-cols-12">
+        <div class="order-last flex w-full min-w-0 flex-col gap-5 lg:order-0 lg:col-span-8">
+          {{ with .Params.images }}
+            <div class="flex min-w-0 flex-col gap-5">
+              <h2
+                class="font-primary text-foreground-primary border-foreground-primary/10 flex items-center gap-2 border-b pb-2 text-2xl font-bold">
+                <i class="fa-regular fa-images text-foreground-secondary"></i> Gallery
+              </h2>
+
+              <div class="overflow-hidden">
+                <div
+                  class="group border-foreground-primary/15 bg-background-secondary relative w-full overflow-hidden rounded-xl border-1 shadow-sm"
+                  role="region"
+                  aria-roledescription="carousel"
+                  aria-label="Project Screenshots">
+                  <div
+                    id="image-carousel"
+                    class="no-scrollbar z-0 flex w-full snap-x snap-mandatory items-center gap-1 overflow-x-auto scroll-smooth">
+                    {{ range $index, $image := . }}
+                      <div
+                        class="group/slide bg-foreground-primary/10 lightbox-trigger relative flex w-full flex-[0_0_100%] animate-pulse cursor-zoom-in snap-center justify-center"
+                        data-index="{{ $index }}"
+                        role="group"
+                        aria-roledescription="slide"
+                        aria-label="Image {{ add $index 1 }} of {{ len $.Params.images }}">
+                        <img
+                          src="{{ $image.url }}"
+                          alt="{{ $image.title }}"
+                          class="block h-auto max-h-[70vh] w-full object-contain opacity-0 transition-all duration-700 ease-out group-hover/slide:scale-[102%]"
+                          onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('animate-pulse', 'bg-foreground-primary/10');" />
+                        <div
+                          class="absolute inset-0 z-0 flex items-center justify-center bg-black/0 opacity-0 transition-colors group-hover/slide:bg-black/10 group-hover/slide:opacity-100">
+                          <div
+                            class="effect-shadowlight pointer-events-none flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-b from-black/60 to-black/40 text-white backdrop-blur-md">
+                            <i class="fa-solid fa-expand" aria-hidden="true"></i>
+                          </div>
+                        </div>
+                      </div>
+                    {{ end }}
+                  </div>
+
+                  {{ if gt (len .) 1 }}
+                    <button
+                      id="carousel-prev"
+                      class="effect-shadowlight absolute top-1/2 left-3 z-10 hidden h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white/90 opacity-0 backdrop-blur-md transition-all group-hover:opacity-100 hover:bg-black/80 hover:text-white sm:flex"
+                      aria-label="Previous image"
+                      aria-controls="image-carousel">
+                      <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+                    </button>
+                    <button
+                      id="carousel-next"
+                      class="effect-shadowlight absolute top-1/2 right-3 z-10 hidden h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white/90 opacity-0 backdrop-blur-md transition-all group-hover:opacity-100 hover:bg-black/80 hover:text-white sm:flex"
+                      aria-label="Next image"
+                      aria-controls="image-carousel">
+                      <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                  {{ end }}
+                </div>
+
+                {{ if gt (len .) 1 }}
+                  <div
+                    class="no-scrollbar mt-4 flex snap-x gap-3 overflow-x-auto py-1"
+                    id="carousel-thumbs"
+                    role="tablist"
+                    aria-label="Image Thumbnails">
+                    {{ range $index, $image := . }}
+                      <button
+                        class="{{ if eq $index 0 }}
+                          border-foreground-primary opacity-100
+                        {{ else }}
+                          border-transparent opacity-50
+                        {{ end }} thumb-indicator bg-foreground-primary/10 focus:ring-foreground-primary/50 h-16 w-16 shrink-0 animate-pulse snap-center overflow-hidden rounded-md border-2 transition-all hover:opacity-100 focus:ring-2 focus:outline-none sm:h-20 sm:w-20"
+                        data-index="{{ $index }}"
+                        role="tab"
+                        aria-label="Go to image {{ add $index 1 }}"
+                        {{ if eq $index 0 }}
+                          aria-current="true" aria-selected="true"
+                        {{ else }}
+                          aria-selected="false"
+                        {{ end }}>
+                        <img
+                          src="{{ $image.url }}"
+                          alt="Thumbnail for {{ $image.title }}"
+                          loading="lazy"
+                          class="pointer-events-none h-full w-full object-cover opacity-0 transition-opacity duration-700 ease-out"
+                          onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('animate-pulse', 'bg-foreground-primary/10'); this.parentElement.classList.add('bg-background-secondary');" />
+                      </button>
+                    {{ end }}
+                  </div>
+                {{ end }}
+              </div>
+            </div>
+          {{ end }}
+
+          {{ if .Content }}
+            <div class="flex min-w-0 flex-col gap-5">
+              <h2
+                class="font-primary text-foreground-primary border-foreground-primary/10 flex items-center gap-2 border-b pb-2 text-2xl font-bold">
+                <i class="fa-regular fa-file-lines text-foreground-secondary"></i> Overview
+              </h2>
+              <div
+                class="content content-readme bg-background-secondary border-foreground-primary/15 overflow-x-auto rounded-xl border-1 p-4 wrap-break-word sm:p-5">
+                {{ .Content }}
+              </div>
+            </div>
+          {{ end }}
+
+          {{ with .Params.versions }}
+            <div id="versions" class="flex min-w-0 scroll-mt-1 flex-col gap-5">
+              <h2
+                class="font-primary text-foreground-primary border-foreground-primary/10 flex items-center gap-2 border-b pb-2 text-2xl font-bold">
+                <i class="fa-regular fa-list-tree text-foreground-secondary"></i> Releases
+              </h2>
+
+              {{ range $vIndex, $version := . }}
+                <div
+                  class="bg-background-secondary border-foreground-primary/15 group relative flex min-w-0 flex-col gap-5 rounded-xl border-1 p-4 sm:p-5">
+                  <div class="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                    <div class="min-w-0">
+                      <h3 class="font-primary text-foreground-primary m-0 mb-2 text-xl font-bold wrap-break-word">
+                        {{ .name }}
+                      </h3>
+                      <div class="flex flex-wrap items-center gap-2">
+                        <time
+                          class="bg-background-primary border-foreground-primary/20 text-foreground-secondary inline-flex items-center gap-1.5 rounded border px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase shadow-sm sm:hidden">
+                          <i class="fa-regular fa-calendar text-[10px]"></i>
+                          {{ time.Format "Jan 2, 2006" .date }}
+                        </time>
+
+                        <span
+                          class="bg-background-primary border-foreground-primary/15 text-foreground-primary inline-flex items-center rounded border px-2 py-0.5 font-mono text-[10px] font-bold tracking-wider shadow-sm">
+                          {{ .versionNumber }}
+                        </span>
+
+                        {{ with .type }}
+                          <span
+                            class="{{ if eq . "release" }}
+                              border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400
+                            {{ else if eq . "beta" }}
+                              border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400
+                            {{ else if eq . "alpha" }}
+                              border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400
+                            {{ else }}
+                              border-foreground-primary/20 bg-background-primary text-foreground-secondary
+                            {{ end }} inline-flex items-center rounded border px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase">
+                            {{ . }}
+                          </span>
+                        {{ end }}
+                      </div>
+                    </div>
+
+                    <time
+                      class="text-foreground-secondary bg-background-elevated border-foreground-primary/10 hidden shrink-0 items-center gap-1.5 rounded-md border px-2 py-1 text-sm font-medium sm:flex">
+                      <i class="fa-regular fa-calendar text-xs"></i>
+                      {{ time.Format "Jan 2, 2006" .date }}
+                    </time>
+                  </div>
+
+                  {{ if .notes }}
+                    <div class="flex min-w-0 flex-col gap-2">
+                      <h4 class="text-foreground-secondary mb-0 text-xs font-bold tracking-wider uppercase">
+                        Release Notes
+                      </h4>
+                      <div class="release-notes-container relative min-w-0" id="notes-container-{{ $vIndex }}">
+                        <div
+                          class="content content-nested text-foreground-secondary max-h-30 max-w-none overflow-hidden text-sm wrap-break-word transition-[max-height] duration-500 ease-in-out md:text-base"
+                          id="notes-content-{{ $vIndex }}">
+                          {{ .notes | markdownify }}
+                        </div>
+
+                        <div
+                          class="from-background-secondary via-background-secondary/80 absolute right-0 bottom-0 left-0 flex h-20 items-end justify-center bg-linear-to-t to-transparent pb-1 transition-opacity duration-300"
+                          id="notes-fade-{{ $vIndex }}">
+                          <button
+                            type="button"
+                            onclick="expandReleaseNotes('{{ $vIndex }}')"
+                            class="btn btn-tertiary btn-small bg-background-secondary/90 ml-0! rounded-full! px-4! py-1! text-xs shadow-sm backdrop-blur-sm">
+                            <i class="fa-solid fa-chevron-down mr-1.5 text-[10px]"></i> View full release notes
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  {{ end }}
+
+                  {{ with .links }}
+                    <div class="mt-1 flex min-w-0 flex-col gap-2">
+                      <h4 class="text-foreground-secondary mb-0 text-xs font-bold tracking-wider uppercase">Links</h4>
+                      <div class="flex flex-wrap gap-2">
+                        {{ range . }}
+                          <a
+                            href="{{ .url | safeURL }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="btn btn-tertiary btn-small ml-0! max-w-full px-2.5 py-1.5 text-xs!">
+                            <i
+                              class="{{ default "fa-solid fa-arrow-up-right-from-square" .icon }} mr-1.5 text-[10px] opacity-70"></i>
+                            <span class="truncate">{{ .name }}</span>
+                          </a>
+                        {{ end }}
+                      </div>
+                    </div>
+                  {{ end }}
+
+                  {{ with .files }}
+                    <div class="mt-1 flex min-w-0 flex-col gap-3">
+                      <h4 class="text-foreground-secondary mb-0 text-xs font-bold tracking-wider uppercase">
+                        Downloads
+                      </h4>
+                      {{ range . }}
+                        <div
+                          class="bg-background-primary border-foreground-primary/10 flex min-w-0 flex-col justify-between gap-3 rounded-xl border-1 p-3 shadow-sm sm:flex-row sm:items-start">
+                          <div class="flex min-w-0 flex-1 items-start gap-3">
+                            <div
+                              class="bg-background-elevated border-foreground-primary/10 text-foreground-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border-1 text-lg shadow-sm">
+                              <i class="{{ default "fa-regular fa-file" .icon }}"></i>
+                            </div>
+                            <div class="flex min-w-0 flex-1 flex-col py-1">
+                              <span
+                                class="text-foreground-primary line-clamp-2 font-mono text-sm leading-snug font-bold wrap-break-word"
+                                title="{{ .fileName }}"
+                                >{{ .fileName }}</span
+                              >
+                              <div class="text-foreground-secondary mt-1 flex min-w-0 flex-col gap-0.5 text-xs">
+                                {{ with .description }}
+                                  <span class="truncate" title="{{ . }}">{{ . }}</span>
+                                {{ end }}
+
+                                {{ with .hash }}
+                                  <span class="flex min-w-0 items-center gap-1.5 font-mono">
+                                    <span class="truncate" title="{{ . }}">SHA-256:{{ substr . 0 32 }}...</span>
+                                    <button
+                                      type="button"
+                                      onclick="copyToClipboard('{{ . }}', this)"
+                                      class="hover:text-foreground-primary shrink-0 cursor-pointer transition-colors focus:outline-none"
+                                      aria-label="Copy hash">
+                                      <i class="fa-regular fa-copy"></i>
+                                    </button>
+                                  </span>
+                                {{ end }}
+
+
+                                <span class="shrink-0">{{ .fileSize }}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {{ if .download }}
+                            <div
+                              class="border-foreground-primary/10 mt-1 flex w-full shrink-0 justify-start border-t pt-2 sm:mt-0 sm:w-auto sm:justify-end sm:border-t-0 sm:pt-0">
+                              <div class="btn-dropdown-container w-full sm:w-auto">
+                                <button
+                                  type="button"
+                                  class="btn btn-primary btn-small ml-0! flex w-full items-center justify-center sm:w-auto">
+                                  Download <i class="fa-solid fa-chevron-down ml-2 text-[10px] opacity-70"></i>
+                                </button>
+
+                                <div class="btn-dropdown-menu max-w-[calc(100vw-3rem)]">
+                                  <span
+                                    class="text-foreground-secondary mb-0.5 block px-3 py-1.5 text-[10px] font-bold tracking-wider uppercase"
+                                    >Download from</span
+                                  >
+                                  {{ range .download }}
+                                    <a
+                                      href="{{ .url | safeURL }}"
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      class="btn-dropdown-item">
+                                      <i
+                                        class="fa-solid fa-download text-foreground-secondary w-4 text-center text-xs opacity-70"></i>
+                                      <span class="truncate">{{ .name }}</span>
+                                    </a>
+                                  {{ end }}
+                                </div>
+                              </div>
+                            </div>
+                          {{ end }}
+
+                        </div>
+                      {{ end }}
+                    </div>
+                  {{ end }}
+
+                </div>
+              {{ end }}
+            </div>
+          {{ end }}
+
+        </div>
+
+        <div class="order-first flex w-full min-w-0 flex-col gap-5 lg:sticky lg:top-18 lg:order-0 lg:col-span-4">
+          <div class="bg-background-secondary border-foreground-primary/15 min-w-0 rounded-xl border-1 p-4 sm:p-5">
+            <h3 class="font-primary text-foreground-primary mb-4 flex items-center gap-2 text-lg font-bold">
+              <i class="fa-regular fa-folder-open text-foreground-secondary"></i> Project Details
+            </h3>
+
+            <dl class="flex min-w-0 flex-col gap-3 text-sm">
+              {{ with .Params.status }}
+                <div
+                  class="border-foreground-primary/10 flex items-center justify-between gap-4 border-b pb-2 last:border-b-0 last:pb-0">
+                  <dt class="text-foreground-secondary inline-flex items-center gap-1.5 whitespace-nowrap">
+                    <i class="fa-regular fa-signal-stream text-xs"></i> Status
+                  </dt>
+                  <dd class="text-right">
+                    <span
+                      class="{{ if eq . "Active" }}
+                        border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400
+                      {{ else if eq . "On hold" }}
+                        border-yellow-500/30 bg-yellow-500/10 text-yellow-600 dark:text-yellow-400
+                      {{ else if eq . "Archived" }}
+                        border-amber-700/30 bg-amber-700/10 text-amber-800 dark:text-amber-500
+                      {{ else if eq . "Deprecated" }}
+                        border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400
+                      {{ else if eq . "Completed" }}
+                        border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-400
+                      {{ else }}
+                        border-foreground-primary/20 bg-background-primary text-foreground-secondary
+                      {{ end }} rounded border px-2 py-0.5 text-[10px] font-bold tracking-wider wrap-break-word uppercase">
+                      {{ . }}
+                    </span>
+                  </dd>
+                </div>
+              {{ end }}
+
+              <div
+                class="border-foreground-primary/10 flex min-w-0 items-start justify-between gap-4 border-b pb-2 last:border-b-0 last:pb-0">
+                <dt class="text-foreground-secondary inline-flex items-center gap-1.5 whitespace-nowrap">
+                  <i class="fa-regular fa-clock text-xs"></i> Last Updated
+                </dt>
+                <dd class="text-foreground-primary text-right wrap-break-word">{{ .Lastmod.Format "Jan 2, 2006" }}</dd>
+              </div>
+
+              <div
+                class="border-foreground-primary/10 flex min-w-0 items-start justify-between gap-4 border-b pb-2 last:border-b-0 last:pb-0">
+                <dt class="text-foreground-secondary inline-flex items-center gap-1.5 whitespace-nowrap">
+                  <i class="fa-regular fa-calendar-star text-xs"></i> Originally published
+                </dt>
+                <dd class="text-foreground-primary text-right wrap-break-word">{{ .Date.Format "Jan 2, 2006" }}</dd>
+              </div>
+
+              {{ $licensesData := hugo.Data.licenses }}
+              {{ if index $licensesData $licenseId }}
+                {{ $thisLicense := index $licensesData $licenseId }}
+                <div
+                  class="border-foreground-primary/10 flex min-w-0 items-start justify-between gap-4 border-b pb-2 last:border-b-0 last:pb-0">
+                  <dt class="text-foreground-secondary inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap">
+                    <i class="fa-regular fa-file-contract text-xs"></i> License
+                  </dt>
+                  <dd class="text-foreground-primary flex min-w-0 justify-end text-right">
+                    <button
+                      type="button"
+                      data-modal-target="license-modal"
+                      class="hover:text-foreground-secondary focus:ring-foreground-primary/50 inline-flex max-w-full cursor-pointer items-center gap-1.5 rounded-sm text-right transition-colors outline-none focus:ring-2">
+                      <i class="{{ $thisLicense.icon }} shrink-0" aria-hidden="true"></i>
+                      <span class="decoration-foreground-primary/30 truncate underline underline-offset-4">
+                        {{ $thisLicense.name }}
+                      </span>
+                    </button>
+                  </dd>
+                </div>
+              {{ end }}
+
+
+              <div
+                class="border-foreground-primary/10 flex flex-col gap-2 border-b pt-1 pb-1 last:border-b-0 last:pb-0">
+                <dt class="text-foreground-secondary inline-flex items-center gap-1.5 whitespace-nowrap">
+                  <i class="fa-regular fa-tags text-xs"></i> Tags
+                </dt>
+                <dd class="mt-1 ml-0 flex flex-wrap gap-1.5">
+                  {{ $typeKey := .Params.projectType | default .Params.type }}
+                  {{ if $typeKey }}
+                    {{ $typeInfo := index hugo.Data.projectTypes $typeKey }}
+                    {{ if $typeInfo }}
+                      <span
+                        class="font-primary bg-background-elevated border-foreground-primary/15 text-foreground-primary rounded-md border px-2 py-1 text-[11px] font-semibold">
+                        <i class="{{ $typeInfo.icon }} mr-1 opacity-70"></i>{{ $typeInfo.name }}
+                      </span>
+                    {{ end }}
+                  {{ end }}
+
+                  {{ range .Params.tags }}
+                    <span
+                      class="font-primary bg-background-elevated border-foreground-primary/15 text-foreground-primary rounded-md border px-2 py-1 text-[11px] font-semibold wrap-break-word">
+                      {{ . }}
+                    </span>
+                  {{ end }}
+                </dd>
+              </div>
+            </dl>
+
+            {{ $hasButtons := .Params.buttons }}
+            {{ $hasVersions := .Params.versions }}
+            {{ if or $hasButtons $hasVersions }}
+              <div class="border-foreground-primary/10 mt-4 flex flex-col gap-2 border-t pt-4">
+                {{ with $hasButtons }}
+                  {{ range . }}
+                    <a
+                      href="{{ .url | safeURL }}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="btn btn-{{ default "primary" .style }} btn-full ml-0! flex max-w-full items-center justify-center gap-2">
+                      <i
+                        class="{{ default "fa-solid fa-arrow-up-right-from-square" .icon }} shrink-0 text-sm opacity-80"></i>
+                      <span class="truncate">{{ .title | default .name }}</span>
+                    </a>
+                  {{ end }}
+                {{ end }}
+
+                {{ if $hasVersions }}
+                  <a
+                    href="#versions"
+                    class="btn {{ if $hasButtons }}
+                      btn-secondary
+                    {{ else }}
+                      btn-primary
+                    {{ end }} btn-full ml-0! flex max-w-full items-center justify-center gap-2">
+                    <i class="fa-regular fa-list-tree shrink-0 text-sm opacity-80"></i>
+                    <span class="truncate">View all releases</span>
+                  </a>
+                {{ end }}
+              </div>
+            {{ end }}
+          </div>
+
+          {{ with .Params.install }}
+            <div class="bg-background-secondary border-foreground-primary/15 min-w-0 rounded-xl border-1 p-4 sm:p-5">
+              <h3 class="font-primary text-foreground-primary mb-4 flex items-center gap-2 text-lg font-bold">
+                <i class="fa-solid fa-terminal text-foreground-secondary"></i> Install package
+              </h3>
+              <div class="flex min-w-0 flex-col gap-4">
+                {{ range $index, $pkg := . }}
+                  {{ $icon := "fa-solid fa-box" }}
+                  {{ $title := $pkg.packageManager | title }}
+                  {{ $pmLower := lower $pkg.packageManager }}
+                  {{ $command := "" }}
+
+                  {{ if eq $pmLower "chocolatey" }}
+                    {{ $icon = "fa-solid fa-mug-hot" }}
+                    {{ $command = printf "choco install %s -y" $pkg.packageName }}
+                  {{ else if eq $pmLower "winget" }}
+                    {{ $icon = "fa-brands fa-windows" }}
+                    {{ $command = printf "winget install %s" $pkg.packageName }}
+                  {{ else }}
+                    {{ $command = printf "%s install %s" $pmLower $pkg.packageName }}
+                  {{ end }}
+
+
+                  <div class="flex min-w-0 flex-col gap-1.5">
+                    <span class="text-foreground-secondary flex items-center gap-1.5 text-xs font-semibold">
+                      <i class="{{ $icon }} w-4 text-center opacity-80"></i> {{ $title }}
+                    </span>
+                    <div
+                      class="bg-background-elevated border-foreground-primary/10 relative flex min-w-0 items-center rounded-lg border p-1 shadow-inner">
+                      <code
+                        class="language-powershell text-foreground-primary no-scrollbar grow overflow-x-auto px-2 py-1 font-mono text-[11px] whitespace-nowrap"
+                        >{{ $command }}</code
+                      >
+                      <button
+                        type="button"
+                        onclick="copyToClipboard('{{ $command }}', this)"
+                        class="btn btn-tertiary btn-square btn-small mr-0.5 ml-1! flex! h-7! w-7! shrink-0 items-center! justify-center!"
+                        aria-label="Copy to clipboard">
+                        <i class="fa-regular fa-copy text-xs"></i>
+                      </button>
+                    </div>
+                  </div>
+                {{ end }}
+              </div>
+            </div>
+          {{ end }}
+
+          {{ with .Params.links }}
+            <div class="bg-background-secondary border-foreground-primary/15 min-w-0 rounded-xl border-1 p-4 sm:p-5">
+              <h3 class="font-primary text-foreground-primary mb-3 flex items-center gap-2 text-lg font-bold">
+                <i class="fa-solid fa-link text-foreground-secondary"></i> Links
+              </h3>
+              <ul class="m-0 flex min-w-0 list-none flex-col gap-3 p-0">
+                {{ range . }}
+                  <li class="inline-flex max-w-full min-w-0">
+                    <a
+                      href="{{ .url | safeURL }}"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-foreground-primary hover:text-foreground-secondary focus-visible:ring-foreground-primary/50 flex max-w-full min-w-0 items-center gap-2 rounded-sm text-sm font-medium transition-colors outline-none focus-visible:ring-2">
+                      <i
+                        class="{{ default "fa-solid fa-arrow-up-right-from-square" .icon }} shrink-0 text-xs opacity-70"></i>
+                      <span class="decoration-foreground-primary/30 truncate underline underline-offset-4"
+                        >{{ .title | default .name }}</span
+                      >
+                    </a>
+                  </li>
+                {{ end }}
+              </ul>
+            </div>
+          {{ end }}
+
+          {{ partial "donation.html" . }}
+
+          {{ partial "license-modal.html" (dict "Page" . "Author" $authorName "CopyrightYears" $copyrightYears "LicenseId" $licenseId) }}
+
+          {{ if .Params.logo }}
+            {{ $lightboxLogo := .Params.fullLogo | default .Params.logo }}
+            <dialog
+              id="logo-lightbox"
+              aria-label="Project Logo"
+              aria-modal="true"
+              class="pointer-events-none invisible fixed inset-0 z-50 m-0 flex h-dvh max-h-none w-dvw max-w-none flex-col items-center justify-center border-none bg-black/40 p-0 opacity-0 backdrop-blur-2xl transition-all duration-300 select-none [&.is-closing]:invisible! [&.is-closing]:opacity-0! [[open]]:pointer-events-auto [[open]]:visible [[open]]:opacity-100">
+              <div class="absolute top-0 right-0 left-0 z-50 flex w-full items-center justify-end p-4 sm:p-6 lg:p-8">
+                <button
+                  id="logo-lb-close-btn"
+                  class="effect-shadowlight flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full bg-linear-to-b from-black/60 to-black/40 text-white/90 drop-shadow-md backdrop-blur-md transition-colors outline-none hover:bg-black/80 hover:text-white focus:ring-2 focus:ring-white/50"
+                  aria-label="Close Lightbox"
+                  onclick="closeLogoLightbox()">
+                  <i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i>
+                </button>
+              </div>
+
+              <div class="relative flex h-full w-full items-center justify-center p-4 sm:p-8">
+                <img
+                  src="{{ $lightboxLogo }}"
+                  class="max-h-full max-w-full rounded-md object-contain drop-shadow-2xl"
+                  alt="{{ .Title }} Full Logo" />
+              </div>
+            </dialog>
+          {{ end }}
+
+          {{ with .Params.images }}
+            <dialog
+              id="gallery-lightbox"
+              aria-label="Fullscreen Lightbox"
+              aria-modal="true"
+              data-custom-modal="true"
+              class="pointer-events-none invisible fixed inset-0 z-50 m-0 flex h-dvh max-h-none w-dvw max-w-none flex-col items-center justify-center border-none bg-black/40 p-0 opacity-0 backdrop-blur-2xl transition-all duration-300 select-none [&.is-closing]:invisible! [&.is-closing]:opacity-0! [[open]]:pointer-events-auto [[open]]:visible [[open]]:opacity-100">
+              <div
+                class="lb-ui pointer-events-none absolute top-0 right-0 left-0 z-50 flex w-full items-center justify-between bg-linear-to-b from-black/50 to-transparent p-4 transition-opacity duration-300 sm:p-6 lg:pointer-events-auto lg:relative lg:shrink-0 lg:bg-none lg:p-8">
+                <div
+                  id="lightbox-caption"
+                  aria-live="polite"
+                  class="font-primary effect-shadowlight pointer-events-auto rounded-full bg-linear-to-b from-black/60 to-black/40 px-4 py-2 text-sm font-medium tracking-wide text-white drop-shadow-md backdrop-blur-md sm:text-lg lg:text-xl"></div>
+                <button
+                  id="lb-close-btn"
+                  class="effect-shadowlight pointer-events-auto ml-4 flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full bg-linear-to-b from-black/60 to-black/40 text-white/90 drop-shadow-md backdrop-blur-md transition-colors outline-none hover:bg-black/80 hover:text-white focus:ring-2 focus:ring-white/50"
+                  aria-label="Close Lightbox">
+                  <i class="fa-solid fa-xmark text-xl" aria-hidden="true"></i>
+                </button>
+              </div>
+
+              <div class="group/lbarrows relative z-0 flex h-full min-h-0 w-full flex-1 items-center justify-center">
+                {{ if gt (len .) 1 }}
+                  <button
+                    id="lb-prev-btn"
+                    class="lb-ui effect-shadowlight pointer-events-auto absolute top-1/2 left-2 z-50 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-linear-to-b from-black/60 to-black/40 text-white/90 opacity-100 drop-shadow-lg backdrop-blur-md transition-all outline-none hover:bg-black/80 hover:text-white focus:ring-2 focus:ring-white/50 sm:left-4 md:h-12 md:w-12 lg:left-8 lg:opacity-0 lg:group-hover/lbarrows:opacity-100"
+                    aria-label="Previous Image">
+                    <i class="fa-solid fa-chevron-left text-lg" aria-hidden="true"></i>
+                  </button>
+                  <button
+                    id="lb-next-btn"
+                    class="lb-ui effect-shadowlight pointer-events-auto absolute top-1/2 right-2 z-50 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-linear-to-b from-black/60 to-black/40 text-white/90 opacity-100 drop-shadow-lg backdrop-blur-md transition-all outline-none hover:bg-black/80 hover:text-white focus:ring-2 focus:ring-white/50 sm:right-4 md:h-12 md:w-12 lg:right-8 lg:opacity-0 lg:group-hover/lbarrows:opacity-100"
+                    aria-label="Next Image">
+                    <i class="fa-solid fa-chevron-right text-lg" aria-hidden="true"></i>
+                  </button>
+                {{ end }}
+
+
+                <div
+                  id="lightbox-carousel"
+                  role="region"
+                  aria-roledescription="carousel"
+                  aria-label="Fullscreen Gallery"
+                  class="no-scrollbar pointer-events-auto z-10 flex h-full w-full snap-x snap-mandatory items-center gap-1 overflow-x-auto scroll-smooth">
+                  {{ range $index, $image := . }}
+                    <div
+                      role="group"
+                      aria-roledescription="slide"
+                      aria-label="Fullscreen Image {{ add $index 1 }} of {{ len $.Params.images }}"
+                      class="relative flex h-full w-full flex-[0_0_100%] snap-center items-center justify-center p-2 sm:p-4 lg:p-4">
+                      <img
+                        src="{{ $image.url }}"
+                        class="lb-img max-h-full max-w-full cursor-pointer rounded-md object-contain opacity-0 drop-shadow-2xl transition-opacity duration-700 ease-out"
+                        alt="{{ $image.title }}"
+                        loading="lazy"
+                        onload="this.classList.remove('opacity-0');" />
+                    </div>
+                  {{ end }}
+                </div>
+              </div>
+
+              <div
+                class="lb-ui {{ if eq (len .) 1 }}
+                  opacity-0! invisible! pointer-events-none!
+                {{ end }} pointer-events-none absolute right-0 bottom-0 left-0 z-50 flex w-full items-end justify-center bg-linear-to-b from-black/50 to-transparent p-4 pb-6 transition-opacity duration-300 sm:p-6 sm:pb-10 lg:pointer-events-auto lg:relative lg:shrink-0 lg:items-center lg:bg-none lg:p-8 lg:pb-8">
+                <div
+                  class="no-scrollbar pointer-events-auto flex max-w-full snap-x gap-3 overflow-x-auto px-2"
+                  id="lightbox-thumbs"
+                  role="tablist"
+                  aria-label="Lightbox Thumbnails">
+                  {{ range $index, $image := . }}
+                    <button
+                      role="tab"
+                      aria-label="Go to image {{ add $index 1 }}"
+                      {{ if eq $index 0 }}
+                        aria-selected="true" aria-current="true"
+                      {{ else }}
+                        aria-selected="false"
+                      {{ end }}
+                      class="{{ if eq $index 0 }}
+                        border-white opacity-100
+                      {{ else }}
+                        border-transparent opacity-50
+                      {{ end }} lb-thumb-indicator bg-foreground-primary/10 h-14 w-14 shrink-0 animate-pulse snap-center overflow-hidden rounded-md border-2 shadow-lg transition-all hover:opacity-100 focus:ring-2 focus:ring-white/50 focus:outline-none sm:h-16 sm:w-16"
+                      data-index="{{ $index }}">
+                      <img
+                        src="{{ $image.url }}"
+                        alt="Thumbnail"
+                        loading="lazy"
+                        class="pointer-events-none h-full w-full object-cover opacity-0 transition-opacity duration-700 ease-out"
+                        onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('animate-pulse', 'bg-foreground-primary/10'); this.parentElement.classList.add('bg-black/40');" />
+                    </button>
+                  {{ end }}
+                </div>
+              </div>
+            </dialog>
+
+            <script id="lightbox-data" type="application/json">
+            [
+              {{ range $index, $image := . }}
+                {{ if $index }},{{ end }}
+                {
+                  "caption": {{ $image.title | jsonify | safeJS }}
+                }
+              {{ end }}
+            ]
+            </script>
+          {{ end }}
+
+
+          <script>
+            const logoLightbox = document.getElementById("logo-lightbox");
+
+            window.openLogoLightbox = function () {
+              if (logoLightbox) {
+                document.body.style.overflow = "hidden";
+                logoLightbox.classList.remove("is-closing");
+                logoLightbox.showModal();
+              }
+            };
+
+            window.closeLogoLightbox = function () {
+              if (logoLightbox) {
+                logoLightbox.classList.add("is-closing");
+                setTimeout(() => {
+                  logoLightbox.close();
+                  logoLightbox.classList.remove("is-closing");
+                  document.body.style.overflow = "";
+                }, 300);
+              }
+            };
+
+            if (logoLightbox) {
+              logoLightbox.addEventListener("click", (e) => {
+                if (e.target === logoLightbox) {
+                  closeLogoLightbox();
+                }
+              });
+              logoLightbox.addEventListener("cancel", (e) => {
+                e.preventDefault();
+                closeLogoLightbox();
+              });
+            }
+
+            function expandReleaseNotes(index) {
+              const content = document.getElementById(`notes-content-${index}`);
+              const fade = document.getElementById(`notes-fade-${index}`);
+
+              if (content && fade) {
+                content.style.maxHeight = content.scrollHeight + "px";
+                fade.style.opacity = "0";
+
+                setTimeout(() => {
+                  fade.style.display = "none";
+                  content.style.maxHeight = "none";
+                }, 500);
+              }
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+              document.querySelectorAll(".release-notes-container").forEach((container) => {
+                const content = container.querySelector('[id^="notes-content-"]');
+                const fade = container.querySelector('[id^="notes-fade-"]');
+
+                if (content && fade) {
+                  if (content.scrollHeight <= 130) {
+                    fade.style.display = "none";
+                    content.classList.remove("max-h-[120px]");
+                  }
+                }
+              });
+
+              const lightboxDataEl = document.getElementById("lightbox-data");
+              if (lightboxDataEl) {
+                const lightboxImages = JSON.parse(lightboxDataEl.textContent);
+                let currentLightboxIndex = 0;
+
+                const lightbox = document.getElementById("gallery-lightbox");
+                const lightboxCarousel = document.getElementById("lightbox-carousel");
+                const lightboxCaption = document.getElementById("lightbox-caption");
+                const lbThumbs = document.querySelectorAll(".lb-thumb-indicator");
+
+                const mainCarousel = document.getElementById("image-carousel");
+                const thumbs = document.querySelectorAll(".thumb-indicator");
+
+                const mainSlides = mainCarousel ? mainCarousel.querySelectorAll(".snap-center") : [];
+                const lbSlides = lightboxCarousel ? lightboxCarousel.querySelectorAll(".snap-center") : [];
+
+                if (mainCarousel && mainSlides.length > 0) {
+                  const carouselObserver = new IntersectionObserver(
+                    (entries) => {
+                      entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                          const activeIndex = Array.from(mainSlides).indexOf(entry.target);
+
+                          thumbs.forEach((thumb, index) => {
+                            if (index === activeIndex) {
+                              thumb.classList.add("border-foreground-primary", "opacity-100");
+                              thumb.classList.remove("border-transparent", "opacity-50");
+                              thumb.setAttribute("aria-current", "true");
+                              thumb.setAttribute("aria-selected", "true");
+                              thumb.scrollIntoView({
+                                behavior: "smooth",
+                                block: "nearest",
+                                inline: "center",
+                              });
+                            } else {
+                              thumb.classList.add("border-transparent", "opacity-50");
+                              thumb.classList.remove("border-foreground-primary", "opacity-100");
+                              thumb.removeAttribute("aria-current");
+                              thumb.setAttribute("aria-selected", "false");
+                            }
+                          });
+                        }
+                      });
+                    },
+                    { root: mainCarousel, threshold: 0.6 },
+                  );
+
+                  mainSlides.forEach((slide) => carouselObserver.observe(slide));
+                }
+
+                if (lightboxCarousel && lbSlides.length > 0) {
+                  const lbObserver = new IntersectionObserver(
+                    (entries) => {
+                      entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                          const activeIndex = Array.from(lbSlides).indexOf(entry.target);
+                          currentLightboxIndex = activeIndex;
+
+                          if (lightboxCaption) {
+                            lightboxCaption.textContent = lightboxImages[activeIndex].caption;
+                          }
+
+                          if (lbThumbs.length) {
+                            lbThumbs.forEach((thumb, i) => {
+                              if (i === activeIndex) {
+                                thumb.classList.add("border-white", "opacity-100");
+                                thumb.classList.remove("border-transparent", "opacity-50");
+                                thumb.setAttribute("aria-current", "true");
+                                thumb.setAttribute("aria-selected", "true");
+                                thumb.scrollIntoView({
+                                  behavior: "smooth",
+                                  block: "nearest",
+                                  inline: "center",
+                                });
+                              } else {
+                                thumb.classList.add("border-transparent", "opacity-50");
+                                thumb.classList.remove("border-white", "opacity-100");
+                                thumb.removeAttribute("aria-current");
+                                thumb.setAttribute("aria-selected", "false");
+                              }
+                            });
+                          }
+                        }
+                      });
+                    },
+                    { root: lightboxCarousel, threshold: 0.6 },
+                  );
+
+                  lbSlides.forEach((slide) => lbObserver.observe(slide));
+                }
+
+                function toggleLightboxUI() {
+                  if (window.innerWidth >= 1024) return;
+                  lightbox.classList.toggle("ui-hidden");
+                }
+
+                function openLightbox(index) {
+                  document.body.style.overflow = "hidden";
+                  currentLightboxIndex = index;
+                  lightbox.classList.remove("ui-hidden");
+                  lightbox.showModal();
+
+                  lightboxCarousel.classList.remove("scroll-smooth");
+                  if (lbSlides[index]) {
+                    lightboxCarousel.scrollTo({ left: lbSlides[index].offsetLeft });
+                  }
+
+                  setTimeout(() => {
+                    lightboxCarousel.classList.add("scroll-smooth");
+                  }, 50);
+                }
+
+                function changeLightbox(direction) {
+                  let newIndex = currentLightboxIndex + direction;
+                  if (newIndex < 0) {
+                    newIndex = lightboxImages.length - 1;
+                  } else if (newIndex >= lightboxImages.length) {
+                    newIndex = 0;
+                  }
+                  goToLightboxSlide(newIndex);
+                }
+
+                function goToLightboxSlide(index) {
+                  if (lbSlides[index]) {
+                    lightboxCarousel.scrollTo({
+                      left: lbSlides[index].offsetLeft,
+                      behavior: "smooth",
+                    });
+                  }
+                }
+
+                function closeLightbox() {
+                  lightbox.classList.add("is-closing");
+                  setTimeout(() => {
+                    lightbox.close();
+                    lightbox.classList.remove("is-closing");
+                    document.body.style.overflow = "";
+                    if (mainCarousel && mainSlides[currentLightboxIndex]) {
+                      mainCarousel.scrollTo({
+                        left: mainSlides[currentLightboxIndex].offsetLeft,
+                      });
+                    }
+                  }, 300);
+                }
+
+                document.querySelectorAll(".lightbox-trigger").forEach((trigger) => {
+                  trigger.addEventListener("click", (e) => {
+                    const index = parseInt(e.currentTarget.dataset.index);
+                    openLightbox(index);
+                  });
+                });
+
+                const lbCloseBtnLbx = document.getElementById("lb-close-btn");
+                if (lbCloseBtnLbx) lbCloseBtnLbx.addEventListener("click", closeLightbox);
+
+                const lbPrevBtn = document.getElementById("lb-prev-btn");
+                if (lbPrevBtn)
+                  lbPrevBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    changeLightbox(-1);
+                  });
+
+                const lbNextBtn = document.getElementById("lb-next-btn");
+                if (lbNextBtn)
+                  lbNextBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    changeLightbox(1);
+                  });
+
+                if (lightboxCarousel) {
+                  lightboxCarousel.addEventListener("click", () => {
+                    closeLightbox();
+                  });
+                }
+
+                document.querySelectorAll(".lb-img").forEach((img) => {
+                  img.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    toggleLightboxUI();
+                  });
+                });
+
+                if (lightbox) {
+                  lightbox.addEventListener("cancel", (e) => {
+                    e.preventDefault();
+                    closeLightbox();
+                  });
+                }
+
+                thumbs.forEach((thumb) => {
+                  thumb.addEventListener("click", (e) => {
+                    const index = parseInt(e.currentTarget.dataset.index);
+                    if (mainSlides[index]) {
+                      mainCarousel.scrollTo({
+                        left: mainSlides[index].offsetLeft,
+                        behavior: "smooth",
+                      });
+                    }
+                  });
+                });
+
+                lbThumbs.forEach((thumb) => {
+                  thumb.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    const index = parseInt(e.currentTarget.dataset.index);
+                    goToLightboxSlide(index);
+                  });
+                });
+
+                const btnPrev = document.getElementById("carousel-prev");
+                const btnNext = document.getElementById("carousel-next");
+
+                if (btnPrev && mainCarousel) {
+                  btnPrev.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    let currentIndex = 0;
+                    thumbs.forEach((t, i) => {
+                      if (t.getAttribute("aria-current") === "true") currentIndex = i;
+                    });
+
+                    if (currentIndex === 0) {
+                      mainCarousel.scrollTo({
+                        left: mainSlides[mainSlides.length - 1].offsetLeft,
+                        behavior: "smooth",
+                      });
+                    } else {
+                      mainCarousel.scrollTo({
+                        left: mainSlides[currentIndex - 1].offsetLeft,
+                        behavior: "smooth",
+                      });
+                    }
+                  });
+                }
+
+                if (btnNext && mainCarousel) {
+                  btnNext.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    let currentIndex = 0;
+                    thumbs.forEach((t, i) => {
+                      if (t.getAttribute("aria-current") === "true") currentIndex = i;
+                    });
+
+                    if (currentIndex === mainSlides.length - 1) {
+                      mainCarousel.scrollTo({
+                        left: mainSlides[0].offsetLeft,
+                        behavior: "smooth",
+                      });
+                    } else {
+                      mainCarousel.scrollTo({
+                        left: mainSlides[currentIndex + 1].offsetLeft,
+                        behavior: "smooth",
+                      });
+                    }
+                  });
+                }
+
+                document.addEventListener("keydown", (e) => {
+                  if (lightbox && lightbox.open) {
+                    if (e.key === "ArrowLeft") changeLightbox(-1);
+                    if (e.key === "ArrowRight") changeLightbox(1);
+                  }
+                });
+
+                window.addEventListener("resize", () => {
+                  if (lightbox && lightbox.open) {
+                    goToLightboxSlide(currentLightboxIndex);
+                  }
+                });
+              }
+            });
+          </script>
+
+          <script type="application/ld+json">
+            {{ $licensesData := hugo.Data.licenses }}
+            {{ $schemaLicense := index $licensesData $licenseId }}
+            {{ $creditText := "" }}
+
+            {{ if eq $licenseId "reserved" }}
+              {{ $creditText = printf "All rights to %s are reserved by %s." .Title $authorName }}
+            {{ else if eq $licenseId "personalUse" }}
+              {{ $creditText = printf "%s by %s is restricted strictly to a %s." .Title $authorName $schemaLicense.fullName }}
+            {{ else if $schemaLicense }}
+              {{ $creditText = printf "%s by %s is licensed under %s." .Title $authorName $schemaLicense.fullName }}
+            {{ end }}
+
+            {{ $typeKey := .Params.projectType | default .Params.type }}
+            {{ $schemaType := "CreativeWork" }}
+            {{ $applicationCategory := "" }}
+            {{ if $typeKey }}
+              {{ $typeInfo := index hugo.Data.projectTypes $typeKey }}
+              {{ if $typeInfo }}
+                {{ $schemaType = default "CreativeWork" $typeInfo.schemaType }}
+                {{ $applicationCategory = $typeInfo.name }}
+              {{ else }}
+                {{ $applicationCategory = $typeKey }}
+              {{ end }}
+            {{ end }}
+
+            {{ $sameAsUrls := slice }}
+            {{ with .Params.buttons }}
+              {{ range . }}
+                {{ if .url }}{{ $sameAsUrls = $sameAsUrls | append ( .url | absURL ) }}{{ end }}
+              {{ end }}
+            {{ end }}
+            {{ with .Params.links }}
+              {{ range . }}
+                {{ if .url }}{{ $sameAsUrls = $sameAsUrls | append ( .url | absURL ) }}{{ end }}
+              {{ end }}
+            {{ end }}
+
+            {
+              "@context": "https://schema.org/",
+              "@type": "{{ $schemaType }}",
+              "name": "{{ .Title }}",
+              "url": "{{ .Permalink }}",
+              {{ if gt (len $sameAsUrls) 0 }}
+              "sameAs": {{ $sameAsUrls | jsonify | safeJS }},
+              {{ end }}
+              {{ $projectImage := .Params.banner | default .Params.logo }}
+              {{ if $projectImage }}
+              "image": "{{ $projectImage | absURL }}",
+              {{ end }}
+              "datePublished": "{{ .Date.Format "2006-01-02" }}",
+              "dateModified": "{{ .Lastmod.Format "2006-01-02" }}",
+              {{ if $creditText }}
+              "copyrightNotice": "Copyright \u00A9 {{ $copyrightYears }} {{ $authorName }}",
+              "creditText": "{{ $creditText }}",
+              {{ end }}
+              "author": {
+                "@type": "Person",
+                {{ if eq (lower $authorName) "hexandcube" }}
+                "@id": "https://hexandcube.com/#author"
+                {{ else }}
+                "name": "{{ $authorName }}"
+                {{ end }}
+              }
+              {{ with .Description }}
+              ,"description": "{{ . | plainify }}"
+              {{ end }}
+              {{ if $schemaLicense }}
+                {{ if $schemaLicense.url }}
+                ,"license": "{{ $schemaLicense.url }}"
+                {{ end }}
+              {{ end }}
+              {{ if eq $schemaType "SoftwareApplication" }}
+                {{ if $applicationCategory }}
+                ,"applicationCategory": "{{ $applicationCategory }}"
+                {{ end }}
+                
+                {{ $osDefault := "Universal" }}
+                {{ if eq $typeKey "android-app" }}
+                  {{ $osDefault = "Android" }}
+                {{ else if eq $typeKey "wearos-watchface" }}
+                  {{ $osDefault = "WearOS" }}
+                {{ end }}
+                
+                ,"operatingSystem": "{{ .Params.operatingSystem | default $osDefault }}"
+                ,"offers": {
+                  "@type": "Offer",
+                  "price": "{{ .Params.price | default "0" }}",
+                  "priceCurrency": "{{ .Params.priceCurrency | default "USD" }}"
+                }
+
+                {{ $latestVersion := "" }}
+                {{ with .Params.versions }}
+                  {{ range first 1 . }}
+                    {{ $latestVersion = .versionNumber }}
+                  {{ end }}
+                {{ end }}
+                {{ if $latestVersion }}
+                ,"softwareVersion": "{{ $latestVersion }}"
+                {{ end }}
+              {{ end }}
+            }
+          </script>
+        </div>
+      </div>
+    </section>
+  </article>
+{{ end }}

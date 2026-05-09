@@ -1,0 +1,37 @@
+{
+  "software": {
+    "name": "Software",
+    "icon": "fa-regular fa-rectangle-terminal",
+    "schemaType": "SoftwareApplication"
+  },
+  "mc-modpack": {
+    "name": "Minecraft Modpack",
+    "icon": "fa-regular fa-cube",
+    "schemaType": "CreativeWork"
+  },
+  "mc-mod": {
+    "name": "Minecraft Mod",
+    "icon": "fa-regular fa-cube",
+    "schemaType": "SoftwareApplication"
+  },
+  "browser-extension": {
+    "name": "Browser Extension",
+    "icon": "fa-regular fa-puzzle-piece",
+    "schemaType": "SoftwareApplication"
+  },
+  "wearos-watchface": {
+    "name": "WearOS Watchface",
+    "icon": "fa-regular fa-watch",
+    "schemaType": "SoftwareApplication"
+  },
+  "android-app": {
+    "name": "Android App",
+    "icon": "fa-brands fa-android",
+    "schemaType": "SoftwareApplication"
+  },
+  "webapp": {
+    "name": "Web Application",
+    "icon": "fa-regular fa-globe",
+    "schemaType": "WebApplication"
+  }
+}

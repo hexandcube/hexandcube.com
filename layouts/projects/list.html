@@ -1,0 +1,231 @@
+{{ define "main" }}
+  <main>
+    <section class="pt-8 md:pt-12 responsive">
+      <h1 class="text-foreground-primary font-primary font-bold tracking-tight text-4xl sm:text-5xl md:text-6xl">
+        {{ .Title }}
+      </h1>
+      <div class="mt-5 text-foreground-secondary max-w-prose">
+        {{ .Description }}
+      </div>
+    </section>
+
+    {{ $featuredProjects := sort (where .RegularPagesRecursive "Params.featuredindex" ">" 0) "Params.featuredindex" "asc" }}
+    
+    {{ if gt (len $featuredProjects) 0 }}
+      <section class="flex flex-col gap-5 mt-10 lg:mx-8 mx-4 responsive">
+        <h2 class="text-2xl font-primary font-bold text-foreground-primary flex items-center gap-2 border-b border-foreground-primary/10 pb-2">
+          <i class="fa-solid fa-star text-foreground-secondary"></i> Featured
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {{ range first 4 $featuredProjects }}
+            <a
+              href="{{ .RelPermalink }}"
+              class="group flex flex-col justify-between gap-4 p-5 bg-background-secondary hover:bg-background-elevated border-1 border-foreground-primary/15 rounded-xl transition-all duration-200 ease-in-out hover:scale-[101%] h-full"
+              aria-label="View featured project: {{ .Title }}">
+              
+              <div class="flex items-start gap-4">
+                <div class="shrink-0 w-16 h-16 rounded-xl overflow-hidden bg-foreground-primary/5 border border-foreground-primary/15 flex items-center justify-center shadow-sm">
+                  {{ if .Params.logo }}
+                    <img src="{{ .Params.logo }}" alt="{{ .Title }} logo" loading="lazy" class="w-full h-full object-cover" />
+                  {{ else if .Params.icon }}
+                    <span class="font-primary font-bold text-2xl text-foreground-secondary group-hover:text-foreground-primary transition-colors">
+                      <i class="{{ .Params.icon }}"></i>
+                    </span>
+                  {{ else }}
+                    <span class="font-primary font-bold text-xl text-foreground-secondary group-hover:text-foreground-primary transition-colors">
+                      {{ upper (substr .Title 0 2) }}
+                    </span>
+                  {{ end }}
+                </div>
+                
+                <div class="flex flex-col grow min-w-0">
+                  <h3 class="text-xl font-primary font-bold text-foreground-primary truncate m-0">
+                    {{ .Title }}
+                  </h3>
+                  <p class="text-sm text-foreground-secondary line-clamp-2 mt-1 mb-0">
+                    {{ .Params.tagline | default .Params.description }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap gap-2 mt-2">
+                {{ $typeKey := .Params.projectType | default .Params.type }}
+                {{ if $typeKey }}
+                  {{ $typeInfo := index hugo.Data.projectTypes $typeKey }}
+                  {{ if $typeInfo }}
+                    <span class="flex items-center gap-1.5 text-[11px] font-primary font-semibold px-2 py-1 bg-background-elevated rounded-md border border-foreground-primary/15 text-foreground-primary">
+                      <i class="{{ $typeInfo.icon }} opacity-70"></i>
+                      {{ $typeInfo.name }}
+                    </span>
+                  {{ end }}
+                {{ end }}
+
+                {{ range first 2 .Params.tags }}
+                  <span class="text-[11px] font-primary font-semibold px-2 py-1 bg-background-elevated rounded-md border border-foreground-primary/15 text-foreground-primary">
+                    {{ . }}
+                  </span>
+                {{ end }}
+              </div>
+            </a>
+          {{ end }}
+        </div>
+      </section>
+    {{ end }}
+
+    <div class="responsive lg:mx-8 mx-4 {{ if gt (len $featuredProjects) 0 }}mt-12{{ else }}mt-8{{ end }} mb-4">
+      <h2 class="text-2xl font-primary font-bold text-foreground-primary flex items-center gap-2 border-b border-foreground-primary/10 pb-2">
+        <i class="fa-regular fa-folder-open text-foreground-secondary"></i> All Projects
+      </h2>
+    </div>
+
+    <section class="flex flex-col gap-4 lg:mx-8 mx-4 responsive">
+      {{ $paginator := .Paginate (sort .RegularPagesRecursive "Params.lastmod" "desc" ) }}
+      {{ range $paginator.Pages }}
+
+        {{ $lastUpdated := .Lastmod }}
+        {{ $hasVersions := false }}
+        {{ $latestVersion := dict }}
+
+        {{ with .Params.versions }}
+          {{ if gt (len .) 0 }}
+            {{ $hasVersions = true }}
+            {{ $latestVersion = index . 0 }}
+            {{ if $latestVersion.date }}
+              {{/* Parse the version date to ensure we can do math on it */}}
+              {{ $lastUpdated = time $latestVersion.date }}
+            {{ end }}
+          {{ end }}
+        {{ end }}
+
+        {{ $diff := sub now.Unix $lastUpdated.Unix }}
+        {{ $days := div $diff 86400 }}
+        {{ $timeStr := "" }}
+        {{ if le $days 0 }}
+          {{ $timeStr = "today" }}
+        {{ else if eq $days 1 }}
+          {{ $timeStr = "yesterday" }}
+        {{ else if lt $days 30 }}
+          {{ $timeStr = printf "%d days ago" $days }}
+        {{ else if lt $days 365 }}
+          {{ $months := div $days 30 }}
+          {{ if eq $months 1 }}
+            {{ $timeStr = "1 month ago" }}
+          {{ else }}
+            {{ $timeStr = printf "%d months ago" $months }}
+          {{ end }}
+        {{ else }}
+          {{ $years := div $days 365 }}
+          {{ if eq $years 1 }}
+            {{ $timeStr = "1 year ago" }}
+          {{ else }}
+            {{ $timeStr = printf "%d years ago" $years }}
+          {{ end }}
+        {{ end }}
+
+
+        <a
+          href="{{ .RelPermalink }}"
+          class="group flex flex-col sm:flex-row gap-5 p-4 bg-background-secondary hover:bg-background-elevated
+            border-1 border-foreground-primary/15 rounded-xl transition-all duration-200 ease-in-out hover:scale-[101%] items-start"
+          aria-label="View project: {{ .Title }}">
+          <div
+            class="shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden bg-foreground-primary/5 border border-foreground-primary/15 flex items-center justify-center shadow-sm">
+            {{ if .Params.logo }}
+              <img src="{{ .Params.logo }}" alt="{{ .Title }} logo" loading="lazy" class="w-full h-full object-cover" />
+            {{ else if .Params.icon }}
+              <span
+                class="font-primary font-bold text-3xl sm:text-4xl text-foreground-secondary group-hover:text-foreground-primary transition-colors">
+                <i class="{{ .Params.icon }}"></i>
+              </span>
+            {{ else }}
+              <span
+                class="font-primary font-bold text-2xl sm:text-3xl text-foreground-secondary group-hover:text-foreground-primary transition-colors">
+                {{ upper (substr .Title 0 2) }}
+              </span>
+            {{ end }}
+          </div>
+
+          <div class="grow min-w-0">
+            <div class="flex items-center gap-3 mb-1">
+              <h2 class="text-xl sm:text-2xl font-primary font-bold text-foreground-primary truncate m-0">
+                {{ .Title }}
+              </h2>
+
+              {{ with .Params.status }}
+                <span
+                  class="text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full border 
+                        {{ if eq . "Active" }}
+                    border-green-500/30 bg-green-500/10 text-green-600 dark:text-green-400
+                  {{ else if eq . "On hold" }}
+                    border-yellow-500/30 bg-yellow-500/10 text-yellow-600 dark:text-yellow-400
+                  {{ else if eq . "Archived" }}
+                    border-amber-700/30 bg-amber-700/10 text-amber-800 dark:text-amber-500
+                  {{ else if eq . "Deprecated" }}
+                    border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400
+                  {{ else if eq . "Completed" }}
+                    border-blue-500/30 bg-blue-500/10 text-blue-600 dark:text-blue-400
+                  {{ else }}
+                    border-foreground-primary/20 bg-background-primary text-foreground-secondary
+                  {{ end }}">
+                  {{ . }}
+                </span>
+              {{ end }}
+            </div>
+
+            <p class="text-sm text-foreground-secondary line-clamp-2 mb-3 max-w-3xl">
+              {{ .Params.tagline | default .Params.description }}
+            </p>
+
+            <div class="flex flex-wrap gap-2 mt-auto">
+              {{ $typeKey := .Params.projectType | default .Params.type }}
+              {{ if $typeKey }}
+                {{ $typeInfo := index hugo.Data.projectTypes $typeKey }}
+                {{ if $typeInfo }}
+                  <span
+                    class="flex items-center gap-1.5 text-xs font-primary font-semibold px-2 py-1 bg-background-elevated rounded-md border border-foreground-primary/15 text-foreground-primary">
+                    <i class="{{ $typeInfo.icon }} opacity-70"></i>
+                    {{ $typeInfo.name }}
+                  </span>
+                {{ end }}
+              {{ end }}
+
+              {{ range first 4 .Params.tags }}
+                <span
+                  class="text-xs font-primary font-semibold px-2 py-1 bg-background-elevated rounded-md border border-foreground-primary/15 text-foreground-primary">
+                  {{ . }}
+                </span>
+              {{ end }}
+            </div>
+          </div>
+
+          <div class="w-full sm:w-36 shrink-0 flex flex-row sm:flex-col justify-between sm:justify-start items-center sm:items-end text-xs text-foreground-secondary gap-3 pt-3 sm:pt-0 border-t sm:border-t-0 border-foreground-primary/10 mt-3 sm:mt-0">
+            
+            <div class="flex flex-row sm:flex-col items-center sm:items-end gap-1.5 sm:gap-0.5">
+              <span class="font-semibold text-foreground-primary hidden sm:block">Updated</span>
+              <span class="flex items-center gap-1.5">
+                <i class="fa-regular fa-clock sm:hidden text-[10px] opacity-70"></i>
+                <time datetime="{{ $lastUpdated.Format "2006-01-02T15:04:05Z07:00" }}">
+                  {{ $timeStr }}
+                </time>
+              </span>
+            </div>
+
+            {{ if $hasVersions }}
+              <div class="flex flex-row sm:flex-col items-center sm:items-end gap-1.5 sm:gap-0.5">
+                <span class="font-semibold text-foreground-primary hidden sm:block">Latest release</span>
+                <span class="flex items-center gap-1.5 font-mono text-[11px] bg-background-primary px-1.5 py-0.5 rounded border border-foreground-primary/10">
+                  <i class="fa-regular fa-list-tree sm:hidden text-[10px] opacity-70"></i>
+                  v{{ $latestVersion.versionNumber }}
+                </span>
+              </div>
+            {{ end }}
+
+          </div>
+
+        </a>
+      {{ end }}
+    </section>
+
+    {{ partial "pagination.html" $paginator }}
+  </main>
+{{ end }}

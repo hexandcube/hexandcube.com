@@ -1,0 +1,185 @@
+{{ define "main" }}
+  <main>
+    <section class="responsive pt-8 md:pt-12">
+      {{ $currentPage := . }}
+      {{ $galleryPage := site.GetPage "/gallery" }}
+      <h1 class="text-foreground-primary font-primary text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+        {{ $galleryPage.Title }}
+      </h1>
+      <div class="text-foreground-secondary mt-5 max-w-prose">
+        {{ $galleryPage.Description }}
+      </div>
+      <div class="content">{{ .Content }}</div>
+      <nav
+        class="bg-background-secondary border-foreground-primary/15 my-5 inline-flex gap-2 rounded-full border p-1.5"
+        aria-label="Category filters">
+        <a
+          href="/gallery/"
+          class="font-primary {{ if eq $currentPage.RelPermalink "/gallery/" }}
+            text-foreground-primary bg-accent-secondary hover:brightness-120
+            shadow-[0px_1px_2px_0px_rgba(0,0,0,0.15),inset_0px_-2px_0px_0px_rgba(0,0,0,0.15)] before:absolute
+            before:inset-0 before:rounded-full before:pointer-events-none
+            before:shadow-[inset_0px_0px_0px_1px_rgba(255,255,255,0.25)]
+            before:mask-[linear-gradient(to_bottom,black,transparent)]
+          {{ else }}
+            text-foreground-secondary hover:text-foreground-primary hover:bg-accent-muted/20
+          {{ end }} relative rounded-full px-5 py-2 text-sm font-semibold transition-all duration-200 ease-in-out">
+          All
+        </a>
+        {{ range $galleryPage.Sections }}
+          {{ $isActive := or (eq $currentPage .) ($currentPage.IsDescendant .) }}
+          <a
+            href="{{ .RelPermalink }}"
+            class="font-primary text-foreground-primary {{ if $isActive }}
+              text-foreground-primary bg-accent-secondary hover:brightness-120
+              shadow-[0px_1px_2px_0px_rgba(0,0,0,0.15),inset_0px_-2px_0px_0px_rgba(0,0,0,0.15)] before:absolute
+              before:inset-0 before:rounded-full before:pointer-events-none
+              before:shadow-[inset_0px_0px_0px_1px_rgba(255,255,255,0.25)]
+              before:mask-[linear-gradient(to_bottom,black,transparent)]
+            {{ else }}
+              text-foreground-secondary hover:text-foreground-primary hover:bg-accent-muted/20
+            {{ end }} relative rounded-full px-5 py-2 text-sm font-semibold transition-all duration-200 ease-in-out">
+            {{ .Title }}
+          </a>
+        {{ end }}
+      </nav>
+    </section>
+
+    <section class="mx-4 flex flex-wrap gap-4 lg:mx-8">
+      {{ $pages := .RegularPagesRecursive }}
+      {{ $pages = sort $pages "Date" "desc" }}
+
+      {{ $paginator := .Paginate $pages }}
+
+      {{ range $paginator.Pages }}
+
+        {{ $thumbWidth := 800 }}
+        {{ $thumbHeight := div (mul .Params.height $thumbWidth) .Params.width }}
+
+
+        <a
+          href="{{ .RelPermalink }}"
+          class="group bg-background-secondary hover:bg-background-elevated border-foreground-primary/15 block max-w-full flex-[1_0_auto] rounded-xl border-1 transition-all duration-200 ease-in-out hover:scale-[101%]"
+          aria-label="View item: {{ .Title }}">
+          <div class="bg-foreground-primary/10 relative animate-pulse overflow-hidden rounded-t-xl">
+            {{ $categoryPathNames := hugo.Data.categoryPathNames.gallery }}
+            {{ $currentCategory := .Params.category }}
+            {{ $categoryPath := $currentCategory }}
+            {{ if index $categoryPathNames $currentCategory }}
+              {{ $categoryPath = index $categoryPathNames $currentCategory }}
+            {{ end }}
+
+            <img
+              src="https://fs.floofware.net/hexandcube/gallery/{{ $categoryPath }}/thumbnails/{{ .Params.id }}.{{ .Params.format }}"
+              alt="{{ .Title }}"
+              width="{{ $thumbWidth }}"
+              height="{{ $thumbHeight }}"
+              loading="lazy"
+              class="block h-64 w-full object-cover opacity-0 transition-opacity duration-700 ease-out sm:h-64 md:h-50 lg:h-56 xl:h-48 2xl:h-56"
+              onload="this.classList.remove('opacity-0'); this.parentElement.classList.remove('animate-pulse', 'bg-foreground-primary/10');" />
+
+            <!-- this will break if i ever publish something that has both `variants` and a `capture date` but it's fine for now lol -->
+            {{ with .Params.variants }}
+              <div
+                class="font-primary text-background-primary absolute top-2 left-2 flex h-7 max-w-19.5 items-center overflow-hidden rounded-md bg-white/20 px-2 text-xs font-semibold whitespace-nowrap backdrop-blur-md transition-all duration-500 ease-out group-hover:max-w-xs">
+                <div class="relative flex w-full items-center">
+                  <span
+                    class="absolute opacity-100 transition-all duration-300 group-hover:-translate-y-3 group-hover:opacity-0">
+                    {{ len . }} Variants
+                  </span>
+                  <span
+                    class="translate-y-3 truncate opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                    {{ delimit . ", " }}
+                  </span>
+                </div>
+              </div>
+            {{ end }}
+            {{ with .Params.captureDate }}
+              <div
+                class="font-primary text-background-primary absolute top-2 left-2 flex h-7 w-fit items-center overflow-hidden rounded-md bg-white/20 px-2 text-xs font-semibold whitespace-nowrap backdrop-blur-md transition-all duration-500 ease-out">
+                <div class="relative flex items-center">
+                  <span class="relative transition-all duration-500 ease-in-out">
+                    <span class="pointer-events-none invisible block group-hover:hidden"
+                      ><i class="fa-regular fa-camera-viewfinder mr-1.5"></i
+                      >{{ (time.AsTime .).Format "January 2, 2006" }}</span
+                    >
+                    <span class="pointer-events-none invisible hidden group-hover:block"
+                      ><i class="fa-regular fa-camera-viewfinder mr-1.5"></i>Captured on
+                      {{ (time.AsTime .).Format "January 2, 2006" }}</span
+                    >
+                    <span
+                      class="absolute inset-0 flex items-center opacity-100 transition-all duration-300 group-hover:-translate-y-3 group-hover:opacity-0"
+                      ><i class="fa-regular fa-camera-viewfinder mr-1.5"></i
+                      >{{ (time.AsTime .).Format "January 2, 2006" }}</span
+                    >
+                    <span
+                      class="absolute inset-0 flex translate-y-3 items-center opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100"
+                      ><i class="fa-regular fa-camera-viewfinder mr-1.5"></i>Captured on
+                      {{ (time.AsTime .).Format "January 2, 2006" }}</span
+                    >
+                  </span>
+                </div>
+              </div>
+            {{ end }}
+          </div>
+          <noscript>
+            <style>
+              img[loading="lazy"] {
+                opacity: 1 !important;
+              }
+            </style>
+          </noscript>
+
+          <div class="px-3 py-4">
+            <div
+              class="text-foreground-primary bg-background-primary border-foreground-primary/15 mb-1 flex w-max items-center rounded-[10px] border-1 p-1 pr-2.5 text-xs">
+              <time
+                datetime="{{ .Date.Format " 2006-01-02T15:04:05Z07:00" }}"
+                class="text-foreground-primary bg-accent-muted border-foreground-primary/15 mr-2 rounded-md border-1 px-1.5 py-0.5 shadow-xs">
+                {{ .Params.category | title }}
+              </time>
+              {{ .Date.Format "January 2, 2006" }}
+            </div>
+            <h2 class="font-primary text-foreground-primary m-0 ml-0.5 truncate text-2xl font-bold tracking-tight">
+              {{ .Title }}
+            </h2>
+          </div>
+        </a>
+      {{ end }}
+
+
+      <div class="h-0 flex-[10_0_auto]"></div>
+    </section>
+
+    {{ partial "pagination.html" $paginator }}
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      "name": "{{ $galleryPage.Title }}",
+      "description": "{{ $galleryPage.Description }}",
+      "itemListElement": [
+        {{ range $index, $page := $paginator.Pages }}
+        {{ if $index }},{{ end }}
+        {
+          "@type": "ListItem",
+          "position": {{ add $index 1 }},
+          "item": {
+            "@type": "CreativeWork",
+            "url": "{{ .Permalink }}",
+            "name": "{{ .Title }}",
+            "datePublished": "{{ .Date.Format "2006-01-02" }}",
+            "genre": "{{ .Params.category | title }}",
+            "author": {
+                "@type": "Person",
+                "@id": "https://hexandcube.com/#author"
+            }
+          }
+        }
+        {{ end }}
+      ]
+    }
+    </script>
+  </main>
+{{ end }}

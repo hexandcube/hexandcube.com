@@ -1,0 +1,4 @@
+---
+title: "Wallpapers"
+type: "gallery"
+---

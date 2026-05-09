@@ -1,0 +1,18 @@
+/public
+/resources
+.vscode/settings.json
+node_modules
+.hugo_build.lock
+debug.log
+deno.lock
+hugo_stats.json
+
+## OS Files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Netlify CLI
+.netlify

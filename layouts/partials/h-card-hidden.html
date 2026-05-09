@@ -1,0 +1,34 @@
+{{ $aboutPage := site.GetPage "/about" }}
+
+{{ with $aboutPage }}
+  <div class="h-card hidden" aria-hidden="true">
+    
+    <a class="p-nickname u-url u-uid" rel="me" href="{{ .Permalink }}">
+      {{ .Params.displayName | default .Params.name | default site.Title }}
+    </a>
+
+    {{ with .Params.handle }}
+      <span class="p-name">{{ . }}</span>
+    {{ end }}
+    
+    {{ with .Params.avatar }}
+      <img class="u-photo" src="{{ . | absURL }}" alt="Avatar" />
+    {{ end }}
+    
+    {{ with .Params.bio }}
+      <div class="p-note">{{ . | plainify }}</div>
+    {{ end }}
+    
+    {{ with .Params.location }}
+      <span class="p-locality">{{ . }}</span>
+    {{ end }}
+    
+    {{ with .Params.email }}
+      <a class="u-email" href="mailto:{{ . }}">{{ . }}</a>
+    {{ end }}
+        
+    {{ with .Params.pgp }}
+      <a class="u-key" href="{{ .pgpUrl }}">{{ .fingerprint }}</a>
+    {{ end }}
+  </div>
+{{ end }}

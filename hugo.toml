@@ -1,0 +1,133 @@
+baseURL = 'https://hexandcube.com'
+languageCode = 'en'
+title = 'Hexandcube'
+author = 'Hexandcube'
+enableEmoji = true
+
+[pagination]
+  pagerSize = 36
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+  [markup.highlight]
+    codeFences = true
+    lineNoStart = 1
+    lineNos = true
+    lineNumbersInTable = false
+    noClasses = false
+    tabWidth = 2
+
+[build]
+  writeStats = true
+
+[params]
+  version = "11.0"
+  repository = "https://github.com/hexandcube/hexandcube.com"
+  description = "The personal website of Hexandcube (Mallow), a fox with a camera and a computer who writes code, takes pictures, and makes things on the internet."
+
+[menu]
+  # Header navbar menu
+  [[menu.header]]
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = -1
+
+  [[menu.header]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 1
+    params.rel = "me"
+
+  [[menu.header]]
+    identifier = "gallery"
+    name = "Gallery"
+    url = "/gallery/"
+    weight = 2
+
+  [[menu.header]]
+    identifier = "projects"
+    name = "Projects"
+    url = "/projects/"
+    weight = 3
+
+  # Footer links
+  [[menu.footerResources]]
+    identifier = "about"
+    name = "About"
+    url = "/about"
+    weight = 1
+    params.target = "_self"
+
+  [[menu.footerResources]]
+    identifier = "sourcecode"
+    name = "Source code"
+    url = "https://github.com/hexandcube/hexandcube.com"
+    weight = 2
+    params.target = "_blank"
+
+  [[menu.footerCategories]]
+    identifier = "gallery"
+    name = "Gallery"
+    url = "/gallery"
+    weight = 1
+    params.target = "_self"
+
+  [[menu.footerCategories]]
+    identifier = "projects"
+    name = "Projects"
+    url = "/projects"
+    weight = 2
+    params.target = "_self"
+
+  [[menu.footerLegal]]
+    identifier = "attributions"
+    name = "Attributions"
+    url = "/attributions"
+    weight = 1
+    params.target = "_self"
+  
+  [[menu.footerLegal]]
+    identifier = "privacy"
+    name = "Privacy Policy"
+    url = "/privacy"
+    weight = 2
+    params.target = "_self"
+
+  # Footer social buttons menu
+  [[menu.footerSocial]]
+    identifier = "bluesky"
+    name = "Bluesky"
+    url = "https://bsky.app/hexandcube"
+    weight = 1
+    params.icon = "fa-brands fa-bluesky"
+    params.target = "_blank"
+  
+  [[menu.footerSocial]]
+    identifier = "mastodon"
+    name = "Mastodon"
+    url = "https://furry.engineer/@hexandcube"
+    weight = 2
+    params.icon = "fa-brands fa-mastodon"
+    params.target = "_blank"
+
+  [[menu.footerSocial]]
+    identifier = "twitter"
+    name = "Twitter"
+    url = "https://twitter.com/hexandcube"
+    weight = 3
+    params.icon = "fa-brands fa-twitter"
+    params.target = "_blank"
+
+  [[menu.footerSocial]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 4
+    params.icon = "fa-regular fa-link"
+    params.target = "_self"
+

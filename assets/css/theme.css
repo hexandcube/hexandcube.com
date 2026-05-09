@@ -1,0 +1,465 @@
+@import "tailwindcss";
+@import "./syntax.css" 
+@plugin "tailwindcss-debug-screens";
+
+@source "../../layouts/**/*.html";
+
+@theme {
+  /* fonts */
+  --font-logo: "Hexandcube Logo";
+  --font-brand: "Mont", sans-serif;
+  --font-primary: "Sen", sans-serif;
+  --font-sans: "TASA Orbiter", sans-serif;
+  --font-mono: "Space Mono", monospace;
+
+  /* colors */
+  --color-accent-strong: #ff441a;
+  --color-accent-primary: #fd6446;
+  --color-accent-secondary: #9c4333;
+  --color-accent-muted: #3d2b29;
+
+  --color-background-primary: #120e0f;
+  --color-background-secondary: #191516;
+  --color-background-elevated: #241e1f;
+
+  --color-foreground-primary: #f2ebe9;
+  --color-foreground-secondary: #b5a8a7;
+  --color-foreground-muted: #7d6d6c;
+
+  --color-brand-success: #a3b18a;
+  --color-brand-danger: #e65a5a;
+  --color-brand-warning: #e9c46a;
+  --color-brand-info: #84a59d;
+
+  /* rounded corners */
+  --radius-5xl: 2.5rem;
+  --radius-6xl: 3rem;
+  --radius-7xl: 3.5rem;
+  --radius-8xl: 4rem;
+  --radius-9xl: 4.5rem;
+  --radius-10xl: 5rem;
+
+  /* spacing (width, height, size) */
+  --spacing-128: 32rem;
+  --spacing-144: 36rem;
+  --spacing-content: 80ch;
+
+  /* border width */
+  --border-width-1: 1px;
+}
+
+@layer components {
+  .neofox-emoji {
+    @apply inline-block h-[1.2em] w-[1.2em] object-contain align-middle;
+    margin-bottom: 0.1em;
+  }
+}
+
+@view-transition {
+  navigation: auto;
+}
+
+* {
+  scroll-padding-top: 80px;
+  scroll-behavior: smooth;
+}
+
+::selection {
+  color: var(--color-foreground-primary);
+  background-color: var(--color-accent-strong);
+}
+
+#header-container {
+  transition:
+    transform 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
+}
+
+.content {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-primary text-foreground-primary font-bold tracking-tight;
+  }
+
+  h1 {
+    @apply text-3xl sm:text-4xl md:text-5xl mt-10 md:mb-4 mb-2;
+  }
+
+  h2 {
+    @apply text-2xl sm:text-3xl md:text-4xl mt-10 md:mb-2 mb-1;
+  }
+
+  h3 {
+    @apply text-xl sm:text-2xl md:text-3xl mt-10 md:mb-2 mb-1;
+  }
+
+  h4 {
+    @apply text-xl md:text-2xl mt-6 mb-1 font-semibold tracking-normal;
+  }
+
+  h5,
+  h6 {
+    @apply uppercase tracking-widest mt-6 mb-2 text-foreground-secondary;
+  }
+
+  h5 {
+    @apply text-base;
+  }
+
+  h6 {
+    @apply text-sm;
+  }
+
+  p {
+    @apply text-base text-foreground-secondary leading-relaxed max-w-prose;
+  }
+
+  p:not(blockquote p) {
+    @apply my-2;
+  }
+
+  a:not(.btn) {
+    @apply text-accent-strong font-medium underline decoration-dashed underline-offset-3;
+  }
+
+  a:hover:not(.btn) {
+    @apply text-accent-secondary;
+  }
+
+  img:not(.custom-emoji) {
+    @apply mt-2 rounded-2xl;
+  }
+
+  li {
+    @apply my-1 text-foreground-secondary;
+  }
+
+  ol {
+    @apply list-decimal list-inside;
+  }
+
+  ul {
+    @apply list-disc list-inside;
+  }
+
+  ul li:has(input[type="checkbox"]) {
+    @apply list-none ml-0;
+  }
+
+  ul li input[type="checkbox"] {
+    @apply ml-0.5;
+  }
+
+  input[type="checkbox"] {
+    @apply accent-accent-primary;
+  }
+
+  label {
+    @apply block text-sm font-bold text-foreground-secondary mb-1.5;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  textarea {
+    @apply w-full bg-background-elevated border-1 border-foreground-primary/15 rounded-lg px-3 py-2 text-foreground-primary outline-none focus:border-foreground-primary/40 focus:ring-2 focus:ring-foreground-primary/50 transition-colors;
+  }
+
+  textarea {
+    @apply resize-y min-h-30;
+  }
+
+  table {
+    @apply border-2 border-foreground-secondary;
+  }
+
+  th,
+  td {
+    @apply border-l-2 border-t-2 text-foreground-secondary px-2 py-0.5;
+  }
+
+  th {
+    @apply font-bold bg-foreground-secondary/10 border-t-0;
+  }
+
+  td:first-child,
+  th:first-child {
+    border-left: none;
+  }
+
+  dt {
+    @apply font-bold text-foreground-secondary;
+  }
+
+  dd {
+    @apply mb-3 ml-6;
+  }
+
+  .footnote-ref,
+  .footnote-backref {
+    text-decoration: none !important;
+  }
+
+  .footnote-ref::before {
+    content: "[";
+  }
+
+  .footnote-ref::after {
+    content: "]";
+  }
+
+  li > p {
+    @apply inline;
+  }
+
+  abbr {
+    @apply cursor-help;
+  }
+
+  blockquote {
+    @apply border-l-5 border-accent-primary bg-background-secondary pl-3 py-2 my-2 rounded;
+  }
+
+  hr {
+    @apply my-5 border-foreground-muted;
+  }
+
+  del {
+    @apply line-through decoration-2 decoration-accent-strong;
+  }
+
+  /* Collapsible / Accordion Elements */
+  details {
+    @apply bg-background-elevated border-1 border-foreground-primary/15 rounded-xl overflow-hidden transition-all duration-300;
+  }
+  
+  details summary {
+    @apply font-primary font-bold text-foreground-primary px-4 py-3 cursor-pointer select-none flex items-center justify-between outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-foreground-primary/50 transition-colors hover:bg-background-primary/50;
+  }
+
+  details summary::-webkit-details-marker,
+  details summary::marker {
+    display: none;
+  }
+
+  details summary::after {
+    content: "\f078"; /* fa-chevron-down */
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands";
+    font-weight: 900;
+    @apply text-foreground-secondary text-sm transition-transform duration-300;
+  }
+
+  details[open] summary::after {
+    transform: rotate(180deg);
+  }
+
+  details[open] summary {
+    @apply border-b border-foreground-primary/15 bg-background-primary/30;
+  }
+
+  details > .details-content {
+    @apply p-4;
+  }
+}
+
+.content-nested {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply mt-3 mb-1;
+  }
+
+  h1 {
+    @apply text-lg sm:text-xl md:text-2xl;
+  }
+  h2 {
+    @apply text-base sm:text-lg md:text-xl;
+  }
+  h3 {
+    @apply text-base md:text-lg;
+  }
+  h4 {
+    @apply text-sm md:text-base;
+  }
+  h5 {
+    @apply text-sm;
+  }
+  h6 {
+    @apply text-xs;
+  }
+
+  p {
+    @apply my-1;
+  }
+  ul,
+  ol {
+    @apply my-1;
+  }
+  hr {
+    @apply my-3;
+  }
+}
+
+.content-readme {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply mt-6 mb-3;
+  }
+
+  h1 {
+    @apply text-2xl sm:text-3xl md:text-4xl mt-8 mb-4 pb-2 border-b border-foreground-primary/10;
+  }
+
+  h2 {
+    @apply text-xl sm:text-2xl md:text-3xl mt-6 mb-3 pb-1.5 border-b border-foreground-primary/10;
+  }
+
+  h3 {
+    @apply text-lg sm:text-xl md:text-2xl;
+  }
+  h4 {
+    @apply text-base sm:text-lg md:text-xl tracking-normal;
+  }
+  h5 {
+    @apply text-base uppercase tracking-widest text-foreground-secondary;
+  }
+  h6 {
+    @apply text-sm uppercase tracking-widest text-foreground-secondary;
+  }
+
+  p,
+  ul,
+  ol {
+    @apply my-3;
+  }
+  hr {
+    @apply my-6;
+  }
+
+  > *:first-child {
+    @apply mt-0;
+  }
+}
+
+code {
+  @apply bg-background-elevated text-foreground-secondary border-foreground-muted font-mono px-1 rounded-md;
+}
+
+pre {
+  @apply bg-background-secondary text-foreground-primary border-foreground-muted border-1 font-mono p-3 my-3 rounded-lg overflow-x-scroll;
+}
+
+pre > code {
+  @apply p-0 bg-background-secondary;
+  border: none;
+}
+
+.chroma .ln {
+  @apply mr-2;
+}
+
+.effect-shadowlight {
+  @apply shadow-[0px_1.5px_2px_0px_rgba(0,0,0,0.15),inset_0px_-2px_0px_0px_rgba(0,0,0,0.15)] 
+        before:absolute before:inset-0 before:rounded-full before:pointer-events-none 
+        before:shadow-[inset_0px_0px_0px_1.5px_rgba(255,255,255,0.25)] 
+        before:[mask-image:linear-gradient(to_bottom,black,transparent)];
+  transition-property: filter, opacity, color, scale, shadow;
+  transition-duration: 0.2s;
+}
+
+.btn {
+  @apply relative inline-flex items-center justify-center px-3.5 py-1.5 rounded-lg overflow-hidden
+        font-primary text-base font-medium text-center cursor-pointer;
+
+  transition-property: filter, opacity, color, scale, shadow;
+  transition-duration: 0.2s;
+
+  & + .btn {
+    @apply ml-2;
+  }
+}
+
+.btn-primary {
+  @apply text-foreground-primary bg-accent-secondary hover:brightness-120 
+        shadow-[0px_1.5px_2px_0px_rgba(0,0,0,0.15),inset_0px_-2px_0px_0px_rgba(0,0,0,0.15)]
+        before:absolute before:inset-0 before:rounded-lg before:pointer-events-none
+        before:shadow-[inset_0px_0px_0px_1.5px_rgba(255,255,255,0.25)]
+        before:[mask-image:linear-gradient(to_bottom,black,transparent)] transition-all;
+}
+
+.btn-secondary {
+  @apply text-foreground-primary bg-foreground-primary/10 hover:bg-foreground-primary/20 rounded-lg transition-colors border-none;
+}
+
+.btn-tertiary {
+  @apply text-foreground-primary bg-background-primary hover:bg-background-elevated 
+        border border-foreground-primary/15 shadow-sm transition-colors;
+}
+
+.btn-disabled {
+  @apply opacity-50 saturate-75 cursor-not-allowed pointer-events-none;
+}
+
+.btn-square {
+  @apply p-3;
+}
+
+.btn-full {
+  @apply flex-1 w-full;
+}
+
+.btn-small {
+  @apply text-sm font-normal rounded-md;
+}
+
+.btn-container {
+  @apply flex flex-wrap;
+}
+
+.btn-dropdown-container {
+  @apply relative inline-flex;
+}
+
+.btn-dropdown-menu {
+  @apply absolute top-full right-0 mt-1.5 w-max min-w-[180px] flex flex-col p-2 
+    bg-background-secondary border border-foreground-primary/15 rounded-lg shadow-xl 
+    opacity-0 invisible -translate-y-2 transition-all duration-200 z-50;
+}
+
+.btn-dropdown-container:hover .btn-dropdown-menu,
+.btn-dropdown-container:focus-within .btn-dropdown-menu {
+  @apply opacity-100 visible translate-y-0;
+}
+
+.btn-dropdown-item {
+  @apply text-sm font-medium text-foreground-primary hover:bg-background-elevated hover:text-foreground-primary
+        px-3 py-2 rounded-lg transition-colors flex items-center gap-2 whitespace-nowrap 
+        outline-none focus:ring-2 focus:ring-foreground-primary/50;
+}
+
+.expanded {
+  @apply rounded-b-2xl pb-0 mb-5 bg-background-secondary border-background-elevated;
+}
+
+.responsive {
+  @apply w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

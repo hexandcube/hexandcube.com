@@ -1,0 +1,54 @@
+{{ $showDonation := true }}
+{{ if isset .Params "showdonationbox" }}
+  {{ $showDonation = .Params.showdonationbox }}
+{{ end }}
+
+{{ if $showDonation }}
+  <div class="bg-background-secondary border-foreground-primary/15 rounded-xl border-1 p-5 text-center flex flex-col items-center gap-3">
+    <div class="bg-accent-primary/10 text-accent-primary flex h-12 w-12 items-center justify-center rounded-full text-xl shadow-sm">
+      <i class="fa-solid fa-heart"></i>
+    </div>
+    <div class="flex flex-col gap-1">
+      <h3 class="font-primary text-foreground-primary m-0 text-lg font-bold">Support my work</h3>
+      <p class="text-foreground-secondary m-0 text-sm leading-snug">
+        If you enjoy my work and find it useful, consider supporting me financially!
+      </p>
+    </div>
+    <button
+      type="button"
+      data-modal-target="donate-modal"
+      class="btn btn-primary btn-full mt-2 flex w-full items-center justify-center gap-2">
+      <i class="fa-solid fa-heart text-sm opacity-80"></i> Donate
+    </button>
+  </div>
+
+  {{ partial "modal-start.html" (dict "id" "donate-modal" "title" "Support My Work" "icon" "fa-solid fa-heart" "sizeClass" "max-w-md") }}
+    
+    <p class="text-foreground-secondary mb-6 leading-relaxed text-sm wrap-break-word">
+      Thank you for considering a donation! Your support helps me maintain my projects and create more stuff. Choose your preferred option below:
+    </p>
+
+    <div class="flex flex-col gap-3">
+      {{ $supportData := hugo.Data.support | default slice }}
+      {{ range $supportData }}
+        <a
+          href="{{ .url | safeURL }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="bg-background-primary border-foreground-primary/15 hover:bg-background-elevated hover:border-foreground-primary/30 group flex items-center gap-4 rounded-xl border-1 p-3 transition-all focus:outline-none focus:ring-2 focus:ring-foreground-primary/50">
+          <div class="bg-foreground-primary/5 text-foreground-primary flex h-12 w-12 shrink-0 items-center justify-center rounded-lg text-2xl transition-colors group-hover:bg-accent-primary/10 group-hover:text-accent-primary">
+            <i class="{{ .icon }}"></i>
+          </div>
+          <div class="flex flex-col min-w-0">
+            <span class="text-foreground-primary font-bold text-base">{{ .name }}</span>
+            {{ with .description }}
+              <span class="text-foreground-secondary text-xs truncate">{{ . }}</span>
+            {{ end }}
+          </div>
+          <i class="fa-solid fa-arrow-up-right-from-square text-foreground-secondary ml-auto text-sm opacity-50 transition-opacity group-hover:opacity-100"></i>
+        </a>
+      {{ end }}
+    </div>
+
+  {{ partial "modal-end.html" . }}
+{{ end }}
