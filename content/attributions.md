@@ -1,6 +1,6 @@
 ---
 title: Attributions
-updateDate: 2024-05-09
+updateDate: 2026-05-09
 category: Legal
 ---
 
