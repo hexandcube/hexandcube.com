@@ -13,7 +13,7 @@
     {{ $description = .Site.Params.Description }}
 {{ end }}
 
-{{ $ogImage := "https://hexandcube-wip.netlify.app/img/opengraph.png" }}
+{{ $ogImage := "https://hexandcube.com/img/opengraph.png" }}
 {{ $pathParts := split (strings.Trim .RelPermalink "/") "/" }}
 {{ $isGallery := and (eq .Section "gallery") (ge (len $pathParts) 2) }}
 
