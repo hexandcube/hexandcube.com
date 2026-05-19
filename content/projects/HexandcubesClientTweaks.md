@@ -1,7 +1,7 @@
 ---
 title: Hexandcube's Client Tweaks
 date: 2021-05-06
-lastmod: 2025-09-18
+lastmod: 2026-05-19
 tagline: Vanilla Minecraft with quality of life improvements for multiplayer servers.
 tags: ["Fabric", "Modpack", "Client-side", "Modrinth (.mrpack)"]
 projectType: mc-modpack
@@ -22,6 +22,85 @@ links:
     url: https://github.com/hexandcube/hexandcube-client-tweaks/issues
 
 versions:
+    - name: "Hexandcube's Client Tweaks 26.1.2-1"
+      versionNumber: 26.1.2-1
+      type: release
+      date: 2026-05-19
+      notes: |
+        # Changed
+        Updated mods to the latest versions
+
+        # Added
+        - SignalLoss
+        - Enchantment Descriptions
+        - Just Enough Items (JEI)
+        - Voxy
+        - Scribble
+        - NBT Autocomplete
+        - Better Block Entities
+        - Zoomify 
+        - Picture Mode
+        - Pets Locator
+        - Fancy World Animations
+        - Map Distance Fix
+        - Tightfire
+        - Chunky
+
+        # Removed
+        - Axolotl Buckets (Unavailable for this Minecraft Version)
+        - VTDownloader (Unavailable for this Minecraft Version)
+        - Better Command Block UI (Unavailable for this Minecraft Version)
+        - Just Enough Breeding (Unavailable for this Minecraft Version)
+        - Stendhal (Unavailable for this Minecraft Version, replaced by Scribble)
+        - Better Third Person (Unavailable for this Minecraft Version)
+        - Main Menu Credits (Unavailable for this Minecraft Version)
+        - Roughly Enough Items (REI) (Unavailable for this Minecraft Version, replaced with JEI)
+        - Better F3
+        - Better "Add Server"
+        - Event Better Enchants
+        - Camera Utils
+        - Auth Me (Unavailable for this Minecraft Version)
+        - Tiny Item Animations
+        - Just Zoom (Replaced with Zoomify)
+        - Chunks Fade In (Issues with Voxy)
+
+        # Hotkeys
+        - `H+C` - Configure MiniHUD
+        - `X+C` - Configure Tweakeroo
+        - `M` - Open World Map
+        - `H` - Toggle MiniHUD
+        - `N` - Open Notepad
+        - `O` - Change Shader Pack Menu
+        - `R` - Slot Swapping menu
+        - `U` - Manage Waypoints
+        - `B` - New Waypoint
+        - `Y` - Minimap Settings
+        - `J` - Toggle Minimap
+        - `]` - World Map Settings
+        - `Z` - Zoom
+        - `F7` - Lighty Mode Switcher
+        - `F8` - Lighty Light overlay
+        - `=` - Open ClientSort Editor
+        - `I` - Toggle "Do a Barrel Roll" elytra movement
+        - `CTRL+O` on inventory screen - Toggle REI
+        - `R` on inventory item hover - Show recipe
+        - `u` on inventory item hover - Show uses
+
+      links:
+        - name: Modrinth
+          icon: fa-solid fa-cube
+          url: https://modrinth.com/modpack/hexandcube-client-tweaks/version/26.1.2-1
+      files:
+        - fileName: Hexandcube_Client_Tweaks_26.1.2-1.mrpack
+          description: Hexandcube's Client Tweaks 26.1.2-1
+          fileSize: 104 KB
+          icon: fa-regular fa-box-isometric-tape
+          download:
+            - name: Modrinth
+              url: https://cdn.modrinth.com/data/sGsAAYxA/versions/s7Oztwvx/Hexandcube_Client_Tweaks_26.1.2-1.mrpack
+            - name: Floofware FS
+              url: https://fs.floofware.net/hexandcube/projects/Hexandcube_Client_Tweaks/Hexandcube_Client_Tweaks_26.1.2-1.mrpack
+
     - name: "Hexandcube's Client Tweaks 6.3 [1.21.8]"
       versionNumber: 6.3 [1.21.8]
       type: release
@@ -596,6 +675,7 @@ Use at your own discretion, and always check with server rules before using any 
 - and more
 
 #### Hotkeys (for latest version)
+
 - `H+C` - Configure MiniHUD
 - `X+C` - Configure Tweakeroo
 - `M` - Open World Map
@@ -609,7 +689,6 @@ Use at your own discretion, and always check with server rules before using any 
 - `J` - Toggle Minimap
 - `]` - World Map Settings
 - `Z` - Zoom
-- `F6` - Cinematic Zoom
 - `F7` - Lighty Mode Switcher
 - `F8` - Lighty Light overlay
 - `=` - Open ClientSort Editor
