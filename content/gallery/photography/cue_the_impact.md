@@ -19,7 +19,7 @@ links:
 # Photography metadata
 captureDate: 2023-10-31
 camera: Canon EOS 550D
-lens: Canon EF-S 18-55mm f3.5-5.6 III
+lens: Canon EF-S 18-55mm f/3.5-5.6 III
 iso: 1600
 focalLength: 55mm
 shutterSpeed: 1/100
