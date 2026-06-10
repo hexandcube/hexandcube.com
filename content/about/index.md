@@ -103,9 +103,9 @@ socials:
   - name: "Twitter"
     handle: "@hexandcube"
     icon: "fa-brands fa-twitter"
-    url: "https://x.com/hexandcube.com"
+    url: "https://x.com/hexandcube"
   - name: "GitHub"
     handle: "@hexandcube"
     icon: "fa-brands fa-github"
-    url: "https://github.com/hexandcube.com"
+    url: "https://github.com/hexandcube"
 ---
