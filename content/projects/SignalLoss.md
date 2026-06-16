@@ -2,7 +2,7 @@
 title: SignalLoss
 date: 2025-12-15
 author: Hexandcube
-lastmod: 2026-04-16
+lastmod: 2026-06-16
 tagline: Get notified when your server connection is interrupted
 tags: ["Fabric", "Client-side", "Utility", "Java", "Minecraft: Java Edition"]
 projectType: mc-mod
@@ -36,6 +36,48 @@ links:
     url: https://github.com/hexandcube/signalloss/issues
 
 versions:
+    - name: SignalLoss v.1.2.1+26.2
+      versionNumber: 1.2.1+26.2
+      type: release
+      date: 2026-06-16
+      notes: |
+        ### Changed
+        - Updated dependancies for 26.2
+
+        **Full Changelog**: https://github.com/hexandcube/SignalLoss/compare/v.1.2.1+26.1.2...v1.2.1+26.2
+      links:
+        - name: GitHub
+          icon: fa-brands fa-github
+          url: https://github.com/hexandcube/SignalLoss/releases/tag/v1.2.1%2B26.2
+        - name: Modrinth
+          icon: fa-regular fa-cube
+          url: https://modrinth.com/mod/signalloss/version/1.2.1+26.2
+      files:
+        - fileName: SignalLoss-1.2.1+26.2.jar
+          description: FabricMC Modification JAR
+          fileSize: 213 KiB
+          icon: fa-brands fa-java
+          hash: 5eac672662e88decd556a7f372ee837787ba428a1ee3b5d63ba3a426a56e0e03
+          download:
+            - name: GitHub
+              url: https://github.com/hexandcube/SignalLoss/releases/download/v1.2.1%2B26.2/SignalLoss-1.2.1+26.2.jar
+            - name: Modrinth
+              url: https://cdn.modrinth.com/data/L3l9tG1q/versions/uY09Oeuw/SignalLoss-1.2.1%2B26.2.jar
+            - name: Floofware FS
+              url: https://fs.floofware.net/hexandcube/projects/SignalLoss/MC-26.2/SignalLoss-1.2.1%2B26.2.jar
+        - fileName: SignalLoss-1.2.1+26.2-sources.jar
+          description: Sources JAR
+          fileSize: 205 KiB
+          icon: fa-brands fa-java
+          hash: 6a49bec2c786d109788b5d6bbf5358ec14207622c8c3b8b25fbbfaf962a0be3e
+          download:
+            - name: GitHub
+              url: https://github.com/hexandcube/SignalLoss/releases/download/v1.2.1%2B26.2/SignalLoss-1.2.1+26.2-sources.jar
+            - name: Modrinth
+              url: https://cdn.modrinth.com/data/L3l9tG1q/versions/uY09Oeuw/SignalLoss-1.2.1%2B26.2-sources.jar
+            - name: Floofware FS
+              url: https://fs.floofware.net/hexandcube/projects/SignalLoss/MC-26.2/SignalLoss-1.2.1%2B26.2-sources.jar
+
     - name: SignalLoss v.1.2.1+26.1.2
       versionNumber: 1.2.1+26.1.2
       type: release
