@@ -1,7 +1,7 @@
 ---
 title: Hexandcube's Client Tweaks
 date: 2021-05-06
-lastmod: 2026-05-19
+lastmod: 2026-07-16
 tagline: Vanilla Minecraft with quality of life improvements for multiplayer servers.
 tags: ["Fabric", "Modpack", "Client-side", "Modrinth (.mrpack)"]
 projectType: mc-modpack
@@ -22,6 +22,84 @@ links:
     url: https://github.com/hexandcube/hexandcube-client-tweaks/issues
 
 versions:
+    - name: "Hexandcube's Client Tweaks 26.2-1"
+      versionNumber: 26.2-1
+      type: release
+      date: 2026-07-16
+      notes: |
+        # Changed
+
+        - Updated mods to the latest versions
+        - Changed Keybinds
+
+        # Added
+
+        - No Chat Restrictions
+        - Extreme Sound Muffler
+        - Axolotl Buckets (Re-added)
+        - Better Command Block UI (Re-added)
+        - Auth Me (Re-added)
+        - Pickup Animations
+        - Complementary Shaders
+        - Interactive Enchanted Books
+        - Real Arrow Tip
+        - JEI / REI / EMI WorldGen
+        - Just Enough Professions (JEP)
+        - JEI / REI Trades
+        - More Enchantment Info
+        - Configured 
+
+        # Removed
+
+        - Bridging Mod
+        - Cherished Worlds (Unavailable for 26.2)
+        - Lighty (Unavailable for 26.2, MiniHUD offers similar functionality)
+        - Mob plaques
+        - Pets Locator (Unavailable for 26.2)
+        - Particle Rain (Unavailable for 26.2)
+        - Sound Controller (Replaced with Extreme Sound Muffler)
+        - Tightfire (Unavailable for 26.2)
+
+        # Embedded Mods
+
+        - Configured by MrCrayfish
+
+        # Hotkeys
+
+        - `H+C` - Configure MiniHUD
+        - `X+C` - Configure Tweakeroo
+        - `M` - Open World Map
+        - `H` - Toggle MiniHUD
+        - `N` - Open Notepad
+        - `I` - Change Shader Pack Menu
+        - `R` - Slot Swapping menu
+        - `U` - Manage Waypoints
+        - `B` - New Waypoint
+        - `Y` - Minimap Settings
+        - `J` - Toggle Minimap
+        - `]` - World Map Settings
+        - `C` - Zoom
+        - `F8` - Light overlay (MiniHUD)
+        - `[` - Toggle "Do a Barrel Roll" elytra movement
+        - `O` on inventory screen - Toggle JEI
+        - `R` on inventory item hover - Show recipe
+        - `u` on inventory item hover - Show uses
+
+      links:
+        - name: Modrinth
+          icon: fa-solid fa-cube
+          url: https://modrinth.com/modpack/hexandcube-client-tweaks/version/26.2-2
+      files:
+        - fileName: Hexandcube_Client_Tweaks_26.2-1.mrpack
+          description: Hexandcube's Client Tweaks 26.2-1
+          fileSize: 1.12 MB
+          icon: fa-regular fa-box-isometric-tape
+          download:
+            - name: Modrinth
+              url: https://cdn.modrinth.com/data/sGsAAYxA/versions/pr83L3p8/Hexandcube_Client_Tweaks_26.2-1.mrpack
+            - name: Floofware FS
+              url: https://fs.floofware.net/hexandcube/projects/Hexandcube_Client_Tweaks/Hexandcube_Client_Tweaks_26.2-1.mrpack
+
     - name: "Hexandcube's Client Tweaks 26.1.2-1"
       versionNumber: 26.1.2-1
       type: release

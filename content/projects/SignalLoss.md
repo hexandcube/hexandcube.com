@@ -36,7 +36,7 @@ links:
     url: https://github.com/hexandcube/signalloss/issues
 
 versions:
-    - name: SignalLoss v.1.2.1+26.2
+    - name: SignalLoss v1.2.1+26.2
       versionNumber: 1.2.1+26.2
       type: release
       date: 2026-06-16
