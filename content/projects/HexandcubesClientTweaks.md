@@ -78,7 +78,7 @@ versions:
         - `J` - Toggle Minimap
         - `]` - World Map Settings
         - `C` - Zoom
-        - ``` - Veinmining (Hold, supported servers only)
+        - `` ` `` - Veinmining (Hold, supported servers only)
         - `F8` - Light overlay (MiniHUD)
         - `[` - Toggle "Do a Barrel Roll" elytra movement
         - `O` on inventory screen - Toggle JEI
@@ -846,7 +846,7 @@ Use at your own discretion, and always check with server rules before using any 
 - `J` - Toggle Minimap
 - `]` - World Map Settings
 - `C` - Zoom
-- ``` - Veinmining (Hold, supported servers only)
+- `` ` `` - Veinmining (Hold, supported servers only)
 - `F8` - Light overlay (MiniHUD)
 - `[` - Toggle "Do a Barrel Roll" elytra movement
 - `O` on inventory screen - Toggle JEI
