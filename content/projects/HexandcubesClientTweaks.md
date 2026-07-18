@@ -1,7 +1,7 @@
 ---
 title: Hexandcube's Client Tweaks
 date: 2021-05-06
-lastmod: 2026-07-17
+lastmod: 2026-07-18
 tagline: Vanilla Minecraft with quality of life improvements for multiplayer servers.
 tags: ["Fabric", "Modpack", "Client-side", "Modrinth (.mrpack)"]
 projectType: mc-modpack
@@ -22,6 +22,71 @@ links:
     url: https://github.com/hexandcube/hexandcube-client-tweaks/issues
 
 versions:
+    - name: "Hexandcube's Client Tweaks 26.2-3"
+      versionNumber: 26.2-3
+      type: release
+      date: 2026-07-18
+      notes: |
+        # Changed
+
+        - Updated mods to the latest versions
+        - Changed configs
+
+        # Added
+
+        - No Report Button
+        - Packed Packs
+        - Simple Music Control
+        - I Know How To Play!
+
+        # Removed
+
+        - Screencopy
+
+        # Embedded Mods
+
+        - Configured by MrCrayfish
+
+        # Hotkeys
+
+        - `H+C` - Configure MiniHUD
+        - `X+C` - Configure Tweakeroo
+        - `X+G` - Toggle Gamma Override (Fullbright) 
+        - `M` - Open World Map
+        - `H` - Toggle MiniHUD
+        - `N` - Open Notepad
+        - `I` - Change Shader Pack Menu
+        - `R` - Slot Swapping menu
+        - `U` - Manage Waypoints
+        - `B` - New Waypoint
+        - `Y` - Minimap Settings
+        - `J` - Toggle Minimap
+        - `]` - World Map Settings
+        - `C` - Zoom
+        - `\` - Play/Pause in-game music
+        - `'` - Next in-game track
+        - `` ` `` - Veinmining (Hold, supported servers only)
+        - `F8` - Light overlay (MiniHUD)
+        - `[` - Toggle "Do a Barrel Roll" elytra movement
+        - `O` on inventory screen - Toggle JEI
+        - `R` on inventory item hover - Show recipe
+        - `u` on inventory item hover - Show uses
+
+      links:
+        - name: Modrinth
+          icon: fa-solid fa-cube
+          url: https://modrinth.com/modpack/hexandcube-client-tweaks/version/26.2-3
+      files:
+        - fileName: Hexandcube_Client_Tweaks_26.2-3.mrpack
+          description: Hexandcube's Client Tweaks 26.2-3
+          fileSize: 1.14 MB
+          icon: fa-regular fa-box-isometric-tape
+          download:
+            - name: Modrinth
+              url: https://cdn.modrinth.com/data/sGsAAYxA/versions/3r4opyeq/Hexandcube_Client_Tweaks_26.2-3.mrpack
+            - name: Floofware FS
+              url: https://fs.floofware.net/hexandcube/projects/Hexandcube_Client_Tweaks/Hexandcube_Client_Tweaks_26.2-3.mrpack
+
     - name: "Hexandcube's Client Tweaks 26.2-2"
       versionNumber: 26.2-2
       type: release
@@ -846,6 +911,8 @@ Use at your own discretion, and always check with server rules before using any 
 - `J` - Toggle Minimap
 - `]` - World Map Settings
 - `C` - Zoom
+- `\` - Play/Pause in-game music
+- `'` - Next in-game track
 - `` ` `` - Veinmining (Hold, supported servers only)
 - `F8` - Light overlay (MiniHUD)
 - `[` - Toggle "Do a Barrel Roll" elytra movement
