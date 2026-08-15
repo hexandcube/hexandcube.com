@@ -10,7 +10,7 @@ variants: ["Blue", "Green", "Red", "Yellow", "White"]
 width: 7680
 height: 4320
 license: personalUse 
-downloadUrl: https://works.hexandcube.com/l/ananas_party
+downloadUrl: https://ko-fi.com/s/f719441c8e
 downloadInNewTab: true
 links:
 - name:

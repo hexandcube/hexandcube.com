@@ -10,7 +10,7 @@ variants:
 width: 7680
 height: 4320
 license: personalUse
-downloadUrl: https://works.hexandcube.com/l/shapeshifter
+downloadUrl: https://ko-fi.com/s/bc1736fead
 downloadInNewTab: true
 links:
 - name:

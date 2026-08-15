@@ -10,7 +10,7 @@ variants:
 width: 7680
 height: 4320
 license: personalUse
-downloadUrl: https://works.hexandcube.com/l/ignite_material
+downloadUrl: https://ko-fi.com/s/474c2c9749
 downloadInNewTab: true
 
 

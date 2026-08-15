@@ -10,7 +10,7 @@ variants: ["Day", "Night"]
 width: 7680
 height: 4320
 license: personalUse
-downloadUrl: https://works.hexandcube.com/l/solstice_stay
+downloadUrl: https://ko-fi.com/s/d1e69cf957
 downloadInNewTab: true
 
 

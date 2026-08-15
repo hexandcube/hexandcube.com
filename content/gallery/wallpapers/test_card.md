@@ -10,7 +10,7 @@ variants: ["Bordered", "Borderless"]
 width: 7680
 height: 4320
 license: personalUse
-downloadUrl: https://works.hexandcube.com/l/test_card
+downloadUrl: https://ko-fi.com/s/c18f5c9d6b
 downloadInNewTab: true
 
 

@@ -10,7 +10,7 @@ variants: ["Blue", "Green", "Orange", "Pink", "Purple", "Yellow"]
 width: 7680
 height: 4320
 license: personalUse
-downloadUrl: https://works.hexandcube.com/l/silicate
+downloadUrl: https://ko-fi.com/s/2c3e9fcad8
 downloadInNewTab: true
 
 noindex: false

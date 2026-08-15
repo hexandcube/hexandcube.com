@@ -9,7 +9,7 @@ id: Hexandcube-Midnight_Material
 width: 7680
 height: 4320
 license: personalUse
-downloadUrl: https://works.hexandcube.com/l/midnight_material
+downloadUrl: http://localhost:1313/gallery/wallpapers/midnight_material/
 downloadInNewTab: true
 
 

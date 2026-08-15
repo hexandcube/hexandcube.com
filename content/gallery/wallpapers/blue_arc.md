@@ -9,7 +9,7 @@ id: Hexandcube-Blue_Arc
 width: 7680
 height: 4320
 license: personalUse
-downloadUrl: https://works.hexandcube.com/l/blue_arc
+downloadUrl: https://ko-fi.com/s/b1beb7ff1d
 downloadInNewTab: true
 
 

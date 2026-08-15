@@ -11,7 +11,7 @@ width: 7680
 height: 4320
 collections: ["Chromatide"]
 license: personalUse
-downloadUrl: https://works.hexandcube.com/l/chromatide_luminous_syrup
+downloadUrl: https://ko-fi.com/s/1af10861b9
 downloadInNewTab: true
 
 

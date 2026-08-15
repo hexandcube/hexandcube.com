@@ -10,7 +10,7 @@ variants: ["Day", "Night"]
 width: 7680
 height: 4320
 license: personalUse
-downloadUrl: https://works.hexandcube.com/l/powder_peaks
+downloadUrl: https://ko-fi.com/s/e7ea0a8e64
 downloadInNewTab: true
 
 noindex: false

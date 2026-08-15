@@ -11,7 +11,7 @@ width: 7680
 height: 4320
 collections: ["Chromatide"]
 license: personalUse
-downloadUrl: https://works.hexandcube.com/l/chromatide_vivid_coral
+downloadUrl: https://ko-fi.com/s/afba3db908
 downloadInNewTab: true
 links:
 - name:

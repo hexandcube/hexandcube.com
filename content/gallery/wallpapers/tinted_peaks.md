@@ -10,9 +10,8 @@ variants: ["Dark", "Light", "Orange", "Red"]
 width: 7680
 height: 4320
 license: personalUse
-downloadUrl: https://works.hexandcube.com/l/tinted_peaks
+downloadUrl: https://ko-fi.com/s/4e09cc44ac
 downloadInNewTab: true
-
 
 noindex: false
 draft: false

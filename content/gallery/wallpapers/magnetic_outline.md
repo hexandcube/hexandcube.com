@@ -10,7 +10,7 @@ variants: ["Blue", "Green", "Yellow"]
 width: 7680
 height: 4320
 license: personalUse
-downloadUrl: https://works.hexandcube.com/l/magnetic_outline
+downloadUrl: https://ko-fi.com/s/42291fe8fc
 downloadInNewTab: true
 
 

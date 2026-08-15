@@ -10,7 +10,7 @@ variants:
 width: 7680
 height: 4320
 license: personalUse
-downloadUrl: https://works.hexandcube.com/l/thermal_tide
+downloadUrl: https://ko-fi.com/s/a7086c2773
 downloadInNewTab: true
 
 
