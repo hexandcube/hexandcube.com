@@ -1,6 +1,6 @@
 ---
 title: Attributions
-updateDate: 2026-05-09
+updateDate: 2026-08-15
 category: Legal
 ---
 
@@ -44,3 +44,8 @@ Designed and developed by [Hexandcube](https://hexandcube.com/about) with the he
 - Authors: [Colophon Foundry](https://www.colophon-foundry.org/)
 - URL: https://fonts.google.com/specimen/Space+Mono
 - License: [SIL Open Font License 1.1](https://fonts.google.com/specimen/Space+Mono/license)
+
+##### Neofox emoji
+- Author: [Volpeon](https://volpeon.ink/)
+- URL: https://volpeon.ink/emojis/neofox/
+- License: [CC BY-NC-SA 4.0](https://spdx.org/licenses/CC-BY-NC-SA-4.0.html)
