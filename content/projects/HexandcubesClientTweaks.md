@@ -1,7 +1,7 @@
 ---
 title: Hexandcube's Client Tweaks
 date: 2021-05-06
-lastmod: 2026-07-18
+lastmod: 2026-10-06
 tagline: Vanilla Minecraft with quality of life improvements for multiplayer servers.
 tags: ["Fabric", "Modpack", "Client-side", "Modrinth (.mrpack)"]
 projectType: mc-modpack
@@ -22,6 +22,75 @@ links:
     url: https://github.com/hexandcube/hexandcube-client-tweaks/issues
 
 versions:
+    - name: "Hexandcube's Client Tweaks 26.3-1"
+      versionNumber: 26.3-1
+      type: release
+      date: 2026-10-06
+      notes: |
+        # Changed
+
+        - Updated mods to the latest versions
+        - Changed configs
+
+        # Added
+
+        - Borderless Fullscreen
+        - Screencopy
+
+        # Removed
+
+        - Better Mount HUD (Not available)
+        - Chunky
+        - Cubes Without Bordersw (Not available, Replaced with Borderless Fullscreen)
+        - Emoji Type (Not available)
+        - Interactive Enchanted Books
+        - Just Enough Item (JEI)
+        - Just Enough Professions
+        - JEI/REI/EMI Worldgen 
+        - Map Distance Fix (Not available)
+        - Particular Reforged
+        - Smooth Gui
+        - Smooth Swapping
+        - Snapper (Not available)
+        - Sound Physics Remastered
+        - Sounds
+        - VeinMiner
+        - VeinMiner Hotkey
+        - Voxy
+        - Configured
+        - Xaero's Minimap
+        - Xaero's Worldmap
+
+        # Hotkeys
+
+        - `H+C` - Configure MiniHUD
+        - `X+C` - Configure Tweakeroo
+        - `X+G` - Toggle Gamma Override (Fullbright) 
+        - `H` - Toggle MiniHUD
+        - `N` - Open Notepad
+        - `I` - Change Shader Pack Menu
+        - `R` - Slot Swapping menu
+        - `C` - Zoom
+        - `\` - Play/Pause in-game music
+        - `]` - Next in-game track
+        - `F8` - Light overlay (MiniHUD)
+        - `[` - Toggle "Do a Barrel Roll" elytra movement
+
+      links:
+        - name: Modrinth
+          icon: fa-solid fa-cube
+          url: https://modrinth.com/modpack/hexandcube-client-tweaks/version/26.3-1
+      files:
+        - fileName: Hexandcube_Client_Tweaks_26.3-1.mrpack
+          description: Hexandcube's Client Tweaks 26.3-1
+          fileSize: 87.4 KB
+          icon: fa-regular fa-box-isometric-tape
+          download:
+            - name: Modrinth
+              url: https://cdn.modrinth.com/data/sGsAAYxA/versions/kcWXQy7r/Hexandcube_Client_Tweaks_26.3-1.mrpack?mr_download_reason=standalone
+            - name: Floofware FS
+              url: https://fs.floofware.net/hexandcube/projects/Hexandcube_Client_Tweaks/Hexandcube_Client_Tweaks_26.3-1.mrpack
+
     - name: "Hexandcube's Client Tweaks 26.2-3"
       versionNumber: 26.2-3
       type: release
@@ -894,33 +963,6 @@ Use at your own discretion, and always check with server rules before using any 
 - Custom shader support (Iris)
 - Optifine and MinecraftCapes.net Cape support
 - and more
-
-#### Hotkeys (for latest version)
-
-- `H+C` - Configure MiniHUD
-- `X+C` - Configure Tweakeroo
-- `X+G` - Toggle Gamma Override (Fullbright) 
-- `M` - Open World Map
-- `H` - Toggle MiniHUD
-- `N` - Open Notepad
-- `I` - Change Shader Pack Menu
-- `R` - Slot Swapping menu
-- `U` - Manage Waypoints
-- `B` - New Waypoint
-- `Y` - Minimap Settings
-- `J` - Toggle Minimap
-- `]` - World Map Settings
-- `C` - Zoom
-- `\` - Play/Pause in-game music
-- `'` - Next in-game track
-- `` ` `` - Veinmining (Hold, supported servers only)
-- `F8` - Light overlay (MiniHUD)
-- `[` - Toggle "Do a Barrel Roll" elytra movement
-- `O` on inventory screen - Toggle JEI
-- `R` on inventory item hover - Show recipe
-- `u` on inventory item hover - Show uses
-
-~~Check version description for version-specific hotkeys~~ (soon).
 
 
 #### Modpack formats
