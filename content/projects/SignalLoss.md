@@ -2,7 +2,7 @@
 title: SignalLoss
 date: 2025-12-15
 author: Hexandcube
-lastmod: 2026-09-18
+lastmod: 2026-10-05
 tagline: Get notified when your server connection is interrupted
 tags: ["Fabric", "Client-side", "Utility", "Java", "Minecraft: Java Edition"]
 projectType: mc-mod
@@ -36,6 +36,50 @@ links:
     url: https://github.com/hexandcube/signalloss/issues
 
 versions:
+    - name: SignalLoss v1.3.0+26.3
+      versionNumber: 1.3.0+26.3
+      type: release
+      date: 2026-10-05
+      notes: |
+        ## What's Changed
+        * Allow toast message modification by [@minexxxx](https://github.com/minexxxx) in https://github.com/hexandcube/SignalLoss/pull/2
+
+        ## New Contributors
+        * [@minexxxx](https://github.com/minexxxx) made their first contribution in https://github.com/hexandcube/SignalLoss/pull/2
+
+        **Full Changelog**: https://github.com/hexandcube/SignalLoss/compare/v1.2.1+26.3...v1.3.0+26.3
+      links:
+        - name: GitHub
+          icon: fa-brands fa-github
+          url: https://github.com/hexandcube/SignalLoss/releases/tag/v1.3.0%2B26.3
+        - name: Modrinth
+          icon: fa-regular fa-cube
+          url: https://modrinth.com/mod/signalloss/version/1.3.0+26.3
+      files:
+        - fileName: SignalLoss-1.3.0+26.3.jar
+          description: FabricMC Modification JAR
+          fileSize: 214 KiB
+          icon: fa-brands fa-java
+          hash: de5a84c94b4bf6dd43fba92c5fa7c9ad92519f5939b02e7e9896ff3b77c929d2
+          download:
+            - name: GitHub
+              url: https://github.com/hexandcube/SignalLoss/releases/download/v1.3.0%2B26.3/SignalLoss-1.3.0+26.3.jar
+            - name: Modrinth
+              url: https://cdn.modrinth.com/data/L3l9tG1q/versions/MtwCbpmq/SignalLoss-1.3.0%2B26.3.jar
+            - name: Floofware FS
+              url: https://fs.floofware.net/hexandcube/projects/SignalLoss/MC-26.3/SignalLoss-1.3.0%2B26.3.jar
+        - fileName: SignalLoss-1.3.0+26.3-sources.jar
+          description: Sources JAR
+          fileSize: 206 KiB
+          icon: fa-brands fa-java
+          hash: 801013a03ef89a1679a648383b114b338c062e2091848e5ae3832cd176faf009
+          download:
+            - name: GitHub
+              url: https://github.com/hexandcube/SignalLoss/releases/download/v1.3.0%2B26.3/SignalLoss-1.3.0+26.3-sources.jar
+            - name: Modrinth
+              url: https://cdn.modrinth.com/data/L3l9tG1q/versions/MtwCbpmq/SignalLoss-1.3.0%2B26.3-sources.jar
+            - name: Floofware FS
+              url: https://fs.floofware.net/hexandcube/projects/SignalLoss/MC-26.3/SignalLoss-1.3.0%2B26.3-sources.jar
     - name: SignalLoss v1.2.1+26.3
       versionNumber: 1.2.1+26.3
       type: release
@@ -74,7 +118,7 @@ versions:
             - name: GitHub
               url: https://github.com/hexandcube/SignalLoss/releases/download/v1.2.1%2B26.3/SignalLoss-1.2.1+26.3-sources.jar
             - name: Modrinth
-              url: https://cdn.modrinth.com/data/L3l9tG1q/versions/mbB1pYMP/SignalLoss-1.2.1%2B26.3-sources.jar?mr_download_reason=standalone
+              url: https://cdn.modrinth.com/data/L3l9tG1q/versions/mbB1pYMP/SignalLoss-1.2.1%2B26.3-sources.jar
             - name: Floofware FS
               url: https://fs.floofware.net/hexandcube/projects/SignalLoss/MC-26.3/SignalLoss-1.2.1%2B26.3-sources.jar
     - name: SignalLoss v1.2.1+26.2
@@ -575,14 +619,15 @@ You can configure the mod in-game using commands or by editing `/config/signallo
 
 **Options:**
 
-| Option | Command | Default     | Description                                                                                                 |
-| :--- | :--- |:------------|:------------------------------------------------------------------------------------------------------------|
-| **Enabled** | `enabled` | `true`      | Enable the SignalLoss mod                                                                                   |
-| **Timeout Threshold** | `timeoutThreshold` | `2000` (2s) | How long to wait since the last packet was successfully received, before displaying the toast notification. |
-| **Min Warning Time** | `minWarningTime` | `2000` (2s) | Minimum time the toast stays on screen after being triggered, to prevent flickering.                        |
-| **Linger Time** | `lingerTime` | `1000` (1s) | How long the toast stays on screen after recovery (shows final lag duration).                               |
-| **Draw Background** | `drawBackground` | `true`      | Should a background for the toast be rendered                                                               |
-| **Singleplayer** | `showInSingleplayer`| `false`     | Enable the SignalLoss mod for the Singleplayer internal server                                              |
-| **Position** | `position` | `CENTER`    | Screen position (`LEFT`, `CENTER`, `RIGHT`).                                                                |
-| **Text Color** | `textColor` | `#FFFF5555` | ARGB Hex color for the warning text.                                                                        |
-| **Background Color** | `backgroundColor` | `#A0000000` | ARGB Hex color for the background box.                                                                      |
+| Option                  | Command | Default     | Description                                                                                                                                                               |
+|:------------------------| :--- |:------------|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Enabled**             | `enabled` | `true`      | Enable the SignalLoss mod                                                                                                                                                 |
+| **Timeout Threshold**   | `timeoutThreshold` | `2000` (2s) | How long to wait since the last packet was successfully received, before displaying the toast notification.                                                               |
+| **Min Warning Time**    | `minWarningTime` | `2000` (2s) | Minimum time the toast stays on screen after being triggered, to prevent flickering.                                                                                      |
+| **Linger Time**         | `lingerTime` | `1000` (1s) | How long the toast stays on screen after recovery (shows final lag duration).                                                                                             |
+| **Draw Background**     | `drawBackground` | `true`      | Should a background for the toast be rendered                                                                                                                             |
+| **Singleplayer**        | `showInSingleplayer`| `false`     | Enable the SignalLoss mod for the Singleplayer internal server                                                                                                            |
+| **Position**            | `position` | `CENTER`    | Screen position (`LEFT`, `CENTER`, `RIGHT`).                                                                                                                              |
+| **Text Color**          | `textColor` | `#FFFF5555` | ARGB Hex color for the warning text.                                                                                                                                      |
+| **Background Color**    | `backgroundColor` | `#A0000000` | ARGB Hex color for the background box.                                                                                                                                    |
+| **Toast Notification**  | `toastMessage` | `⚠ Waiting for server...` | The message displayed in the toast notification when a connection interruption is detected.                                                                               |
