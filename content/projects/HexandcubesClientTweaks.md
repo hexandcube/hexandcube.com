@@ -1,7 +1,7 @@
 ---
 title: Hexandcube's Client Tweaks
 date: 2021-05-06
-lastmod: 2026-10-06
+lastmod: 2026-10-08
 tagline: Vanilla Minecraft with quality of life improvements for multiplayer servers.
 tags: ["Fabric", "Modpack", "Client-side", "Modrinth (.mrpack)"]
 projectType: mc-modpack
@@ -22,6 +22,55 @@ links:
     url: https://github.com/hexandcube/hexandcube-client-tweaks/issues
 
 versions:
+    - name: "Hexandcube's Client Tweaks 26.3-2"
+      versionNumber: 26.3-2
+      type: release
+      date: 2026-10-08
+      notes: |
+        # Changed
+
+        - Updated mods to the latest versions
+        - Changed configs
+        - Fixed an issue causing a crash when sitting in a boat by removing BoatHud
+
+        # Removed
+
+        - BoatHud 
+
+        # Added
+
+        - Config Manager
+
+        # Hotkeys
+
+        - `H+C` - Configure MiniHUD
+        - `X+C` - Configure Tweakeroo
+        - `X+G` - Toggle Gamma Override (Fullbright) 
+        - `H` - Toggle MiniHUD
+        - `N` - Open Notepad
+        - `I` - Change Shader Pack Menu
+        - `R` - Slot Swapping menu
+        - `C` - Zoom
+        - `\` - Play/Pause in-game music
+        - `]` - Next in-game track
+        - `F8` - Light overlay (MiniHUD)
+        - `[` - Toggle "Do a Barrel Roll" elytra movement
+
+      links:
+        - name: Modrinth
+          icon: fa-solid fa-cube
+          url: https://modrinth.com/modpack/hexandcube-client-tweaks/version/26.3-2
+      files:
+        - fileName: Hexandcube_Client_Tweaks_26.3-2.mrpack
+          description: Hexandcube's Client Tweaks 26.3-2
+          fileSize: 85.1 KB
+          icon: fa-regular fa-box-isometric-tape
+          download:
+            - name: Modrinth
+              url: https://cdn.modrinth.com/data/sGsAAYxA/versions/zKbwXvDM/Hexandcube_Client_Tweaks_26.3-2.mrpack
+            - name: Floofware FS
+              url: https://fs.floofware.net/hexandcube/projects/Hexandcube_Client_Tweaks/Hexandcube_Client_Tweaks_26.3-2.mrpack
+
     - name: "Hexandcube's Client Tweaks 26.3-1"
       versionNumber: 26.3-1
       type: release
@@ -87,7 +136,7 @@ versions:
           icon: fa-regular fa-box-isometric-tape
           download:
             - name: Modrinth
-              url: https://cdn.modrinth.com/data/sGsAAYxA/versions/kcWXQy7r/Hexandcube_Client_Tweaks_26.3-1.mrpack?mr_download_reason=standalone
+              url: https://cdn.modrinth.com/data/sGsAAYxA/versions/kcWXQy7r/Hexandcube_Client_Tweaks_26.3-1.mrpack
             - name: Floofware FS
               url: https://fs.floofware.net/hexandcube/projects/Hexandcube_Client_Tweaks/Hexandcube_Client_Tweaks_26.3-1.mrpack
 
