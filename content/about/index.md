@@ -3,10 +3,10 @@ title: "About"
 description: "A little bit about who I am and what I do"
 displayName: "Mallow"
 handle: "hexandcube"
-pronouns: "he/him"
+pronouns: "he/him 🏳️‍🌈" 
 bio: |
-  A fox with a camera, and a computer 
-  I take pictures, write code, and I also do some other stuff sometimes
+  A fox with a camera, and a computer. <br>
+  I take pictures, write code, manage servers and design things with my paws sometimes.
 
 usePdsImages: true 
 AThandle: hexandcube.com
@@ -16,7 +16,7 @@ banner: https://fs.floofware.net/hexandcube/images/banner.png
 
 birthday: "2003-10-20"
 location: "Poland, Central Europe"
-email: "hexandcube@hexandcube.com"
+email: "hexandcube@floofware.net"
 timezone: "Europe/Warsaw"
 
 pgp:
@@ -77,6 +77,9 @@ languages:
     level: "Fluent"
 
 contactForm: true
+contactInfobox: |
+  Please note that I'm very anxious so I may not respond to your message immediately. 
+  Really appreciate all messages though! <br> Thank you for understanding <3
 
 contact:
   - name: "Signal"

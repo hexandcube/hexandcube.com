@@ -6,7 +6,7 @@ tagline: A pure performance fabric modpack
 tags: ["Fabric", "Modpack", "Client-side", "Modrinth (.mrpack)"]
 license: mit
 projectType: mc-modpack
-status: On hold
+status: Archived
 logo: https://fs.floofware.net/hexandcube/projects/PerformanceCraft/_meta/logo-small.png
 
 buttons:
