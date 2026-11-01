@@ -12,7 +12,7 @@ licenseURL: https://github.com/hexandcube/bsky-redirect/blob/main/LICENSE.md
 # icon: 
 logo: https://fs.floofware.net/hexandcube/projects/Bsky_Redirect/_meta/logo-small.png
 # banner: https://fs.floofware.net/hexandcube/projects/Bsky_Redirect/_meta/marquee-tile.png
-# featuredIndex: 
+featuredIndex: 4
 showDonationbox: true
 
 images:
