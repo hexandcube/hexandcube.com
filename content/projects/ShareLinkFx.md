@@ -82,3 +82,20 @@ versions:
 noindex: false
 draft: false
 ---
+# ShareLinkFx
+
+**ShareLinkFx is a lightweight utility app that replaces shared social media URLs with embed fixer links, allowing for rich post previews in messaging apps like Telegram and Discord.**
+
+Just share a link from a supported app directly to ShareLinkFx. The app will instantly modify the link and allow you to re-share it, no manual editing required.
+
+### App Features:
+* Restore Rich Embeds: Replace domains to bring back full post previews on Discord, Telegram, and other messaging platforms.
+* Built-In Platform Support*: Bluesky, Twitter/X, Instagram, TikTok, Tumblr, and Mastodon
+* Custom Embed Services: Create your own custom domain replacement rules for any website.
+* Strip Tracking Parameters: Automatically remove extra URL parameters (like ?t=123) often used for user tracking.
+* Remove Extra Text: Automatically strip away annoying promotional text injected by social apps, returning just the clean link.
+* Custom Share Behavior: Choose what happens after a link is fixed - copy to clipboard, open the share sheet, or both.
+
+ShareLinkFx is free and open-source. You can view the source code, report issues, or contribute on GitHub: https://github.com/hexandcube/sharelinkfx
+
+***Disclaimer**: Suggested in-app embed fixer services are examples of commonly used third-party services. They are provided by independent third parties and are not affiliated with or endorsed by the developer of ShareLinkFx.
